@@ -23,10 +23,10 @@
 cd <config['startdir']>
 
 echo ACTIVATING supereeg VIRTUAL ENVIRONMENT
-source activate supereeg
+source activate supereeg_env
 
 # run the job
 <config['cmd_wrapper']> <job_command> #note: job_command is reserved for the job command; it should not be specified in config.py
 
-source deactivate supereeg
+source deactivate supereeg_env
 
