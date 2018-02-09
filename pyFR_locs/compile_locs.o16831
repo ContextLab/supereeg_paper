@@ -1,0 +1,12 @@
+------------------------- Prologue ----------------------------
+         Started: Fri Feb  9 10:31:58 EST 2018
+          Job ID: 16831.knorr.hpcc.dartmouth.edu
+         User ID: lowen
+        Group ID: PBS
+        Job Name: compile_locs
+ Resources Req'd: nodes=4:ppn=4,walltime=10:00:00,neednodes=4:ppn=4
+      Queue Name: default
+    Account Name: 
+------------------------- Prologue ----------------------------
+
+ACTIVATING supereeg VIRTUAL ENVIRONMENT

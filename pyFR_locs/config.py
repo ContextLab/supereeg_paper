@@ -25,8 +25,8 @@ config['resultsdir'] = os.path.join(config['workingdir'], 'results')
 # runtime options
 config['jobname'] = "compile_locs"  # default job name
 config['q'] = "default"  # options: default, testing, largeq
-config['nnodes'] = 1  # how many nodes to use for this one job
-config['ppn'] = 1  # how many processors to use for this one job (assume 4GB of RAM per processor)
+config['nnodes'] = 4  # how many nodes to use for this one job
+config['ppn'] = 4  # how many processors to use for this one job (assume 4GB of RAM per processor)
 config['walltime'] = '10:00:00'  # maximum runtime, in h:MM:SS
 #config['startdir'] = '/ihome/lowen/repos/supereeg/examples'  # directory to start the job in
 config['cmd_wrapper'] = "python"  # replace with actual command wrapper (e.g. matlab, python, etc.)
