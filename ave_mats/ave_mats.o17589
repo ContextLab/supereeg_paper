@@ -1,0 +1,27 @@
+------------------------- Prologue ----------------------------
+         Started: Fri Feb  9 12:27:06 EST 2018
+          Job ID: 17589.knorr.hpcc.dartmouth.edu
+         User ID: lowen
+        Group ID: PBS
+        Job Name: ave_mats
+ Resources Req'd: nodes=4:ppn=4,walltime=10:00:00,neednodes=4:ppn=4
+      Queue Name: default
+    Account Name: 
+------------------------- Prologue ----------------------------
+
+ACTIVATING supereeg VIRTUAL ENVIRONMENT
+67
+
+------------------------- Epilogue ----------------------------
+        Finished: Fri Feb  9 12:28:26 EST 2018
+          Job ID: 17589.knorr.hpcc.dartmouth.edu
+         User ID: lowen
+        Group ID: PBS
+        Job Name: ave_mats
+      Session ID: 23210
+ Resources Req'd: nodes=4:ppn=4,walltime=10:00:00,neednodes=4:ppn=4
+  Resources Used: cput=00:00:06,vmem=592796kb,walltime=00:01:19,mem=56596kb,energy_used=0
+      Queue Name: default
+    Account Name: 
+------------------------- Epilogue ----------------------------
+

@@ -11,6 +11,8 @@ full_mats/full_mats.o*
 full_mats/full_mats.e*
 pyFR_locs/compile_locs.o*
 pyFR_locs/compile_locs.e*
+ave_mats/ave_mats.e*
+ave_mats/ave_mats.o*
 .Python
 env/
 build/
