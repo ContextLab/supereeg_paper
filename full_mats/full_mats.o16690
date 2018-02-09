@@ -10,3 +10,18 @@
 ------------------------- Prologue ----------------------------
 
 ACTIVATING supereeg VIRTUAL ENVIRONMENT
+done
+
+------------------------- Epilogue ----------------------------
+        Finished: Fri Feb  9 11:21:17 EST 2018
+          Job ID: 16690.knorr.hpcc.dartmouth.edu
+         User ID: lowen
+        Group ID: PBS
+        Job Name: full_mats
+      Session ID: 18129
+ Resources Req'd: nodes=4:ppn=4,walltime=01:00:00,neednodes=4:ppn=4
+  Resources Used: cput=00:00:19,vmem=1735908kb,walltime=00:52:38,mem=598552kb,energy_used=0
+      Queue Name: default
+    Account Name: 
+------------------------- Epilogue ----------------------------
+

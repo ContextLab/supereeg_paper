@@ -10,3 +10,19 @@
 ------------------------- Prologue ----------------------------
 
 ACTIVATING supereeg VIRTUAL ENVIRONMENT
+BW014: not enough electrodes pass threshold
+BW014_filtered
+
+------------------------- Epilogue ----------------------------
+        Finished: Fri Feb  9 10:56:22 EST 2018
+          Job ID: 16695.knorr.hpcc.dartmouth.edu
+         User ID: lowen
+        Group ID: PBS
+        Job Name: full_mats
+      Session ID: 45097
+ Resources Req'd: nodes=4:ppn=4,walltime=01:00:00,neednodes=4:ppn=4
+  Resources Used: cput=00:00:08,vmem=2189024kb,walltime=00:27:43,mem=997784kb,energy_used=0
+      Queue Name: default
+    Account Name: 
+------------------------- Epilogue ----------------------------
+

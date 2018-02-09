@@ -1,0 +1,12 @@
+------------------------- Prologue User ----------------------------
+         Started: Fri Feb  9 11:27:41 EST 2018
+          Job ID: 16981.knorr.hpcc.dartmouth.edu
+         User ID: lowen
+        Group ID: PBS
+        Job Name: full_mats
+ Resources Req'd: nodes=4:ppn=4,walltime=01:00:00,neednodes=4:ppn=4
+      Queue Name: default
+    Account Name: 
+------------------------- Prologue User ----------------------------
+
+ACTIVATING supereeg VIRTUAL ENVIRONMENT
