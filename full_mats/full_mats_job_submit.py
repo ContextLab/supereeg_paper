@@ -18,9 +18,10 @@ except:
 
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
-files = glob.glob(os.path.join(config['datadir'],'BW*'))
+files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 # options for model: 'pyFR_locs', 'example_model', 'gray_mask_6mm_brain'
-model = str('gray_mask_6mm_brain')
+# model = str('gray_mask_6mm_brain')
+model = str('pyFR_locs')
 job_commands = map(lambda x: x[0]+" "+str(x[1])+" " + model, zip([job_script]*len(files), files))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
