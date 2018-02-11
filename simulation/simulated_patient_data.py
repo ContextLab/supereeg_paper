@@ -65,6 +65,7 @@ if str(sys.argv [1]) == 'location_case_3':
     param_grid = [(p,m,n) for p in m_patients for m in range(100,170,incs) for n in range(100,170,incs)]
 else:
     print('need to input script paramter to deliniate special location cases')
+    #assert param_grid
 #for p, m, n in [(10,10,160)]:
 for p, m, n in param_grid:
     d = []

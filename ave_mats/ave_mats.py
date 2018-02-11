@@ -34,7 +34,7 @@ ave_model = se.model_compile(model_data)
 
 ave_model.save(fname=os.path.join(results_dir, model_template))
 
-ave_model.plot()
+ave_model.plot_data()
 
 plt.savefig(os.path.join(fig_dir, model_template))
 
