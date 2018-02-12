@@ -3,29 +3,28 @@ from supereeg.helpers import make_gif_pngs
 import sys
 import os
 from config import config
+import glob
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 
 
 model_template = sys.argv[1]
 
-if model_template == 'pyFR_union':
-    model = se.load(os.path.join(config['pyFR_union_dir'],'pyFR_union.mo'))
-
-elif model_template == 'gray_mask_6mm_brain':
-    model = se.load(os.path.join(config['gray_mask_6mm_brain_dir'], 'gray_mask_6mm_brain.mo'))
-
-else:
-    model = se.load(intern(model_template))
+model_dir = os.path.join(config['datadir'], model_template)
 
 results_dir = os.path.join(config['resultsdir'], model_template)
-
+print(results_dir)
 
 try:
-    if not os.path.exists(os.path.dirname(results_dir)):
-        os.makedirs(results_dir)
-except OSError as err:
-   print(err)
+    os.stat(results_dir)
+except:
+    os.makedirs(results_dir)
+
+model_data = os.path.join(model_dir, model_template + '.mo')
+
+print(model_data)
+
+model = se.load(intern(model_data))
 
 bo = se.load('example_data')
 bo.info()
@@ -33,9 +32,12 @@ bo.info()
 
 bor = model.predict(bo)
 
-nii = bor.to_nii()
+if model_template == 'gray_mask_6mm_brain':
+    nii = bor.to_nii(template='6mm')
+else:
+    nii = bor.to_nii(template='20mm')
 
-make_gif_pngs(nii, gif_path=results_dir, display_mode='lyrz', threshold=0, plot_abs=False, colorbar='False',
+make_gif_pngs(nii, gif_path=results_dir, display_mode='lyrz', threshold=0, plot_abs=False, colorbar=False,
                             vmin=-20, vmax=20,)
 
 
