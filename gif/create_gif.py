@@ -3,7 +3,8 @@ from supereeg.helpers import make_gif_pngs
 import sys
 import os
 from config import config
-
+import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 
 
 model_template = sys.argv[1]

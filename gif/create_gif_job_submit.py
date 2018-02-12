@@ -19,7 +19,8 @@ except:
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'create_gif.py')
 
 # options for model: 'pyFR_union', 'example_model', 'gray_mask_6mm_brain'
-model = str('gray_mask_6mm_brain')
+# model = str('gray_mask_6mm_brain')
+model = str('example_model') 
 
 job_commands = map(lambda x: x[0]+" " + model, zip([job_script]*1, range(1)))
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
