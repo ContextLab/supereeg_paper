@@ -42,6 +42,6 @@ else:
     nii = zbo.to_nii(template='20mm')
 
 make_gif_pngs(nii, gif_path=results_dir, display_mode='lyrz', threshold=0, plot_abs=False, colorbar=False,
-                            vmin=-10, vmax=10,)
+                            vmin=-5, vmax=5,)
 
 
