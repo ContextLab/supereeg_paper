@@ -2,6 +2,8 @@ import supereeg as se
 from supereeg.helpers import make_gif_pngs
 import sys
 import os
+import copy
+import pandas as pd
 from config import config
 import glob
 import matplotlib.pyplot as plt
@@ -29,15 +31,17 @@ model = se.load(intern(model_data))
 bo = se.load('example_data')
 bo.info()
 
-
 bor = model.predict(bo)
 
+zbo = copy.copy(bor)
+zbo.data = pd.DataFrame(bor.get_zscore_data())
+
 if model_template == 'gray_mask_6mm_brain':
-    nii = bor.to_nii(template='6mm')
+    nii = zbo.to_nii(template='6mm')
 else:
-    nii = bor.to_nii(template='20mm')
+    nii = zbo.to_nii(template='20mm')
 
 make_gif_pngs(nii, gif_path=results_dir, display_mode='lyrz', threshold=0, plot_abs=False, colorbar=False,
-                            vmin=-20, vmax=20,)
+                            vmin=-10, vmax=10,)
 
 
