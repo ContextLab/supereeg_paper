@@ -34,7 +34,7 @@ bor = model.predict(bo)
 
 nii = bor.to_nii()
 
-make_gif_pngs(nii, gif_path=results_dir, display_mode='lyrz', threshold=0, plot_abs=False, colorbar='True',
+make_gif_pngs(nii, gif_path=results_dir, display_mode='lyrz', threshold=0, plot_abs=False, colorbar='False',
                             vmin=-20, vmax=20,)
 
 
