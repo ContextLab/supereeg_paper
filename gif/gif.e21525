@@ -1,0 +1,25 @@
+/ihome/lowen/anaconda2/envs/supereeg_env/lib/python2.7/site-packages/nilearn/plotting/__init__.py:20: UserWarning: 
+This call to matplotlib.use() has no effect because the backend has already
+been chosen; matplotlib.use() must be called *before* pylab, matplotlib.pyplot,
+or matplotlib.backends is imported for the first time.
+
+The backend was *originally* set to u'Qt5Agg' by the following code:
+  File "/ihome/lowen/repos/supereeg_paper/gif/create_gif.py", line 1, in <module>
+    import supereeg as se
+  File "/ihome/lowen/anaconda2/envs/supereeg_env/lib/python2.7/site-packages/supereeg/__init__.py", line 1, in <module>
+    from .brain import Brain
+  File "/ihome/lowen/anaconda2/envs/supereeg_env/lib/python2.7/site-packages/supereeg/brain.py", line 14, in <module>
+    import matplotlib.pyplot as plt
+  File "/ihome/lowen/anaconda2/envs/supereeg_env/lib/python2.7/site-packages/matplotlib/pyplot.py", line 69, in <module>
+    from matplotlib.backends import pylab_setup
+  File "/ihome/lowen/anaconda2/envs/supereeg_env/lib/python2.7/site-packages/matplotlib/backends/__init__.py", line 14, in <module>
+    line for line in traceback.format_stack()
+
+
+  matplotlib.use('Agg')
+/ihome/lowen/anaconda2/envs/supereeg_env/lib/python2.7/site-packages/supereeg/brain.py:140: UserWarning: No sample rate given.  Number of seconds cant be computed
+  warnings.warn('No sample rate given.  Number of seconds cant be computed')
+Traceback (most recent call last):
+  File "/ihome/lowen/repos/supereeg_paper/gif/create_gif.py", line 25, in <module>
+    bor = model.predict(bo)
+AttributeError: 'Brain' object has no attribute 'predict'
