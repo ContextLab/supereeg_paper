@@ -5,9 +5,17 @@ import os
 from config import config
 
 
+
 model_template = sys.argv[1]
 
-model = se.load(intern(model_template))
+if model_template == 'pyFR_union':
+    model = se.load(os.path.join(config['pyFR_union_dir'],'pyFR_union.mo'))
+
+elif model_template == 'gray_mask_6mm_brain':
+    model = se.load(os.path.join(config['gray_mask_6mm_brain_dir'], 'gray_mask_6mm_brain.mo'))
+
+else:
+    model = se.load(intern(model_template))
 
 results_dir = os.path.join(config['resultsdir'], model_template)
 

@@ -21,6 +21,8 @@ else:
 config['scriptdir'] = os.path.join(config['workingdir'], 'scripts')
 config['lockdir'] = os.path.join(config['workingdir'], 'locks')
 config['resultsdir'] = os.path.join(config['workingdir'], 'results')
+config['gray_mask_6mm_brain_dir'] = os.path.join(config['startdir'], 'ave_mats/results/gray_mask_6mm_brain')
+config['pyFR_union_dir'] = os.path.join(config['startdir'], 'ave_mats/results/pyFR_union')
 
 # runtime options
 config['jobname'] = "gif"  # default job name
