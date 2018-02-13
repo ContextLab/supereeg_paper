@@ -10,7 +10,7 @@ plt.switch_backend('agg')
 
 import seaborn as sns; sns.set()
 
-cmap = sns.cubehelix_palette(as_cmap=True, light=.9)
+cmap = sns.cubehelix_palette(rot=.1)
 
 model_template = sys.argv[1]
 
@@ -61,9 +61,9 @@ else:
     nii_recon = zbor.to_nii(template='20mm')
     nii_obs = o_bo.to_nii(template='20mm')
 
-make_gif_pngs(nii_recon, gif_path=results_recon_dir, window_min=1000, window_max=1010, cmap=cmap, display_mode='lyrz', threshold=0,
+make_gif_pngs(nii_recon, gif_path=results_recon_dir, window_min=1000, window_max=1256, cmap=cmap, display_mode='lyrz', threshold=0,
               plot_abs=False, colorbar=False, vmin=-10, vmax=10)
 
 
-make_gif_pngs(nii_obs, gif_path=results_obs_dir, window_min=1000, window_max=1010, cmap=cmap, display_mode='lyrz', threshold=0,
+make_gif_pngs(nii_obs, gif_path=results_obs_dir, window_min=1000, window_max=1256, cmap=cmap, display_mode='lyrz', threshold=0,
               plot_abs=False, colorbar=False, vmin=-10, vmax=10)
