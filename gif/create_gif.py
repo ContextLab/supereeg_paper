@@ -10,7 +10,7 @@ plt.switch_backend('agg')
 
 import seaborn as sns; sns.set()
 
-cmap = sns.cubehelix_palette()
+cmap = sns.cubehelix_palette(as_cmap=True, light=.9)
 
 model_template = sys.argv[1]
 
