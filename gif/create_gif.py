@@ -61,9 +61,9 @@ else:
     nii_recon = zbor.to_nii(template='20mm')
     nii_obs = o_bo.to_nii(template='20mm')
 
-make_gif_pngs(nii_recon, gif_path=results_recon_dir, window_min=1000, window_max=1100, cmap=cmap, display_mode='lyrz', threshold=None,
-              plot_abs=False, colorbar=False, vmin=-5, vmax=5)
+make_gif_pngs(nii_recon, gif_path=results_recon_dir, window_min=1000, window_max=1100, cmap=cmap, display_mode='lyrz', threshold=0,
+              plot_abs=False, colorbar=False, vmin=-3, vmax=3)
 
 
-make_gif_pngs(nii_obs, gif_path=results_obs_dir, window_min=1000, window_max=1100, cmap=cmap, display_mode='lyrz', threshold=None,
-              plot_abs=False, colorbar=False, vmin=-5, vmax=5)
+make_gif_pngs(nii_obs, gif_path=results_obs_dir, window_min=1000, window_max=1100, cmap=cmap, display_mode='lyrz', threshold=0,
+              plot_abs=False, colorbar=False, vmin=-3, vmax=3)
