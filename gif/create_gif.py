@@ -61,9 +61,9 @@ if not os.path.exists(recon_file):
     bo = se.load('example_data')
     bo.info()
 
-    bo_r = bo.get_resampled()
+    bo.resample(64)
 
-    bor = model.predict(bo_r)
+    bor = model.predict(bo)
 
     zbor = copy.copy(bor)
     zbor.data = pd.DataFrame(bor.get_zscore_data())
