@@ -8,7 +8,7 @@ import nibabel as nib
 from config import config
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
-import cubehelix
+
 
 
 import seaborn as sns; sns.set()
@@ -61,7 +61,9 @@ if not os.path.exists(recon_file):
     bo = se.load('example_data')
     bo.info()
 
-    bor = model.predict(bo)
+    bo_r = bo.get_resampled()
+
+    bor = model.predict(bo_r)
 
     zbor = copy.copy(bor)
     zbor.data = pd.DataFrame(bor.get_zscore_data())
