@@ -8,15 +8,19 @@ import nibabel as nib
 from config import config
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
+import cubehelix
+
 
 import seaborn as sns; sns.set()
 
 #cmap = sns.cubehelix_palette(as_cmap=True)
-
-cmap=plt.cm.get_cmap('Spectral')
+#cmap = sns.set_palette("husl")
+cmap=plt.cm.get_cmap('gray')
+#cmap = cubehelix.cmap(reverse=True)
+#cmap = cubehelix.cmap(startHue=240,endHue=-300,minSat=1,maxSat=2.5,minLight=.3,maxLight=.8,gamma=.9)
 
 gif_args = {'window_min': 1000,
-            'window_max': 1101,
+            'window_max': 1010,
             'cmap': cmap,
             'display_mode': 'lyrz',
             'threshold': 0,
@@ -84,6 +88,6 @@ else:
 
     nii_obs = nib.load(obs_file)
 
-make_gif_pngs(nii_recon, gif_path=results_recon_dir, **gif_args)
+make_gif_pngs(nii_recon, gif_path=results_recon_dir, name='recon', **gif_args)
 
-make_gif_pngs(nii_obs, gif_path=results_obs_dir, **gif_args)
+make_gif_pngs(nii_obs, gif_path=results_obs_dir, name='obs', **gif_args)
