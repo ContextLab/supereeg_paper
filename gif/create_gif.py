@@ -9,12 +9,10 @@ from config import config
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 
-fname = 'example_data'
+cmap=plt.cm.get_cmap('Spectral_r')
 
-cmap=plt.cm.get_cmap('gray')
-
-gif_args = {'window_min': 1000,
-            'window_max': 1640,
+gif_args = {'window_min': 0,
+            'window_max': 640,
             'cmap': cmap,
             'display_mode': 'lyrz',
             'threshold': 0,
@@ -25,6 +23,8 @@ gif_args = {'window_min': 1000,
 
 
 model_template = sys.argv[1]
+
+fname = sys.argv[2]
 
 model_dir = os.path.join(config['datadir'], model_template)
 
