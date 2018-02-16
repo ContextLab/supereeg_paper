@@ -7,11 +7,13 @@ config['template'] = 'run_job.sh'
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 if (socket.gethostname() == 'Lucys-MacBook-Pro-3.local') or (socket.gethostname() == 'vertex.kiewit.dartmouth.edu') or (socket.gethostname() == 'vertex.local'):
+    config['bodatadir'] = '/Users/lucyowen/Desktop/supereeg_env/bo/'
     config['datadir'] = '/Users/lucyowen/Desktop/supereeg_env/ave_mats/results/'
     config['workingdir'] = '/Users/lucyowen/Desktop/supereeg_env/gif/'
     config['startdir'] = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))  # directory to start the job in
     config['template'] = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'run_job_local.sh')
 else:
+    config['bodatadir'] = '/idata/cdl/data/ECoG/pyFR/data/bo/'
     config['datadir'] = '/idata/cdl/lowen/ave_mats/results/'
     config['workingdir'] = '/idata/cdl/lowen/gif'
     config['startdir'] = '/idata/cdl/lowen'

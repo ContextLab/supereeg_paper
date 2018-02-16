@@ -9,18 +9,12 @@ from config import config
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 
+fname = 'example_data'
 
-
-import seaborn as sns; sns.set()
-
-#cmap = sns.cubehelix_palette(as_cmap=True)
-#cmap = sns.set_palette("husl")
 cmap=plt.cm.get_cmap('gray')
-#cmap = cubehelix.cmap(reverse=True)
-#cmap = cubehelix.cmap(startHue=240,endHue=-300,minSat=1,maxSat=2.5,minLight=.3,maxLight=.8,gamma=.9)
 
 gif_args = {'window_min': 1000,
-            'window_max': 1010,
+            'window_max': 1640,
             'cmap': cmap,
             'display_mode': 'lyrz',
             'threshold': 0,
@@ -34,9 +28,9 @@ model_template = sys.argv[1]
 
 model_dir = os.path.join(config['datadir'], model_template)
 
-results_recon_dir = os.path.join(config['resultsdir'], model_template + '_recon')
+results_recon_dir = os.path.join(config['resultsdir'], model_template + '_' + fname + '_recon')
 
-results_obs_dir = os.path.join(config['resultsdir'], model_template + '_obs')
+results_obs_dir = os.path.join(config['resultsdir'], model_template + '_' + fname + '_obs')
 
 
 try:
@@ -58,7 +52,12 @@ if not os.path.exists(recon_file):
 
     model = se.load(intern(model_data))
 
-    bo = se.load('example_data')
+    #bo = se.load(os.path.join(config['datadir'], fname))
+
+    bo = se.load(intern(fname))
+
+    bo.get_slice()
+
     bo.info()
 
     bo.resample(64)
