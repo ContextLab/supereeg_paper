@@ -18,16 +18,19 @@ except:
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'create_gif.py')
 
-# options for bo: 'example_data' or 'CH003.bo'
+# options for bo: 'example_data' or 'CH003.bo' or 'filepath'
 fname = 'example_data'
 
-# options for model: 'pyFR_union', 'example_model', 'gray_mask_6mm_brain'
-model = str('gray_mask_6mm_brain')
-#model = str('example_model')
+# options for model: 'pyFR_union', 'example_model', 'gray'
+#model = str('gray')
+model = str('example_model')
+
+# options for vox_size: '20', '6', or any value
+vox_size = 20
 
 job_commands = map(lambda x: x[0]+" " + model +" " + fname, zip([job_script]*1, range(1)))
-# job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
+# job_names should specify the file name of each script (as a list, of the same length as job_commands)
 job_names = map(lambda x: 'model_'+ model + '_' + fname + '.sh', range(len(job_commands)))
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======

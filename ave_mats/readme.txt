@@ -1,5 +1,5 @@
 This script converts pyFR patient data from npz format to brain objects.
-One job submitted for each patient. 
+One job submitted for each patient.
 
 To run :
 python file_io_job_submit.py

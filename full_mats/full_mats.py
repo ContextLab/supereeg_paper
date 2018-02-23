@@ -14,6 +14,8 @@ fname = sys.argv[1]
 
 model_template = sys.argv[2]
 
+vox_size = sys.argv[3]
+
 results_dir = os.path.join(config['resultsdir'], model_template)
 
 fig_dir = os.path.join(results_dir, 'figs')
@@ -35,8 +37,14 @@ if model_template == 'pyFR_union':
     data = np.load(os.path.join(config['pyFRlocsdir'],'pyFR_k10_locs.npz'))
     locs = data['locs']
     gray_locs = pd.DataFrame(locs, columns=['x', 'y', 'z'])
+
+elif model_template == 'example_model':
+    gray = se.Brain(se.load('gray', vox_size=20))
+
+    gray_locs = gray.locs
+
 else:
-    gray = se.load(intern(model_template))
+    gray = se.load(intern(model_template), vox_size=vox_size)
     gray_locs = gray.locs
 
 

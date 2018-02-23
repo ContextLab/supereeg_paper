@@ -1,4 +1,3 @@
-
 import supereeg as se
 import numpy as np
 import glob
@@ -10,6 +9,8 @@ from config import config
 
 
 model_template = sys.argv[1]
+
+vox_size = sys.argv[2]
 
 model_dir = os.path.join(config['datadir'], model_template)
 
@@ -40,4 +41,3 @@ plt.savefig(os.path.join(fig_dir, model_template))
 
 
 print(ave_model.n_subs)
-

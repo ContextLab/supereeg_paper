@@ -1,3 +1,4 @@
+
 #!/bin/bash -l
 
 # DO NOT MODIFY THIS FILE!
@@ -29,4 +30,3 @@ source activate supereeg_env
 <config['cmd_wrapper']> <job_command> #note: job_command is reserved for the job command; it should not be specified in config.py
 
 source deactivate supereeg_env
-
