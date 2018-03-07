@@ -21,13 +21,13 @@ results_dir = os.path.join(config['resultsdir'], model_template)
 fig_dir = os.path.join(results_dir, 'figs')
 
 try:
-    if not os.path.exists(os.path.dirname(results_dir)):
+    if not os.path.exists(results_dir):
         os.makedirs(results_dir)
 except OSError as err:
    print(err)
 
 try:
-    if not os.path.exists(os.path.dirname(fig_dir)):
+    if not os.path.exists(fig_dir):
         os.makedirs(fig_dir)
 except OSError as err:
    print(err)
