@@ -20,13 +20,14 @@ except:
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ave_mats.py')
 
 # options for model: 'pyFR_union', 'example_model', 'gray'
+
 #model = str('gray')
 model = str('example_model')
 
 # options for vox_size: '20', '6', or any value
-vox_size = 20
+vox_size = str('20')
 
-job_commands = map(lambda x: x[0]+" "+ model, zip([job_script]*1, range(1)))
+job_commands = map(lambda x: x[0]+" "+ model+" "+ vox_size, zip([job_script]*1, range(1)))
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
 job_names = map(lambda x: 'model_'+ model + '.sh', range(len(job_commands)))

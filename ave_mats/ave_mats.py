@@ -19,14 +19,16 @@ results_dir = os.path.join(config['resultsdir'], model_template)
 fig_dir = os.path.join(results_dir, 'figs')
 
 try:
-    os.stat(results_dir)
-except:
-    os.makedirs(results_dir)
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir)
+except OSError as err:
+   print(err)
 
 try:
-    os.stat(fig_dir)
-except:
-    os.makedirs(fig_dir)
+    if not os.path.exists(fig_dir):
+        os.makedirs(fig_dir)
+except OSError as err:
+   print(err)
 
 model_data = glob.glob(os.path.join(model_dir,'*.mo'))
 
