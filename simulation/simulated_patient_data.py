@@ -29,9 +29,8 @@ try:
 except:
     os.makedirs(config['resultsdir'])
 
-model = se.load('example_model')
-
-locs = model.locs
+# simulate more locations
+locs = se.simulate_locations(n_elecs=100)
 
 # n_electrodes - number of electrodes for reconstructed patient
 n_elecs = range(10, 100, 10)
