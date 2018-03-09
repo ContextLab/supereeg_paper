@@ -11,14 +11,20 @@ from nilearn import plotting as ni_plt
 
 ## this script iterates over brain objects, filters them based on kurtosis value,
 ## then compiles the clean electrodes into a numpy array as well as a list of the contributing brain objects
-
-try:
-    os.stat(config['resultsdir'])
-except:
-    os.makedirs(config['resultsdir'])
-
+#
+# try:
+#     os.stat(config['resultsdir'])
+# except:
+#     os.makedirs(config['resultsdir'])
 
 results_dir = config['resultsdir']
+
+try:
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir)
+except OSError as err:
+   print(err)
+
 
 data_dir = config['datadir']
 
