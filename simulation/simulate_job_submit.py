@@ -15,13 +15,19 @@ try:
 except:
     os.makedirs(config['resultsdir'])
 
+# job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'simulated_patient_data.py')
+# simulations = ('location_case_1', 'location_case_2', 'location_case_3')
+# job_commands = map(lambda x: x[0]+" "+str(x[1]), zip([job_script]*len(simulations), simulations))
+#
+# # job_names should specify the file name of each script (as a list, of the same length as job_commands)
+#
+# job_names = map(lambda x: os.path.basename(os.path.splitext(x)[0])+'.sh', simulations)
+
+# each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'simulated_patient_data.py')
-simulations = ('location_case_1', 'location_case_2', 'location_case_3')
-job_commands = map(lambda x: x[0]+" "+str(x[1]), zip([job_script]*len(simulations), simulations))
-
+job_commands = map(lambda x: x[0]+" "+str(x[1]), zip([job_script]*1, range(1)))
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
-
-job_names = map(lambda x: os.path.basename(os.path.splitext(x)[0])+'.sh', simulations)
+job_names = map(lambda x: 'simulation_' + str(x) + '.sh', range(len(job_commands)))
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
