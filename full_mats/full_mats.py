@@ -16,7 +16,7 @@ model_template = sys.argv[2]
 
 vox_size = sys.argv[3]
 
-results_dir = os.path.join(config['resultsdir'], model_template)
+results_dir = os.path.join(config['resultsdir'], model_template + vox_size)
 
 fig_dir = os.path.join(results_dir, 'figs')
 
@@ -40,11 +40,10 @@ if model_template == 'pyFR_union':
 
 elif model_template == 'example_model':
     gray = se.Brain(se.load('gray', vox_size=20))
-
     gray_locs = gray.locs
 
 else:
-    gray = se.load(intern(model_template), vox_size=vox_size)
+    gray = se.Brain(se.load(intern(model_template), vox_size=int(vox_size)))
     gray_locs = gray.locs
 
 
