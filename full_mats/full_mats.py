@@ -50,17 +50,17 @@ else:
 file_name = os.path.basename(os.path.splitext(fname)[0])
 
 if fname.split('.')[-1]=='bo':
-    bo = se.load(fname)
-    bo.plot_locs()
-    if se.filter_subj(bo):
+    values = se.filter_subj(fname, return_locs=False)
+    if values is None:
+        pass
+    else:
+        bo = se.load(fname)
         model = se.Model(bo, locs=gray_locs)
         model.save(fname=os.path.join(results_dir, file_name))
         model.plot_data()
         plt.savefig(os.path.join(fig_dir, file_name))
         print('done')
 
-    else:
-        print(file_name + '_filtered')
 else:
     print('unknown file type')
 
