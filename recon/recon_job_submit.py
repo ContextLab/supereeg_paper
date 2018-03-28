@@ -18,26 +18,30 @@ except:
 
 
 def electrode_search(fname):
-    bo = se.load(fname)
-    if se.filter_subj(bo):
-        file_name = os.path.basename(os.path.splitext(fname)[0])
-        nbo = se.filter_elecs(bo)
-        return nbo.locs.shape[0]
+    values = se.filter_subj(fname, return_locs=True)
+    if values is None:
+        return 0
+    else:
+        meta, locs = values
+        return locs.shape[0]
+
 
 
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
 files = glob.glob(os.path.join(config['datadir'],'*.bo'))
-zip(files, map(lambda e :electrode_search(e), files))
+
+file_nums = [(a, i) for item, (a,b) in enumerate(zip(files, map(lambda e :electrode_search(e), files))) for i in range(b)]
+
 # options for model: 'pyFR_locs', 'example_model', 'gray'
-model = str('example_model')
+model = str('gray')
 # options for vox_size: '20', '6', or any value
 vox_size = 20
-#job_commands = map(lambda x: x[0]+" "+str(x[1])+" " + model, zip([job_script]* len(files), files))
+job_commands = map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model+" " +str(vox_size), zip([job_script]* len(file_nums), file_nums))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
-job_names = map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_'+model+'.sh', files)
+job_names = map(lambda x: os.path.basename(x[0])+"_"+str(x[1])+"_" + model+"_"+str(vox_size)+'.sh', file_nums)
 
 
 
