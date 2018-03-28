@@ -51,6 +51,7 @@ file_name = os.path.basename(os.path.splitext(fname)[0])
 
 if fname.split('.')[-1]=='bo':
     bo = se.load(fname)
+    bo.plot_locs()
     if se.filter_subj(bo):
         model = se.Model(bo, locs=gray_locs)
         model.save(fname=os.path.join(results_dir, file_name))

@@ -8,7 +8,7 @@ import os
 import socket
 import getpass
 import datetime as dt
-import pickle
+import supereeg as se
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 try:
@@ -16,23 +16,41 @@ try:
 except:
     os.makedirs(config['resultsdir'])
 
+
+def electrode_search(fname):
+    bo = se.load(fname)
+    if se.filter_subj(bo):
+        file_name = os.path.basename(os.path.splitext(fname)[0])
+        nbo = se.filter_elecs(bo)
+        return nbo.locs.shape[0]
+
+
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
 files = glob.glob(os.path.join(config['datadir'],'*.bo'))
-# options for model: 'pyFR_locs', 'example_model', 'gray_mask_6mm_brain'
+zip(files, map(lambda e :electrode_search(e), files))
+# options for model: 'pyFR_locs', 'example_model', 'gray'
 model = str('example_model')
-job_commands = map(lambda x: x[0]+" "+str(x[1])+" " + model, zip([job_script]*len(files), files))
+# options for vox_size: '20', '6', or any value
+vox_size = 20
+#job_commands = map(lambda x: x[0]+" "+str(x[1])+" " + model, zip([job_script]* len(files), files))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
 job_names = map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_'+model+'.sh', files)
 
 
-def electrode_search(fname):
-    with open(fname, 'rb') as f:
-        bo = pickle.load(f)
-    return bo.locs
 
+## old
+# for i in /idata/cdl/data/ECoG/pyFR/data/npz/BW001.npz
+# do
+#     # i="/idata/cdl/data/ECoG/pyFR/data/npz/$index"
+#     electrode=5 #$(python worker_electrode.py $i>&1)
+#         for e in $(seq 0 $electrode)
+#         do
+#           	qsub -v electrode_number=$e,casenumber=$i -N $i$i_job jobs_timeseries.pbs
+#         done
+# done
 
 #def main(fname):
 #        data = np.load(fname, mmap_mode='r')

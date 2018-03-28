@@ -14,7 +14,9 @@ fname = sys.argv[1]
 
 model_template = sys.argv[2]
 
-results_dir = os.path.join(config['resultsdir'], model_template)
+vox_size = sys.argv[3]
+
+results_dir = os.path.join(config['resultsdir'], model_template + vox_size)
 
 fig_dir = os.path.join(results_dir, 'figs')
 

@@ -12,9 +12,9 @@ model_template = sys.argv[1]
 
 vox_size = sys.argv[2]
 
-model_dir = os.path.join(config['datadir'], model_template)
+model_dir = os.path.join(config['datadir'], model_template + vox_size)
 
-results_dir = os.path.join(config['resultsdir'], model_template)
+results_dir = os.path.join(config['resultsdir'], model_template + vox_size)
 
 fig_dir = os.path.join(results_dir, 'figs')
 
@@ -35,11 +35,11 @@ model_data = glob.glob(os.path.join(model_dir,'*.mo'))
 
 ave_model = se.model_compile(model_data)
 
-ave_model.save(fname=os.path.join(results_dir, model_template))
+ave_model.save(fname=os.path.join(results_dir, model_template + vox_size))
 
 ave_model.plot_data()
 
-plt.savefig(os.path.join(fig_dir, model_template))
+plt.savefig(os.path.join(fig_dir, model_template + vox_size))
 
 
 print(ave_model.n_subs)

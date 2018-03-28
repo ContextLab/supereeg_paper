@@ -21,8 +21,8 @@ job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ave_mats
 
 # options for model: 'pyFR_union', 'example_model', 'gray'
 
-#model = str('gray')
-model = str('example_model')
+model = str('gray')
+#model = str('example_model')
 
 # options for vox_size: '20', '6', or any value
 vox_size = str('20')

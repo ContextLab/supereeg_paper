@@ -27,23 +27,17 @@ data_dir = config['datadir']
 bo_files = glob.glob(os.path.join(data_dir,'*.bo'))
 
 model_data = []
-for b in bo_files:
-    model_data.append(se.filter_subj(se.load(b)))
-    print(b)
-
-print(model_data)
-
-
 union_locs = pd.DataFrame()
-for bo in model_data:
-    if bo == None:
-        continue
+
+## compile filtered locations of brain objects that have 2 or more electrodes that pass kurtosis threshold
+for b in bo_files:
+    values = se.filter_subj(b, return_locs=True)
+    if values is None:
+        pass
     else:
-    ## for only the union electrode locations that pass kurtosis threshold:
-        bo = se.filter_elecs(se.load(os.path.join(data_dir, bo + '.bo')))
-
-    union_locs = union_locs.append(bo.locs, ignore_index=True)
-
+        meta, locs = values
+        union_locs = union_locs.append(locs)
+        model_data.append(meta)
 
 locations = sort_unique_locs(union_locs)
 
