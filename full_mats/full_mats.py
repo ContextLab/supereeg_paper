@@ -1,5 +1,6 @@
 
 import supereeg as se
+from supereeg.helpers import filter_subj
 import numpy as np
 import glob
 import sys
@@ -50,7 +51,7 @@ else:
 file_name = os.path.basename(os.path.splitext(fname)[0])
 
 if fname.split('.')[-1]=='bo':
-    values = se.filter_subj(fname, return_locs=False)
+    values = filter_subj(fname, return_locs=False)
     if values is None:
         pass
     else:
