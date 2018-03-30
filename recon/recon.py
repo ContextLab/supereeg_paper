@@ -16,23 +16,13 @@ model_template = sys.argv[2]
 
 vox_size = sys.argv[3]
 
+elecs = sys.argv[4]
+
+model_dir = os.path.join(config['datadir'], model_template + vox_size)
+
 results_dir = os.path.join(config['resultsdir'], model_template + vox_size)
 
 fig_dir = os.path.join(results_dir, 'figs')
-
-def electrode_search(fname, threshold=10):
-    with open(fname, 'rb') as f:
-        bo = pickle.load(f)
-        thresh_bool = bo.kurtosis > threshold
-        if sum(~thresh_bool) < 2:
-            return 0
-        else:
-            return sum(~thresh_bool)
-
-num_elecs = electrode_search(fname)
-
-
-#([electrode_search(fname) for fname in files])
 
 try:
     os.stat(results_dir)
@@ -46,8 +36,6 @@ except:
 
 
 # load locations for model
-### this weird work around is necessary because there's an issue using a variable for a string in an argument
-
 gray = se.load(intern(model_template))
 gray_locs = gray.locs
 
@@ -55,6 +43,8 @@ file_name = os.path.basename(os.path.splitext(fname)[0])
 
 if fname.split('.')[-1]=='bo':
     bo = se.load(fname)
+    mo = os.path.join(results_dir, file_name)
+
     if se.filter_subj(bo):
         model = se.Model(bo, locs=gray_locs)
         model.save(filepath=os.path.join(results_dir, file_name))
@@ -66,6 +56,21 @@ if fname.split('.')[-1]=='bo':
         print(file_name + '_filtered')
 else:
     print('unknown file type')
+
+### needs to:
+# 1 call up brain object
+# 2 call up associated model object
+# 3 call up average correlation matrix
+# 3.5 zscore brain object
+# 4 remove 1 electrode from brain object, store as separate brain object
+# 5 remove model object from average correlation matrix
+# 6 predict everywhere
+# 7 index r_bo at electrode location
+# 8 save correlation value
+
+
+
+
 # work around if not brain objects, but :
 # if fname.split('.')[-1]=='bo':
 #     bo = se.filter_elecs(se.load(fname))

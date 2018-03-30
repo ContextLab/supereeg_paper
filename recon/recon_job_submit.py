@@ -40,30 +40,9 @@ vox_size = 20
 job_commands = map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model+" " +str(vox_size), zip([job_script]* len(file_nums), file_nums))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
-
 job_names = map(lambda x: os.path.basename(x[0])+"_"+str(x[1])+"_" + model+"_"+str(vox_size)+'.sh', file_nums)
 
 
-
-## old
-# for i in /idata/cdl/data/ECoG/pyFR/data/npz/BW001.npz
-# do
-#     # i="/idata/cdl/data/ECoG/pyFR/data/npz/$index"
-#     electrode=5 #$(python worker_electrode.py $i>&1)
-#         for e in $(seq 0 $electrode)
-#         do
-#           	qsub -v electrode_number=$e,casenumber=$i -N $i$i_job jobs_timeseries.pbs
-#         done
-# done
-
-#def main(fname):
-#        data = np.load(fname, mmap_mode='r')
-#        n_electrodes = np.shape(data['R'])[0] - 1
-#        print n_electrodes
-#        sys.exit(n_electrodes)
-#
-#if __name__ == "__main__":
-#        main(sys.argv[1])
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
