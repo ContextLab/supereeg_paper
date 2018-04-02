@@ -20,7 +20,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-plt.switch_backend('agg')
+#plt.switch_backend('agg')
 from supereeg.helpers import _corr_column
 from config import config
 
@@ -33,7 +33,7 @@ except:
 locs = se.simulate_locations(n_elecs=100)
 
 # n_electrodes - number of electrodes for reconstructed patient
-n_elecs = range(10, 100, 10)
+n_elecs = range(75, 100, 50)
 
 
 # m_patients - number of patients in the model
@@ -41,7 +41,7 @@ m_patients = [5, 10]
 
 
 # m_electrodes - number of electrodes for each patient in the model
-m_elecs = range(10, 100, 10)
+m_elecs = range(75, 100, 50)
 
 
 iter_val = 5
@@ -55,7 +55,7 @@ for p, m, n in param_grid:
 
     for i in range(iter_val):
         # create brain objects with m_patients and loop over the number of model locations and subset locations to build model
-        model_bos = [se.simulate_model_bos(n_samples=100, sample_rate=1000, locs=locs, sample_locs=m, noise =.3) for x in range(p)]
+        model_bos = [se.simulate_model_bos(n_samples=1000, sample_rate=100, locs=locs, sample_locs=m, noise=.3) for x in range(p)]
 
         # create model from subsampled gray locations
         model = se.Model(model_bos, locs=locs)
@@ -64,13 +64,13 @@ for p, m, n in param_grid:
         sub_locs = locs.sample(n).sort_values(['x', 'y', 'z'])
 
         # simulate brain object
-        bo = se.simulate_bo(n_samples=100, sample_rate=1000, locs=locs, noise =.3)
+        bo = se.simulate_bo(n_samples=1000, sample_rate=100, locs=locs, noise=.3)
 
         # parse brain object to create synthetic patient data
         data = bo.data.iloc[:, sub_locs.index]
 
         # create synthetic patient (will compare remaining activations to predictions)
-        bo_sample = se.Brain(data=data.as_matrix(), locs=sub_locs)
+        bo_sample = se.Brain(data=data.as_matrix(), sample_rate=100, locs=sub_locs)
 
         # reconstruct at 'unknown' locations
         bo_r = model.predict(bo_sample)

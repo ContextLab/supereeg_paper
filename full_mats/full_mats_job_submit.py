@@ -18,7 +18,10 @@ except:
 
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
-files = glob.glob(os.path.join(config['datadir'],'*.bo'))
+
+bos = ('CH005.bo', 'CH013.bo', 'CH061.bo', 'CH066.bo', 'CH067.bo', 'TJ015.bo', 'TJ018_2.bo', 'TJ018.bo', 'TJ027.bo', 'TJ028.bo', 'TJ032.bo')
+files = map(lambda x: os.path.join(config['datadir'],x), bos)
+#files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
 # options for model: 'pyFR_union', 'example_model', 'gray'
 model = str('gray')
