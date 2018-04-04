@@ -5,7 +5,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
-from supereeg.helpers import sort_unique_locs
+from supereeg.helpers import sort_unique_locs, filter_subj
 from config import config
 from nilearn import plotting as ni_plt
 
@@ -31,7 +31,7 @@ union_locs = pd.DataFrame()
 
 ## compile filtered locations of brain objects that have 2 or more electrodes that pass kurtosis threshold
 for b in bo_files:
-    values = se.filter_subj(b, return_locs=True)
+    values = filter_subj(b, return_locs=True)
     if values is None:
         pass
     else:
