@@ -10,9 +10,11 @@ from config import config
 
 model_template = sys.argv[1]
 
-model_dir = os.path.join(config['datadir'], model_template)
+radius = sys.argv[2]
 
-results_dir = os.path.join(config['resultsdir'], model_template)
+model_dir = os.path.join(config['datadir'],  model_template +"_"+ radius)
+
+results_dir = os.path.join(config['resultsdir'],  model_template +"_"+ radius)
 
 
 def z2r(z):
@@ -27,7 +29,7 @@ except OSError as err:
 
 
 files =glob.glob(os.path.join(model_dir, '*.npz'))
-outfile = os.path.join(results_dir, 'locs.npz')
+outfile = os.path.join(results_dir, 'ave_mat.npz')
 
 results = []
 count = 0
