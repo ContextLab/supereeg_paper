@@ -27,7 +27,7 @@ except OSError as err:
 
 
 files =glob.glob(os.path.join(model_dir, '*.npz'))
-outfile = os.path.join(results_dir, model_template)
+outfile = os.path.join(results_dir, 'locs.npz')
 
 results = []
 count = 0
