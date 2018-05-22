@@ -24,13 +24,12 @@ job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ave_mats
 model = str('pyFR_union')
 #model = str('example_model')
 
-# options for vox_size: '20', '6', or any value
-#vox_size = str('6')
+radius = str('20')
 
-job_commands = map(lambda x: x[0]+" "+ model, zip([job_script]*1, range(1)))
+job_commands = map(lambda x: x[0]+" "+ model+" "+ radius, zip([job_script]*1, range(1)))
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
-job_names = map(lambda x: 'model_'+ model + '.sh', range(len(job_commands)))
+job_names = map(lambda x: 'model_'+ model + "_"+ radius + '.sh', range(len(job_commands)))
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
 assert(len(job_commands) == len(job_names))
