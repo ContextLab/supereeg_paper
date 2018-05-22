@@ -15,8 +15,9 @@ fname = sys.argv[1]
 
 model_template = sys.argv[2]
 
+radius = sys.argv[3]
 
-results_dir = os.path.join(config['resultsdir'], model_template)
+results_dir = os.path.join(config['resultsdir'], model_template +"_"+ radius)
 
 try:
     if not os.path.exists(results_dir):
@@ -57,7 +58,7 @@ if elec_count > 1:
 
 
     # exapand matrix
-    num_corrmat_x, denom_corrmat_x, n_subs = _bo2model(bo, R)
+    num_corrmat_x, denom_corrmat_x, n_subs = _bo2model(bo, R, int(radius))
 
     #### save the z expanded correlation matrix
     print('saving model object: ' + fname)
