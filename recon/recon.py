@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 #plt.switch_backend('agg')
 import pickle
 from config import config
+from supereeg.helpers import filter_subj
+
 
 
 fname = sys.argv[1]
@@ -16,7 +18,7 @@ model_template = sys.argv[2]
 
 vox_size = sys.argv[3]
 
-elecs = sys.argv[4]
+e = sys.argv[4]
 
 model_dir = os.path.join(config['datadir'], model_template + vox_size)
 
@@ -44,6 +46,9 @@ file_name = os.path.basename(os.path.splitext(fname)[0])
 if fname.split('.')[-1]=='bo':
     bo = se.load(fname)
     mo = os.path.join(results_dir, file_name)
+    values = se.filter_subj(fname, return_locs=True)
+    meta, locs = values
+    electrode = locs.shape[e]
 
     if se.filter_subj(bo):
         model = se.Model(bo, locs=gray_locs)
@@ -57,6 +62,15 @@ if fname.split('.')[-1]=='bo':
 else:
     print('unknown file type')
 
+
+
+
+def electrode_search(fname, threshold=10):
+    kurt_vals = se.load(fname, field='kurtosis')
+    thresh_bool = kurt_vals > threshold
+    return sum(~thresh_bool)
+
+
 ### needs to:
 # 1 call up brain object
 # 2 call up associated model object
@@ -67,6 +81,9 @@ else:
 # 6 predict everywhere
 # 7 index r_bo at electrode location
 # 8 save correlation value
+
+
+## for null model:
 
 
 

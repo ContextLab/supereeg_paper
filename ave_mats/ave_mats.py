@@ -4,19 +4,20 @@ import glob
 import sys
 import os
 import matplotlib.pyplot as plt
-plt.switch_backend('agg')
+#plt.switch_backend('agg')
 from config import config
 
 
 model_template = sys.argv[1]
 
-vox_size = sys.argv[2]
+model_dir = os.path.join(config['datadir'], model_template)
 
-model_dir = os.path.join(config['datadir'], model_template + vox_size)
+results_dir = os.path.join(config['resultsdir'], model_template)
 
-results_dir = os.path.join(config['resultsdir'], model_template + vox_size)
 
-fig_dir = os.path.join(results_dir, 'figs')
+def z2r(z):
+
+    return (np.exp(2 * z) - 1) / (np.exp(2 * z) + 1)
 
 try:
     if not os.path.exists(results_dir):
@@ -24,22 +25,21 @@ try:
 except OSError as err:
    print(err)
 
-try:
-    if not os.path.exists(fig_dir):
-        os.makedirs(fig_dir)
-except OSError as err:
-   print(err)
 
-model_data = glob.glob(os.path.join(model_dir,'*.mo'))
+files =glob.glob(os.path.join(model_dir, '*.npz'))
+outfile = os.path.join(results_dir, model_template)
 
+results = []
+count = 0
+for i in files:
+    count += 1
+    data = np.load(i, mmap_mode='r')
+    C_est = data['C_est']
+    C_est[np.where(np.isnan(C_est))] = 0
+    if np.shape(results)[0] == 0:
+        results = C_est
+    else:
+        results = results + C_est
 
-ave_model = se.model_compile(model_data)
-
-ave_model.save(fname=os.path.join(results_dir, model_template + vox_size))
-
-ave_model.plot_data()
-
-plt.savefig(os.path.join(fig_dir, model_template + vox_size))
-
-
-print(ave_model.n_subs)
+average_matrix = z2r(results /count) + np.eye(np.shape(results)[0])
+np.savez(outfile, average_matrix=average_matrix, n=count)

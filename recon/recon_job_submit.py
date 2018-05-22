@@ -9,6 +9,7 @@ import socket
 import getpass
 import datetime as dt
 import supereeg as se
+from supereeg.helpers import filter_subj
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 try:
@@ -18,13 +19,12 @@ except:
 
 
 def electrode_search(fname):
-    values = se.filter_subj(fname, return_locs=True)
+    values = filter_subj(fname, return_locs=True)
     if values is None:
         return 0
     else:
         meta, locs = values
         return locs.shape[0]
-
 
 
 # each job command should be formatted as a string

@@ -1,13 +1,13 @@
 
 import supereeg as se
-from supereeg.helpers import filter_subj
+from supereeg.model import _bo2model
 import numpy as np
 import glob
 import sys
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
-plt.switch_backend('agg')
+#plt.switch_backend('agg')
 from config import config
 
 
@@ -15,11 +15,8 @@ fname = sys.argv[1]
 
 model_template = sys.argv[2]
 
-vox_size = sys.argv[3]
 
-results_dir = os.path.join(config['resultsdir'], model_template + vox_size)
-
-fig_dir = os.path.join(results_dir, 'figs')
+results_dir = os.path.join(config['resultsdir'], model_template)
 
 try:
     if not os.path.exists(results_dir):
@@ -27,41 +24,44 @@ try:
 except OSError as err:
    print(err)
 
-try:
-    if not os.path.exists(fig_dir):
-        os.makedirs(fig_dir)
-except OSError as err:
-   print(err)
 
-# load locations for model
-if model_template == 'pyFR_union':
-    data = np.load(os.path.join(config['pyFRlocsdir'],'pyFR_k10_locs.npz'))
-    locs = data['locs']
-    gray_locs = pd.DataFrame(locs, columns=['x', 'y', 'z'])
+def electrode_search(fname, threshold=10):
+    kurt_vals = se.load(fname, field='kurtosis')
+    thresh_bool = kurt_vals > threshold
+    return sum(~thresh_bool)
 
-elif model_template == 'example_model':
-    gray = se.Brain(se.load('gray', vox_size=20))
-    gray_locs = gray.locs
+locs_file = os.path.join(config['pyFRlocsdir'], 'locs.npz')
+
+R = np.load(locs_file)['locs']
+
+elec_count = electrode_search(sys.argv[1])
+
+if elec_count > 1:
+
+    fname =os.path.basename(os.path.splitext(fname)[0])
+
+    print('creating model object: ' + fname)
+
+    # load brain object
+    bo = se.load(sys.argv[1])
+
+    # filter
+    bo.get_filtered_bo()
+
+    npz_outfile = sys.argv[1][:-2]+'npz'
+    if not os.path.isfile(npz_outfile):
+        np.savez(npz_outfile, Y = bo.get_data().as_matrix(),
+                          R = bo.get_locs().as_matrix(),
+                          fname_labels=np.atleast_2d(bo.sessions.as_matrix()),
+                          sample_rate=bo.sample_rate)
+
+
+    # exapand matrix
+    num_corrmat_x, denom_corrmat_x, n_subs = _bo2model(bo, R)
+
+    #### save the z expanded correlation matrix
+    print('saving model object: ' + fname)
+    np.savez(os.path.join(results_dir, fname), C_est=np.divide(num_corrmat_x, denom_corrmat_x))
 
 else:
-    gray = se.Brain(se.load(intern(model_template), vox_size=int(vox_size)))
-    gray_locs = gray.locs
-
-
-file_name = os.path.basename(os.path.splitext(fname)[0])
-
-if fname.split('.')[-1]=='bo':
-    values = filter_subj(fname, return_locs=False)
-    if values is None:
-        pass
-    else:
-        bo = se.load(fname)
-        model = se.Model(bo, locs=gray_locs)
-        model.save(fname=os.path.join(results_dir, file_name))
-        model.plot_data()
-        plt.savefig(os.path.join(fig_dir, file_name))
-        print('done')
-
-else:
-    print('unknown file type')
-
+    print('skipping model (not enough electrodes pass kurtosis threshold): ' + sys.argv[1])

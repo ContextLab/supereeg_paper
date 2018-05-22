@@ -5,7 +5,6 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
-from supereeg.helpers import sort_unique_locs, filter_subj
 from config import config
 from nilearn import plotting as ni_plt
 
@@ -24,29 +23,36 @@ except OSError as err:
 
 data_dir = config['datadir']
 
-bo_files = glob.glob(os.path.join(data_dir,'*.bo'))
 
+def electrode_search(fname, threshold=10):
+
+    kurt_vals = se.load(fname, field='kurtosis')
+    thresh_bool = kurt_vals > threshold
+    locs = se.load(fname, field='locs')
+    if sum(~thresh_bool) > 1:
+        locs = pd.DataFrame(locs, columns=['x', 'y', 'z'])
+    return locs[~thresh_bool]
+
+union_locs = []
 model_data = []
-union_locs = pd.DataFrame()
 
-## compile filtered locations of brain objects that have 2 or more electrodes that pass kurtosis threshold
-for b in bo_files:
-    values = filter_subj(b, return_locs=True)
-    if values is None:
+brain_data = glob.glob(os.path.join(data_dir, '*.bo'))
+for i in brain_data:
+    try:
+        locs = electrode_search(i)
+        if not locs.empty:
+            if union_locs == []:
+                union_locs = locs.as_matrix()
+                model_data.append(os.path.basename(i))
+            else:
+                union_locs = np.vstack((union_locs, locs.as_matrix()))
+                model_data.append(os.path.basename(i))
+    except:
         pass
-    else:
-        meta, locs = values
-        union_locs = union_locs.append(locs)
-        model_data.append(meta)
 
-locations = sort_unique_locs(union_locs)
+locations = se.sort_unique_locs(union_locs)
 
-filepath=os.path.join(results_dir, 'pyFR_k10_locs.npz')
+results = os.path.join(results_dir, 'locs.npz')
+#results = os.path.join('/scratch/lucy.owen/supereeg/', 'locs.npz')
 
-np.savez(filepath, locs = locations, subjs = model_data)
-
-pdfpath=os.path.join(results_dir, 'pyFR_k10_locs.pdf')
-
-ni_plt.plot_connectome(np.eye(locations.shape[0]), locations, display_mode='lyrz', output_file=pdfpath, node_kwargs={'alpha':0.5, 'edgecolors':None}, node_size=10, node_color = np.ones(locations.shape[0]))
-
-print('done')
+np.savez(results, locs = locations, subjs = model_data)

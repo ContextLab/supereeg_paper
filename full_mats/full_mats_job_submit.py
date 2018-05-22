@@ -19,21 +19,16 @@ except:
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
 
-bos = ('CH005.bo', 'CH013.bo', 'CH061.bo', 'CH066.bo', 'CH067.bo', 'TJ015.bo', 'TJ018_2.bo', 'TJ018.bo', 'TJ027.bo', 'TJ028.bo', 'TJ032.bo')
-files = map(lambda x: os.path.join(config['datadir'],x), bos)
-#files = glob.glob(os.path.join(config['datadir'],'*.bo'))
+files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
-# options for model: 'pyFR_union', 'example_model', 'gray'
-model = str('gray')
-#model = str('example_model')
+# options for model: 'pyFR_union'
+model = str('pyFR_union')
 
-# options for vox_size: '20', '6', or any value
-vox_size = 20
-job_commands = map(lambda x: x[0]+" "+str(x[1])+" " + model + " " + str(vox_size), zip([job_script]*len(files), files))
+job_commands = map(lambda x: x[0]+" "+str(x[1])+" " + model, zip([job_script]*len(files), files))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
-job_names = map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_' + model + '_' + str(vox_size) +'.sh', files)
+job_names = map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_' + model + '.sh', files)
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
 assert(len(job_commands) == len(job_names))
