@@ -22,6 +22,8 @@ config['scriptdir'] = os.path.join(config['workingdir'], 'scripts')
 config['lockdir'] = os.path.join(config['workingdir'], 'locks')
 config['resultsdir'] = os.path.join(config['workingdir'], 'results')
 config['modeldir'] = os.path.join(config['startdir'], 'full_mats/results')
+config['avedir'] = os.path.join(config['startdir'], 'ave_mats/results')
+config['pyFRlocsdir'] = os.path.join(config['startdir'], 'pyFR_locs/results')
 
 # runtime options
 config['jobname'] = "recon"  # default job name
