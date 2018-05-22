@@ -42,6 +42,7 @@ for i in brain_data:
         locs = electrode_search(i)
         if not locs.empty:
             if union_locs == []:
+                print(os.path.basename(i))
                 union_locs = locs.as_matrix()
                 model_data.append(os.path.basename(i))
             else:
