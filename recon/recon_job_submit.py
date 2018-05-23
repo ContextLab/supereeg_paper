@@ -36,10 +36,12 @@ file_nums = [(a, i) for item, (a,b) in enumerate(zip(files, map(lambda e :electr
 # options for model: 'pyFR_union', 'example_model', 'gray'
 model = str('pyFR_union')
 
-job_commands = map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model, zip([job_script]* len(file_nums), file_nums))
+radius = str('20')
+
+job_commands = map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model + " " + radius, zip([job_script]* len(file_nums), file_nums))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
-job_names = map(lambda x: os.path.basename(x[0])+"_"+str(x[1])+"_" + model+ '.sh', file_nums)
+job_names = map(lambda x: os.path.basename(x[0])+"_"+str(x[1])+"_" + model+ "_" + radius + '.sh', file_nums)
 
 
 
