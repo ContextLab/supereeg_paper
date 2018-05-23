@@ -28,8 +28,12 @@ def electrode_search(fname):
 
 
 # each job command should be formatted as a string
-job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
-files = glob.glob(os.path.join(config['datadir'],'*.bo'))
+job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon.py')
+
+bos = ('BW001.bo', 'BW013.bo')
+files = map(lambda x: os.path.join(config['datadir'],x), bos)
+print(files)
+#files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
 file_nums = [(a, i) for item, (a,b) in enumerate(zip(files, map(lambda e :electrode_search(e), files))) for i in range(b)]
 
