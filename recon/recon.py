@@ -1,5 +1,6 @@
 
 import supereeg as se
+from supereeg.model import _bo2model
 import numpy as np
 import glob
 import sys
@@ -93,20 +94,9 @@ Model_across[np.where(np.isnan(Model_across))] = 0
 Model = Model_across + np.eye(np.shape(Model_across)[0])
 
 corrs = time_by_file_index_chunked_local(npz_infile, Model_across, known_inds, unknown_inds, electrode_ind, other_inds,
-                                            elec_ind, time_series=False)
+                                         elec_ind, time_series=False)
 recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
 np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
-
-
-### within subjects:
-C_est = mo['C_est']
-C_est[np.where(np.isnan(C_est))] = 0
-
-Model_within = z2r(C_est)
-corrs = time_by_file_index_chunked_local(npz_infile, Model_within, known_inds, unknown_inds, electrode_ind, other_inds,
-                                            elec_ind, time_series=False)
-recon_outfile = os.path.join(within_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-np.savez(recon_outfile, coord=electrode, corrs=corrs)
 
 ### all subjects:
 Model_all = Ave_data['average_matrix']
@@ -116,3 +106,22 @@ corrs = time_by_file_index_chunked_local(npz_infile, Model_all, known_inds, unkn
                                             elec_ind, time_series=False)
 recon_outfile = os.path.join(all_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
 np.savez(recon_outfile, coord=electrode, corrs=corrs)
+
+### within subjects:
+
+bo_sliced = bo[:, other_inds]
+
+num_corrmat_x, denom_corrmat_x, n_subs = _bo2model(bo_sliced, R_K_subj, 20)
+
+C_est=np.divide(num_corrmat_x, denom_corrmat_x)
+C_est[np.where(np.isnan(C_est))] = 0
+sub_model = z2r(C_est) + np.eye(np.shape(C_est)[0])
+
+known_inds, unknown_inds, electrode_ind = known_unknown(R_K_subj, R_K_removed, R_K_subj, elec_ind)
+
+corrs = time_by_file_index_chunked_local(npz_infile, sub_model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                            elec_ind, time_series=False)
+
+recon_outfile = os.path.join(within_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+np.savez(recon_outfile, coord=electrode, corrs=corrs)
+
