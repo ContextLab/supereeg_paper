@@ -7,9 +7,8 @@ import sys
 import os
 import matplotlib.pyplot as plt
 #plt.switch_backend('agg')
-import pickle
 from config import config
-from stats import time_by_file_index_chunked_local, corrmat, z2r, r2z
+from stats import time_by_file_index_chunked_local, z2r, r2z
 from bookkeeping import remove_electrode, known_unknown, alter_avemat
 
 
@@ -88,40 +87,50 @@ known_inds, unknown_inds, electrode_ind = known_unknown(R, R_K_removed, R_K_subj
 
 ### across subjects:
 
-Model_across, count = alter_avemat(Ave_data, mo)
-
-Model_across[np.where(np.isnan(Model_across))] = 0
-Model = Model_across + np.eye(np.shape(Model_across)[0])
-
-corrs = time_by_file_index_chunked_local(npz_infile, Model_across, known_inds, unknown_inds, electrode_ind, other_inds,
-                                         elec_ind, time_series=False)
 recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+if not os.path.isfile(recon_outfile_across):
+    Model_across, count = alter_avemat(Ave_data, mo)
+
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model_across, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
 
 ### all subjects:
-Model_all = Ave_data['average_matrix']
-Model_all[np.where(np.isnan(Model_all))] = 0
+recon_outfile_all = os.path.join(all_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_all):
+    Model_all = Ave_data['average_matrix']
+    Model_all[np.where(np.isnan(Model_all))] = 0
 
-corrs = time_by_file_index_chunked_local(npz_infile, Model_all, known_inds, unknown_inds, electrode_ind, other_inds,
-                                            elec_ind, time_series=False)
-recon_outfile = os.path.join(all_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-np.savez(recon_outfile, coord=electrode, corrs=corrs)
+    corrs = time_by_file_index_chunked_local(npz_infile, Model_all, known_inds, unknown_inds, electrode_ind, other_inds,
+                                                elec_ind, time_series=False)
+
+    np.savez(recon_outfile_all, coord=electrode, corrs=corrs)
+else:
+    print('all model completed')
 
 ### within subjects:
+recon_outfile_within = os.path.join(within_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_within):
+    bo_sliced = bo[:, other_inds]
 
-bo_sliced = bo[:, other_inds]
+    num_corrmat_x, denom_corrmat_x, n_subs = _bo2model(bo_sliced, R_K_subj, 20)
 
-num_corrmat_x, denom_corrmat_x, n_subs = _bo2model(bo_sliced, R_K_subj, 20)
+    C_est=np.divide(num_corrmat_x, denom_corrmat_x)
+    C_est[np.where(np.isnan(C_est))] = 0
+    sub_model = z2r(C_est) + np.eye(np.shape(C_est)[0])
 
-C_est=np.divide(num_corrmat_x, denom_corrmat_x)
-C_est[np.where(np.isnan(C_est))] = 0
-sub_model = z2r(C_est) + np.eye(np.shape(C_est)[0])
+    known_inds, unknown_inds, electrode_ind = known_unknown(R_K_subj, R_K_removed, R_K_subj, elec_ind)
 
-known_inds, unknown_inds, electrode_ind = known_unknown(R_K_subj, R_K_removed, R_K_subj, elec_ind)
+    corrs = time_by_file_index_chunked_local(npz_infile, sub_model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                                elec_ind, time_series=False)
 
-corrs = time_by_file_index_chunked_local(npz_infile, sub_model, known_inds, unknown_inds, electrode_ind, other_inds,
-                                            elec_ind, time_series=False)
+    np.savez(recon_outfile_within, coord=electrode, corrs=corrs)
 
-recon_outfile = os.path.join(within_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-np.savez(recon_outfile, coord=electrode, corrs=corrs)
-
+else:
+    print('within model completed')

@@ -1,4 +1,5 @@
 import numpy as np
+import supereeg as se
 import numpy.matlib as mat
 from scipy.stats import kurtosis, zscore
 from scipy.spatial.distance import pdist
@@ -811,7 +812,7 @@ def chunker(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
     return zip_longest(fillvalue=fillvalue, *args)
 
-def compile_corrs(path_to_npz_data, Corr_timeseries):
+def compile_corrs(bo_path, corr_path):
     """
         Compiles correlation values - as well as other subject/electrode specific paramters - creates the compiled pandas dataframe used for figures
 
@@ -820,7 +821,7 @@ def compile_corrs(path_to_npz_data, Corr_timeseries):
         path_to_npz_data : string
             Path to npz files - I know this isn't a great way to do this :/
 
-        Corr_timeseries : npz file
+        corr_path : npz file
             npz file containing correlation values (loop outside - for each electrode)
 
         Returns
@@ -830,26 +831,29 @@ def compile_corrs(path_to_npz_data, Corr_timeseries):
 
         """
     def parse_path_name(path_name):
-        if os.path.basename(path_name).count('_') == 5:
-            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_", 5)[2]
-            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_", 5)[3]
+        if os.path.basename(path_name).count('_') == 1:
+            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_",1)[0]
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",1)[1]
             return f_name, electrode
-        elif os.path.basename(path_name).count('_') == 6:
-            f_name = '_'.join(os.path.splitext(os.path.basename(path_name))[0].split("_", 6)[2:4])
-            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_", 5)[4]
+        elif os.path.basename(path_name).count('_') == 2:
+            f_name = '_'.join(os.path.splitext(os.path.basename(path_name))[0].split("_",2)[0:2])
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",2)[2]
             return f_name, electrode
         else:
             return "error"
     ### parse path is necessary for the wacky naming system
-    f_name, electrode = parse_path_name(Corr_timeseries)
-    corr_data = np.load(Corr_timeseries, mmap_mode='r')
-    npz_data = np.load(os.path.join(path_to_npz_data, f_name + '.npz'), mmap_mode='r')
+    f_name, electrode = parse_path_name(corr_path)
+    corr_data = np.load(corr_path, mmap_mode='r')
+    bo_data = se.load(os.path.join(bo_path, f_name + '.bo'))
     tempR = round_it(corr_data['coord'], 2)
     tempmeancorr = z2r(np.mean(r2z(corr_data['corrs'])))
-    tempsamplerate = np.mean(npz_data['samplerate'])
-    tempsamples = np.shape(npz_data['Y'])[0]
+    tempsamplerate = np.mean(bo_data.sample_rate)
+    tempsamples = bo_data.get_data().shape[0]
+    tempelecs = bo_data.get_data().shape[1]
+    tempsessions = bo_data.sessions.max()
+    tempthresholded = bo_data.data.shape[1] - bo_data.get_data().shape[1]
 
-    return pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [f_name], 'Electrode': [electrode], 'Sample rate' : [tempsamplerate], 'Samples': [tempsamples]})
+    return pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [f_name], 'Electrode': [electrode], 'Sample rate' : [tempsamplerate], 'Samples': [tempsamples], 'Total Electrodes': [tempelecs], 'Sessions': [tempsessions], 'Number thresholded': [tempthresholded]})
 
 def compile_nn_corrs(nn_corr_file):
     """
