@@ -812,7 +812,7 @@ def chunker(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
     return zip_longest(fillvalue=fillvalue, *args)
 
-def compile_corrs(bo_path, corr_path):
+def compile_corrs(bo_path, corr_path, threshold=10):
     """
         Compiles correlation values - as well as other subject/electrode specific paramters - creates the compiled pandas dataframe used for figures
 
@@ -844,16 +844,20 @@ def compile_corrs(bo_path, corr_path):
     ### parse path is necessary for the wacky naming system
     f_name, electrode = parse_path_name(corr_path)
     corr_data = np.load(corr_path, mmap_mode='r')
-    bo_data = se.load(os.path.join(bo_path, f_name + '.bo'))
     tempR = round_it(corr_data['coord'], 2)
     tempmeancorr = z2r(np.mean(r2z(corr_data['corrs'])))
-    tempsamplerate = np.mean(bo_data.sample_rate)
-    tempsamples = bo_data.get_data().shape[0]
-    tempelecs = bo_data.get_data().shape[1]
-    tempsessions = bo_data.sessions.max()
-    tempthresholded = bo_data.data.shape[1] - bo_data.get_data().shape[1]
+    bo_data = se.load(os.path.join(bo_path, f_name + '.bo'))
+    tempsamplerate = np.mean(se.load(os.path.join(bo_path, f_name + '.bo'), field='sample_rate'))
+    tempsamples = se.load(os.path.join(bo_path, f_name + '.bo'), field='sessions').shape[0]
+    kurt_vals = se.load(os.path.join(bo_path, f_name + '.bo'), field='kurtosis')
+    thresh_bool = kurt_vals > threshold
+    tempelecs = sum(~thresh_bool)
+    tempsessions = se.load(os.path.join(bo_path, f_name + '.bo'), field='sessions').max()
+    tempthresholded = sum(thresh_bool)
 
-    return pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [f_name], 'Electrode': [electrode], 'Sample rate' : [tempsamplerate], 'Samples': [tempsamples], 'Total Electrodes': [tempelecs], 'Sessions': [tempsessions], 'Number thresholded': [tempthresholded]})
+    return pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [f_name], 'Electrode': [electrode],
+                         'Sample rate' : [tempsamplerate], 'Samples': [tempsamples], 'Total Electrodes': [tempelecs],
+                         'Sessions': [tempsessions], 'Number thresholded': [tempthresholded]})
 
 def compile_nn_corrs(nn_corr_file):
     """
