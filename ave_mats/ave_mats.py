@@ -30,7 +30,7 @@ except OSError as err:
 
 files =glob.glob(os.path.join(model_dir, '*.npz'))
 outfile = os.path.join(results_dir, 'ave_mat.npz')
-
+model_data = []
 results = []
 count = 0
 for i in files:
@@ -40,8 +40,10 @@ for i in files:
     C_est[np.where(np.isnan(C_est))] = 0
     if np.shape(results)[0] == 0:
         results = C_est
+        model_data.append(os.path.basename(i))
     else:
         results = results + C_est
+        model_data.append(os.path.basename(i))
 
 average_matrix = z2r(results /count) + np.eye(np.shape(results)[0])
-np.savez(outfile, average_matrix=average_matrix, n=count)
+np.savez(outfile, average_matrix=average_matrix, n=count, subjs = model_data)
