@@ -31,7 +31,7 @@ def electrode_search(fname, threshold=10):
     locs = se.load(fname, field='locs')
     if sum(~thresh_bool) > 1:
         locs = pd.DataFrame(locs, columns=['x', 'y', 'z'])
-    return locs[~thresh_bool]
+        return locs[~thresh_bool]
 
 union_locs = []
 model_data = []

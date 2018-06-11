@@ -118,7 +118,7 @@ else:
 recon_outfile_within = os.path.join(within_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
 if not os.path.isfile(recon_outfile_within):
     bo_sliced = bo[:, other_inds]
-
+    bo_sliced.filter = None
     num_corrmat_x, denom_corrmat_x, n_subs = _bo2model(bo_sliced, R_K_subj, 20)
 
     C_est=np.divide(num_corrmat_x, denom_corrmat_x)

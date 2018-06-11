@@ -31,5 +31,4 @@ for i in files:
 
 all_corrs['Density'] = density(all_corrs['R'].tolist(), 3)
 
-print(os.path.basename(dir) + ': ' + all_corrs['Correlation'].mean())
 all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
