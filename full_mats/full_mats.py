@@ -62,7 +62,7 @@ if elec_count > 1:
 
     #### save the z expanded correlation matrix
     print('saving model object: ' + fname)
-    np.savez(os.path.join(results_dir, fname), C_est=np.divide(num_corrmat_x, denom_corrmat_x))
+    np.savez(os.path.join(results_dir, fname), num = num_corrmat_x, den = denom_corrmat_x)
 
 else:
     print('skipping model (not enough electrodes pass kurtosis threshold): ' + sys.argv[1])
