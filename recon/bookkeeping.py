@@ -130,7 +130,7 @@ def alter_avemat(Average_matrix, Subj_matrix):
     count_removed = n - 1
     C_est = Subj_matrix['C_est']
     C_est[np.where(np.isnan(C_est))] = 0
-    C_est = C_est + np.eye(C_est.shape[0])
+    #C_est = C_est + np.eye(C_est.shape[0])
     return (summed_matrix - (C_est + np.eye(C_est.shape[0])))/count_removed, count_removed
 
     #return z2r(np.divide(np.subtract(np.multiply(n, Z_all), C_est), n-1)), n-1
