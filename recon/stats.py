@@ -946,3 +946,31 @@ def normalize_Y(Y_matrix):
     added = mat.repmat(0.5 + np.arange(Y.shape[1]), Y.shape[0], 1)
     Y = Y + added
     return pd.DataFrame(Y)
+
+def _to_log_complex(X):
+    """
+    Compute the log of the given numpy array.  Store all positive members of the original array in the real component of
+    the result and all negative members of the original array in the complex component of the result.
+    Parameters
+    ----------
+    X : numpy array to take the log of
+    Returns
+    ----------
+    log_X_complex : The log of X, stored as complex numbers to keep track of the positive and negative parts
+    """
+    signX = np.sign(X)
+    posX = np.log(np.multiply(signX > 0, X))
+    negX = np.log(np.abs(np.multiply(signX < 0, X)))
+
+    negX = np.multiply(0+1j, negX)
+    negX.real[np.isnan(negX)] = 0
+
+    return posX + negX
+
+def _to_exp_real(C):
+    """
+    Inverse of _to_log_complex
+    """
+    posX = C.real
+    negX = C.imag
+    return np.exp(posX) - np.exp(negX)

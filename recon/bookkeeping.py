@@ -103,7 +103,10 @@ def remove_electrode(subkarray, subarray, electrode):
     return np.delete(subkarray, rm_ind, 0), other_inds
 
 
-def alter_avemat(Average_matrix, Subj_matrix):
+def logdiffexp(a, b):
+    return np.add(a, np.log(np.subtract(1, np.exp(np.subtract(b, a)))))
+
+def alter_avemat_1(Average_matrix, Subj_matrix):
     """
         Removes one subject's full correlation matrix from the average correlation matrix
 
@@ -123,16 +126,6 @@ def alter_avemat(Average_matrix, Subj_matrix):
             Average matrix with one subject's data removed
 
         """
-    ### this is the incorrect way, but produces the same results as the paper
-    # summed_matrix = Average_matrix['average_matrix'] * Average_matrix['n']
-    # #Z_all = r2z(Average_matrix['average_matrix'])
-    # n = Average_matrix['n']
-    # #summed_matrix = Z_all * n
-    # count_removed = n - 1
-    # C_est = z2r(Subj_matrix['C_est'])
-    # C_est[np.where(np.isnan(C_est))] = 0
-    # #C_est = C_est + np.eye(C_est.shape[0])
-    # return (summed_matrix - (C_est + np.eye(C_est.shape[0])))/count_removed, count_removed
 
     ### this is the more correct way, but it decreases the reconstruction accruacy by staying it r space
     summed_matrix = Average_matrix['average_matrix'] * Average_matrix['n']
@@ -146,6 +139,39 @@ def alter_avemat(Average_matrix, Subj_matrix):
 
     return z2r(np.divide(np.subtract(np.multiply(n, Z_all), C_est), n-1)), n-1
 
+
+def alter_avemat_2(Average_matrix, Subj_matrix):
+    """
+        Removes one subject's full correlation matrix from the average correlation matrix
+
+        Parameters
+        ----------
+        Average_matrix : npz file
+            npz file contains the fields:
+                average_matrix : the average full correlation matrix for all subjects (n)
+                n : number of full correlation matrices that contributed to average matrix
+
+        Subj_matrix : list
+            Subject's squareformed full correlation matrix
+
+        Returns
+        ----------
+        results : ndarray
+            Average matrix with one subject's data removed
+
+        """
+
+    ### this is the more correct way, but it decreases the reconstruction accruacy by staying it r space
+    summed_matrix = Average_matrix['average_matrix'] * Average_matrix['n']
+    Z_all = r2z(Average_matrix['average_matrix'])
+    n = Average_matrix['n']
+    summed_matrix = Z_all * n
+    count_removed = n - 1
+    C_est = np.divide(Subj_matrix['num'], Subj_matrix['den'])
+    C_est[np.where(np.isnan(C_est))] = 0
+    C_est = C_est + np.eye(C_est.shape[0])
+
+    return z2r(np.divide(np.subtract(np.multiply(n, Z_all), C_est), n-1)), n-1
 
 # def alter_avemat(Average_matrix, Subj_matrix):
 #     """
