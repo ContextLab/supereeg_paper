@@ -163,15 +163,13 @@ def alter_avemat_2(Average_matrix, Subj_matrix):
 
     ### this is the more correct way, but it decreases the reconstruction accruacy by staying it r space
     summed_matrix = Average_matrix['average_matrix'] * Average_matrix['n']
-    Z_all = r2z(Average_matrix['average_matrix'])
     n = Average_matrix['n']
-    summed_matrix = Z_all * n
-    count_removed = n - 1
+    Z_all = r2z(Average_matrix['average_matrix']* n)
     C_est = np.divide(Subj_matrix['num'], Subj_matrix['den'])
     C_est[np.where(np.isnan(C_est))] = 0
     C_est = C_est + np.eye(C_est.shape[0])
 
-    return z2r(np.divide(np.subtract(np.multiply(n, Z_all), C_est), n-1)), n-1
+    return z2r(np.divide(np.subtract(Z_all, C_est), n-1)), n-1
 
 # def alter_avemat(Average_matrix, Subj_matrix):
 #     """

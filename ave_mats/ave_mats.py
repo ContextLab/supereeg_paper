@@ -17,6 +17,8 @@ model_dir = os.path.join(config['datadir'],  model_template +"_"+ radius)
 
 results_dir = os.path.join(config['resultsdir'],  model_template +"_"+ radius)
 
+locs_file = os.path.join(config['pyFRlocsdir'], 'locs.npz')
+R = np.load(locs_file)['locs']
 
 def z2r(z):
 
@@ -98,6 +100,7 @@ for i in files:
     C_est = np.divide(num, den)
     C_est[np.where(np.isnan(C_est))] = 0
     if np.shape(results_1)[0] == 0:
+        mo = se.Model(numerator=num, denominator=den, locs=R, n_subs=1)
         results_1 = C_est
         results_n = num
         results_d = den
@@ -105,6 +108,8 @@ for i in files:
         results_l_d = np.log(den)
         model_data.append(os.path.basename(i))
     else:
+        mo_0 = se.Model(numerator=num, denominator=den, locs=R, n_subs=1)
+        mo.update(mo_0)
         results_1 = results_1 + C_est
         results_n = results_n + num
         results_d = results_d + den
@@ -121,7 +126,6 @@ results_2 =_recover_model(_to_log_complex(results_n),  np.log(results_d), z_tran
 results_2[np.isnan(results_2)] = 0
 average_matrix_2 = results_2
 
-
 results_3 = np.divide(results_n, results_d)
 results_3[np.where(np.isnan(results_3))] = 0
 average_matrix_3 = z2r(results_3) + np.eye(np.shape(results_3)[0])
@@ -129,6 +133,10 @@ average_matrix_3 = z2r(results_3) + np.eye(np.shape(results_3)[0])
 results_4 = _recover_model(results_l_n, results_l_d, z_transform=False)
 results_4[np.isnan(results_4)] = 0
 average_matrix_4 = results_4
+
+results_5 = mo.get_model()
+results_5[np.isnan(results_5)] = 0
+average_matrix_5 = results_5
 
 outfile_1 = os.path.join(results_dir, 'ave_mat_1.npz')
 np.savez(outfile_1, average_matrix=average_matrix_1, n=count, subjs = model_data)
@@ -144,3 +152,7 @@ np.savez(outfile_3, average_matrix=average_matrix_3, n=count, subjs = model_data
 outfile_4 = os.path.join(results_dir, 'ave_mat_4.npz')
 #np.savez(outfile_4, num=results_n, den=results_d, n=count, subjs = model_data)
 np.savez(outfile_4, average_matrix=average_matrix_4, n=count, subjs = model_data)
+
+outfile_5 = os.path.join(results_dir, 'ave_mat_5.npz')
+#np.savez(outfile_4, num=results_n, den=results_d, n=count, subjs = model_data)
+np.savez(outfile_5, average_matrix=average_matrix_5, n=count, subjs = model_data)

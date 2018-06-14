@@ -22,6 +22,7 @@ else:
 config['scriptdir'] = os.path.join(config['workingdir'], 'scripts')
 config['lockdir'] = os.path.join(config['workingdir'], 'locks')
 config['resultsdir'] = os.path.join(config['workingdir'], 'results')
+config['pyFRlocsdir'] = os.path.join(config['startdir'], 'pyFR_locs/results')
 
 # runtime options
 config['jobname'] = "ave_mats"  # default job name

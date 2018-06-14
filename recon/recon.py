@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 #plt.switch_backend('agg')
 from config import config
 from stats import time_by_file_index_chunked_local, z2r, r2z
-from bookkeeping import remove_electrode, known_unknown, alter_avemat_1
+from bookkeeping import remove_electrode, known_unknown, alter_avemat_1, alter_avemat_2
 
 ## load brain object
 bo_fname = sys.argv[1]
@@ -82,7 +82,7 @@ if not os.path.isfile(recon_outfile_across):
     Model_across[np.where(np.isnan(Model_across))] = 0
     Model = Model_across + np.eye(np.shape(Model_across)[0])
 
-    corrs = time_by_file_index_chunked_local(npz_infile, Model_across, known_inds, unknown_inds, electrode_ind, other_inds,
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
                                              elec_ind, time_series=False)
     print(corrs)
 
@@ -110,7 +110,7 @@ if not os.path.isfile(recon_outfile_across):
     Model_across[np.where(np.isnan(Model_across))] = 0
     Model = Model_across + np.eye(np.shape(Model_across)[0])
 
-    corrs = time_by_file_index_chunked_local(npz_infile, Model_across, known_inds, unknown_inds, electrode_ind, other_inds,
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
                                              elec_ind, time_series=False)
     print(corrs)
 
@@ -138,7 +138,7 @@ if not os.path.isfile(recon_outfile_across):
     Model_across[np.where(np.isnan(Model_across))] = 0
     Model = Model_across + np.eye(np.shape(Model_across)[0])
 
-    corrs = time_by_file_index_chunked_local(npz_infile, Model_across, known_inds, unknown_inds, electrode_ind, other_inds,
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
                                              elec_ind, time_series=False)
     print(corrs)
 
@@ -146,7 +146,7 @@ if not os.path.isfile(recon_outfile_across):
 else:
     print('across model completed')
 
-### case 4:
+### case 4 best working:
 
 ave ='ave_mat_4.npz'
 Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
@@ -166,7 +166,7 @@ if not os.path.isfile(recon_outfile_across):
     Model_across[np.where(np.isnan(Model_across))] = 0
     Model = Model_across + np.eye(np.shape(Model_across)[0])
 
-    corrs = time_by_file_index_chunked_local(npz_infile, Model_across, known_inds, unknown_inds, electrode_ind, other_inds,
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
                                              elec_ind, time_series=False)
     print(corrs)
 
@@ -175,7 +175,33 @@ else:
     print('across model completed')
 
 
+### case 5:
 
+ave ='ave_mat_5.npz'
+Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+
+across_dir = os.path.join(results_dir, 'across_subjects_5')
+
+try:
+    if not os.path.exists(across_dir):
+        os.makedirs(across_dir)
+except OSError as err:
+    print(err)
+
+recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_across):
+    Model_across, count = alter_avemat_1(Ave_data, mo)
+
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+    print(corrs)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
 
 
 
@@ -280,7 +306,7 @@ else:
 # else:
 #     print('all model completed')
 #
-# ### within subjects:
+### within subjects:
 # recon_outfile_within = os.path.join(within_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
 # if not os.path.isfile(recon_outfile_within):
 #     bo_sliced = bo[:, other_inds]
