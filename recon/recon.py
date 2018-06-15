@@ -62,89 +62,89 @@ R_K_removed, other_inds = remove_electrode(R_K_subj, R_K_subj, elec_ind)
 ## inds after kurtosis threshold: known_inds = known electrodes; unknown_inds = all the rest; rm_unknown_ind = where the removed electrode is located in unknown subset
 known_inds, unknown_inds, electrode_ind = known_unknown(R, R_K_removed, R_K_subj, elec_ind)
 
-### case 1:
-
-ave ='ave_mat_1.npz'
-Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
-
-across_dir = os.path.join(results_dir, 'across_subjects_1')
-
-try:
-    if not os.path.exists(across_dir):
-        os.makedirs(across_dir)
-except OSError as err:
-    print(err)
-
-recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-if not os.path.isfile(recon_outfile_across):
-    Model_across, count = alter_avemat_1(Ave_data, mo)
-
-    Model_across[np.where(np.isnan(Model_across))] = 0
-    Model = Model_across + np.eye(np.shape(Model_across)[0])
-
-    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
-                                             elec_ind, time_series=False)
-    print(corrs)
-
-    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
-else:
-    print('across model completed')
-
-### case 2:
-
-ave ='ave_mat_2.npz'
-Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
-
-across_dir = os.path.join(results_dir, 'across_subjects_2')
-
-try:
-    if not os.path.exists(across_dir):
-        os.makedirs(across_dir)
-except OSError as err:
-    print(err)
-
-recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-if not os.path.isfile(recon_outfile_across):
-    Model_across, count = alter_avemat_1(Ave_data, mo)
-
-    Model_across[np.where(np.isnan(Model_across))] = 0
-    Model = Model_across + np.eye(np.shape(Model_across)[0])
-
-    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
-                                             elec_ind, time_series=False)
-    print(corrs)
-
-    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
-else:
-    print('across model completed')
-
-### case 3:
-
-ave ='ave_mat_3.npz'
-Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
-
-across_dir = os.path.join(results_dir, 'across_subjects_3')
-
-try:
-    if not os.path.exists(across_dir):
-        os.makedirs(across_dir)
-except OSError as err:
-    print(err)
-
-recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-if not os.path.isfile(recon_outfile_across):
-    Model_across, count = alter_avemat_1(Ave_data, mo)
-
-    Model_across[np.where(np.isnan(Model_across))] = 0
-    Model = Model_across + np.eye(np.shape(Model_across)[0])
-
-    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
-                                             elec_ind, time_series=False)
-    print(corrs)
-
-    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
-else:
-    print('across model completed')
+# ### case 1:
+#
+# ave ='ave_mat_1.npz'
+# Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+#
+# across_dir = os.path.join(results_dir, 'across_subjects_1')
+#
+# try:
+#     if not os.path.exists(across_dir):
+#         os.makedirs(across_dir)
+# except OSError as err:
+#     print(err)
+#
+# recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+# if not os.path.isfile(recon_outfile_across):
+#     Model_across, count = alter_avemat_1(Ave_data, mo)
+#
+#     Model_across[np.where(np.isnan(Model_across))] = 0
+#     Model = Model_across + np.eye(np.shape(Model_across)[0])
+#
+#     corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+#                                              elec_ind, time_series=False)
+#     print(corrs)
+#
+#     np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+# else:
+#     print('across model completed')
+#
+# ### case 2:
+#
+# ave ='ave_mat_2.npz'
+# Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+#
+# across_dir = os.path.join(results_dir, 'across_subjects_2')
+#
+# try:
+#     if not os.path.exists(across_dir):
+#         os.makedirs(across_dir)
+# except OSError as err:
+#     print(err)
+#
+# recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+# if not os.path.isfile(recon_outfile_across):
+#     Model_across, count = alter_avemat_1(Ave_data, mo)
+#
+#     Model_across[np.where(np.isnan(Model_across))] = 0
+#     Model = Model_across + np.eye(np.shape(Model_across)[0])
+#
+#     corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+#                                              elec_ind, time_series=False)
+#     print(corrs)
+#
+#     np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+# else:
+#     print('across model completed')
+#
+# ### case 3:
+#
+# ave ='ave_mat_3.npz'
+# Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+#
+# across_dir = os.path.join(results_dir, 'across_subjects_3')
+#
+# try:
+#     if not os.path.exists(across_dir):
+#         os.makedirs(across_dir)
+# except OSError as err:
+#     print(err)
+#
+# recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+# if not os.path.isfile(recon_outfile_across):
+#     Model_across, count = alter_avemat_1(Ave_data, mo)
+#
+#     Model_across[np.where(np.isnan(Model_across))] = 0
+#     Model = Model_across + np.eye(np.shape(Model_across)[0])
+#
+#     corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+#                                              elec_ind, time_series=False)
+#     print(corrs)
+#
+#     np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+# else:
+#     print('across model completed')
 
 ### case 4 best working:
 

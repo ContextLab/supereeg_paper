@@ -156,3 +156,4 @@ np.savez(outfile_4, average_matrix=average_matrix_4, n=count, subjs = model_data
 outfile_5 = os.path.join(results_dir, 'ave_mat_5.npz')
 #np.savez(outfile_4, num=results_n, den=results_d, n=count, subjs = model_data)
 np.savez(outfile_5, average_matrix=average_matrix_5, n=count, subjs = model_data)
+mo.save(os.path.join(results_dir, 'ave_mat_5'))
