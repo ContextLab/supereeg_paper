@@ -139,6 +139,23 @@ def alter_avemat_1(Average_matrix, Subj_matrix):
 
     return z2r(np.divide(np.subtract(np.multiply(n, Z_all), C_est), n-1)), n-1
 
+def _to_exp_real(C):
+    """
+    Inverse of _to_log_complex
+    """
+    posX = C.real
+    negX = C.imag
+    return np.exp(posX) - np.exp(negX)
+
+def _recover_model(num, denom, z_transform=False):
+
+    m = np.divide(_to_exp_real(num), np.exp(denom)) #numerator and denominator are in log units
+    if z_transform:
+        np.fill_diagonal(m, np.inf)
+        return m
+    else:
+        np.fill_diagonal(m, 1)
+        return z2r(m)
 
 def alter_avemat_2(Average_matrix, Subj_matrix):
     """
@@ -165,7 +182,7 @@ def alter_avemat_2(Average_matrix, Subj_matrix):
     summed_matrix = Average_matrix['average_matrix'] * Average_matrix['n']
     n = Average_matrix['n']
     Z_all = r2z(Average_matrix['average_matrix']* n)
-    C_est = np.divide(Subj_matrix['num'], Subj_matrix['den'])
+    C_est = _recover_model(Subj_matrix['num'], Subj_matrix['den'])
     C_est[np.where(np.isnan(C_est))] = 0
     C_est = C_est + np.eye(C_est.shape[0])
 

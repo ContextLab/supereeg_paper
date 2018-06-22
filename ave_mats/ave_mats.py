@@ -1,4 +1,5 @@
 import supereeg as se
+from supereeg.helpers import _logsubexp
 import numpy as np
 import glob
 import sys
@@ -14,6 +15,7 @@ model_template = sys.argv[1]
 radius = sys.argv[2]
 
 model_dir = os.path.join(config['datadir'],  model_template +"_"+ radius)
+log_model_dir = os.path.join(config['datadir'],  model_template +"_"+ radius+"_log")
 
 results_dir = os.path.join(config['resultsdir'],  model_template +"_"+ radius)
 
@@ -71,6 +73,7 @@ def _recover_model(num, denom, z_transform=False):
         np.fill_diagonal(m, 1)
         return z2r(m)
 
+
 try:
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
@@ -100,7 +103,6 @@ for i in files:
     C_est = np.divide(num, den)
     C_est[np.where(np.isnan(C_est))] = 0
     if np.shape(results_1)[0] == 0:
-        mo = se.Model(numerator=num, denominator=den, locs=R, n_subs=1)
         results_1 = C_est
         results_n = num
         results_d = den
@@ -108,8 +110,6 @@ for i in files:
         results_l_d = np.log(den)
         model_data.append(os.path.basename(i))
     else:
-        mo_0 = se.Model(numerator=num, denominator=den, locs=R, n_subs=1)
-        mo.update(mo_0)
         results_1 = results_1 + C_est
         results_n = results_n + num
         results_d = results_d + den
@@ -118,7 +118,6 @@ for i in files:
         results_l_n.imag = np.logaddexp(results_l_n.imag, results_l_n_0.imag)
         results_l_d = np.logaddexp(results_l_d,np.log(den))
         model_data.append(os.path.basename(i))
-
 
 average_matrix_1 = z2r(results_1 /count) + np.eye(np.shape(results_1)[0])
 
@@ -134,9 +133,6 @@ results_4 = _recover_model(results_l_n, results_l_d, z_transform=False)
 results_4[np.isnan(results_4)] = 0
 average_matrix_4 = results_4
 
-results_5 = mo.get_model()
-results_5[np.isnan(results_5)] = 0
-average_matrix_5 = results_5
 
 outfile_1 = os.path.join(results_dir, 'ave_mat_1.npz')
 np.savez(outfile_1, average_matrix=average_matrix_1, n=count, subjs = model_data)
@@ -153,7 +149,47 @@ outfile_4 = os.path.join(results_dir, 'ave_mat_4.npz')
 #np.savez(outfile_4, num=results_n, den=results_d, n=count, subjs = model_data)
 np.savez(outfile_4, average_matrix=average_matrix_4, n=count, subjs = model_data)
 
+log_files =glob.glob(os.path.join(log_model_dir, '*.npz'))
+count = 0
+for l in log_files:
+    data = np.load(l, mmap_mode='r')
+    count += 1
+    num = data['num']
+    den = data['den']
+    if count == 1:
+        mo = se.Model(numerator=num, denominator=den, locs=R, n_subs=1)
+        model_data.append(os.path.basename(l))
+    else:
+        mo_0 = se.Model(numerator=num, denominator=den, locs=R, n_subs=1)
+        mo.update(mo_0, inplace=True)
+        model_data.append(os.path.basename(l))
+
+
+log_mo =glob.glob(os.path.join(log_model_dir, '*.mo'))
+count = 0
+for m in log_mo:
+    data = se.load(m)
+    count += 1
+    if count == 1:
+        mo_add = data
+    else:
+        mo_add.update(data, inplace=True)
+
+
+results_5 = mo.get_model()  # try with z_transform=False
+results_5[np.isnan(results_5)] = 0
+average_matrix_5 = results_5
+
+results_6 = mo_add.get_model()  # try with z_transform=False
+results_6[np.isnan(results_6)] = 0
+average_matrix_6 = results_6
+
 outfile_5 = os.path.join(results_dir, 'ave_mat_5.npz')
 #np.savez(outfile_4, num=results_n, den=results_d, n=count, subjs = model_data)
 np.savez(outfile_5, average_matrix=average_matrix_5, n=count, subjs = model_data)
 mo.save(os.path.join(results_dir, 'ave_mat_5'))
+
+outfile_6 = os.path.join(results_dir, 'ave_mat_6.npz')
+#np.savez(outfile_4, num=results_n, den=results_d, n=count, subjs = model_data)
+np.savez(outfile_6, average_matrix=average_matrix_6, n=count, subjs = model_data)
+mo_add.save(os.path.join(results_dir, 'ave_mat_6'))

@@ -1,6 +1,7 @@
 
 import supereeg as se
-from supereeg.model import _bo2model
+from supereeg.model import _bo2model, _recover_model, _to_exp_real
+from supereeg.helpers import _logsubexp
 import numpy as np
 import glob
 import sys
@@ -28,11 +29,15 @@ radius = sys.argv[4]
 
 mo_fname = os.path.join(config['modeldir'], model_template + '_' + radius, file_name + '.npz')
 mo = np.load(mo_fname, mmap_mode='r')
-
+mo_log_fname = os.path.join(config['modeldir'], model_template + '_' + radius+ '_log', file_name + '.npz')
+mo_log = np.load(mo_log_fname, mmap_mode='r')
+mo_mo_fname = os.path.join(config['modeldir'], model_template + '_' + radius+ '_log', file_name + '.mo')
+mo_mo = se.load(mo_mo_fname)
 
 ave_dir = os.path.join(config['avedir'], model_template+ '_' + radius)
 
 results_dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
+
 
 
 try:
@@ -62,89 +67,89 @@ R_K_removed, other_inds = remove_electrode(R_K_subj, R_K_subj, elec_ind)
 ## inds after kurtosis threshold: known_inds = known electrodes; unknown_inds = all the rest; rm_unknown_ind = where the removed electrode is located in unknown subset
 known_inds, unknown_inds, electrode_ind = known_unknown(R, R_K_removed, R_K_subj, elec_ind)
 
-# ### case 1:
-#
-# ave ='ave_mat_1.npz'
-# Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
-#
-# across_dir = os.path.join(results_dir, 'across_subjects_1')
-#
-# try:
-#     if not os.path.exists(across_dir):
-#         os.makedirs(across_dir)
-# except OSError as err:
-#     print(err)
-#
-# recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-# if not os.path.isfile(recon_outfile_across):
-#     Model_across, count = alter_avemat_1(Ave_data, mo)
-#
-#     Model_across[np.where(np.isnan(Model_across))] = 0
-#     Model = Model_across + np.eye(np.shape(Model_across)[0])
-#
-#     corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
-#                                              elec_ind, time_series=False)
-#     print(corrs)
-#
-#     np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
-# else:
-#     print('across model completed')
-#
-# ### case 2:
-#
-# ave ='ave_mat_2.npz'
-# Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
-#
-# across_dir = os.path.join(results_dir, 'across_subjects_2')
-#
-# try:
-#     if not os.path.exists(across_dir):
-#         os.makedirs(across_dir)
-# except OSError as err:
-#     print(err)
-#
-# recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-# if not os.path.isfile(recon_outfile_across):
-#     Model_across, count = alter_avemat_1(Ave_data, mo)
-#
-#     Model_across[np.where(np.isnan(Model_across))] = 0
-#     Model = Model_across + np.eye(np.shape(Model_across)[0])
-#
-#     corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
-#                                              elec_ind, time_series=False)
-#     print(corrs)
-#
-#     np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
-# else:
-#     print('across model completed')
-#
-# ### case 3:
-#
-# ave ='ave_mat_3.npz'
-# Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
-#
-# across_dir = os.path.join(results_dir, 'across_subjects_3')
-#
-# try:
-#     if not os.path.exists(across_dir):
-#         os.makedirs(across_dir)
-# except OSError as err:
-#     print(err)
-#
-# recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
-# if not os.path.isfile(recon_outfile_across):
-#     Model_across, count = alter_avemat_1(Ave_data, mo)
-#
-#     Model_across[np.where(np.isnan(Model_across))] = 0
-#     Model = Model_across + np.eye(np.shape(Model_across)[0])
-#
-#     corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
-#                                              elec_ind, time_series=False)
-#     print(corrs)
-#
-#     np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
-# else:
-#     print('across model completed')
+### case 1:
+
+ave ='ave_mat_1.npz'
+Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+
+across_dir = os.path.join(results_dir, 'across_subjects_1')
+
+try:
+    if not os.path.exists(across_dir):
+        os.makedirs(across_dir)
+except OSError as err:
+    print(err)
+
+recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_across):
+    Model_across, count = alter_avemat_2(Ave_data, mo)
+
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+    print(corrs)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
+
+### case 2:
+
+ave ='ave_mat_2.npz'
+Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+
+across_dir = os.path.join(results_dir, 'across_subjects_2')
+
+try:
+    if not os.path.exists(across_dir):
+        os.makedirs(across_dir)
+except OSError as err:
+    print(err)
+
+recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_across):
+    Model_across, count = alter_avemat_1(Ave_data, mo)
+
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+    print(corrs)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
+
+### case 3:
+
+ave ='ave_mat_3.npz'
+Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+
+across_dir = os.path.join(results_dir, 'across_subjects_3')
+
+try:
+    if not os.path.exists(across_dir):
+        os.makedirs(across_dir)
+except OSError as err:
+    print(err)
+
+recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_across):
+    Model_across, count = alter_avemat_1(Ave_data, mo)
+
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+    print(corrs)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
 
 ### case 4 best working:
 
@@ -190,7 +195,8 @@ except OSError as err:
 
 recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
 if not os.path.isfile(recon_outfile_across):
-    Model_across, count = alter_avemat_1(Ave_data, mo)
+
+    Model_across, count = alter_avemat_2(Ave_data, mo_log)
 
     Model_across[np.where(np.isnan(Model_across))] = 0
     Model = Model_across + np.eye(np.shape(Model_across)[0])
@@ -204,6 +210,66 @@ else:
     print('across model completed')
 
 
+### case 6:
+
+ave ='ave_mat_6.npz'
+Ave_data = np.load(os.path.join(ave_dir, ave), mmap_mode='r')
+
+across_dir = os.path.join(results_dir, 'across_subjects_6')
+
+try:
+    if not os.path.exists(across_dir):
+        os.makedirs(across_dir)
+except OSError as err:
+    print(err)
+
+recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_across):
+
+    Model_across, count = alter_avemat_2(Ave_data, mo_log)
+
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+    print(corrs)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
+
+
+### case 7:
+
+ave ='ave_mat_6.mo'
+mo = se.load(os.path.join(ave_dir, ave))
+
+across_dir = os.path.join(results_dir, 'across_subjects_7')
+
+try:
+    if not os.path.exists(across_dir):
+        os.makedirs(across_dir)
+except OSError as err:
+    print(err)
+
+recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_across):
+
+    mo_mo._set_numerator(mo_mo.numerator.real, mo_mo.numerator.imag)
+    num_sub = _logsubexp(mo.numerator*mo.n_subs, mo_mo.numerator)
+    denom_sub = _to_exp_real(_logsubexp(mo.denominator*mo.n_subs, mo_mo.denominator))
+    Model_across =_recover_model(num_sub,  np.log(denom_sub), z_transform=False)
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+    print(corrs)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
 
 # ## load brain object
 # bo_fname = sys.argv[1]

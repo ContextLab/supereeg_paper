@@ -1,4 +1,5 @@
 import supereeg as se
+from supereeg.helpers import _unique
 import numpy as np
 import glob
 import os
@@ -51,7 +52,7 @@ for i in brain_data:
     except:
         pass
 
-locations = se.sort_unique_locs(union_locs)
+locations, l_indices = _unique(union_locs)
 
 results = os.path.join(results_dir, 'locs.npz')
 #results = os.path.join('/scratch/lucy.owen/supereeg/', 'locs.npz')
