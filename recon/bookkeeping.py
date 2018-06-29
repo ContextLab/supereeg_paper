@@ -158,6 +158,7 @@ def _recover_model(num, denom, z_transform=False):
         return z2r(m)
 
 def alter_avemat_2(Average_matrix, Subj_matrix):
+    ### still need to change this to logsubexp
     """
         Removes one subject's full correlation matrix from the average correlation matrix
 
@@ -184,6 +185,7 @@ def alter_avemat_2(Average_matrix, Subj_matrix):
     Z_all = r2z(Average_matrix['average_matrix']* n)
     C_est = _recover_model(Subj_matrix['num'], Subj_matrix['den'])
     C_est[np.where(np.isnan(C_est))] = 0
+    Z_all[np.where(np.isnan(Z_all))] = 0
     C_est = C_est + np.eye(C_est.shape[0])
 
     return z2r(np.divide(np.subtract(Z_all, C_est), n-1)), n-1
