@@ -257,8 +257,8 @@ recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3
 if not os.path.isfile(recon_outfile_across):
 
     mo_mo._set_numerator(mo_mo.numerator.real, mo_mo.numerator.imag)
-    num_sub = _logsubexp(mo.numerator*mo.n_subs, mo_mo.numerator)
-    denom_sub = _to_exp_real(_logsubexp(mo.denominator*mo.n_subs, mo_mo.denominator))
+    num_sub = _logsubexp(mo.numerator, mo_mo.numerator)
+    denom_sub = _to_exp_real(_logsubexp(mo.denominator, mo_mo.denominator))
     Model_across =_recover_model(num_sub,  np.log(denom_sub), z_transform=False)
     Model_across[np.where(np.isnan(Model_across))] = 0
     Model = Model_across + np.eye(np.shape(Model_across)[0])
@@ -271,6 +271,37 @@ if not os.path.isfile(recon_outfile_across):
 else:
     print('across model completed')
 
+
+### case 8:
+
+ave ='ave_mat_6.mo'
+mo = se.load(os.path.join(ave_dir, ave))
+
+across_dir = os.path.join(results_dir, 'across_subjects_8')
+
+try:
+    if not os.path.exists(across_dir):
+        os.makedirs(across_dir)
+except OSError as err:
+    print(err)
+
+recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+if not os.path.isfile(recon_outfile_across):
+
+    mo_mo._set_numerator(mo_mo.numerator.real, mo_mo.numerator.imag)
+    num_sub = _logsubexp(mo.numerator, mo_mo.numerator)
+    denom_sub = _to_exp_real(_logsubexp(mo.denominator, mo_mo.denominator))
+    Model_across =_recover_model(num_sub,  np.log(denom_sub), z_transform=False)
+    Model_across[np.where(np.isnan(Model_across))] = 0
+    Model = Model_across + np.eye(np.shape(Model_across)[0])
+
+    corrs = time_by_file_index_chunked_local(npz_infile, Model, known_inds, unknown_inds, electrode_ind, other_inds,
+                                             elec_ind, time_series=False)
+    print(corrs)
+
+    np.savez(recon_outfile_across, coord=electrode, corrs=corrs)
+else:
+    print('across model completed')
 # ## load brain object
 # bo_fname = sys.argv[1]
 # bo = se.load(bo_fname)
