@@ -22,7 +22,8 @@ job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mat
 files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
 # options for model: 'pyFR_union'
-model = str('pyFR_union')
+#model = str('pyFR_union')
+model = str('gray')
 
 # options for vox_size: 5, 10, 20, 30
 radius =  str('20')
