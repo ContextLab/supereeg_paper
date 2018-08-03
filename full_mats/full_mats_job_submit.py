@@ -19,7 +19,13 @@ except:
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
 
-files = glob.glob(os.path.join(config['datadir'],'*.bo'))
+# only make a few:
+bos = ('FR130.mo', 'TJ018_2.mo', 'CH066.mo','CH008b.mo')
+
+files = map(lambda x: os.path.join(config['datadir'],x), bos)
+
+# or make all:
+# files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
 # options for model: 'pyFR_union'
 #model = str('pyFR_union')
@@ -29,9 +35,10 @@ model = str('gray')
 radius =  str('20')
 
 # options for vox_size: 5, 10, 20, 30
-vox_size =  str('20')
+vox_size =  str('6')
 
-job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + model+" "+ radius+" "+ vox_size, zip([job_script]*len(files), files)))
+job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + model+" "+ radius+" "+ vox_size,
+                        zip([job_script]*len(files), files)))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
