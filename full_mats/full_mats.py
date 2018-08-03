@@ -14,7 +14,7 @@ radius = sys.argv[3]
 
 vox_size = sys.argv[4]
 
-results_dir = os.path.join(config['resultsdir'], model_template +"_"+ radius)
+results_dir = os.path.join(config['resultsdir'], model_template +"_"+ vox_size)
 
 try:
     if not os.path.exists(results_dir):
@@ -34,7 +34,8 @@ if model_template == 'pyFR_union':
     R = np.load(locs_file)['locs']
 else:
 
-    R_nii = se.load(model_template, vox_size=vox_size)
+    R_nii = se.load(model_template, vox_size=int(vox_size))
+    R = R_nii.get_locs().as_matrix()
 
 elec_count = electrode_search(sys.argv[1])
 
