@@ -12,6 +12,8 @@ model_template = sys.argv[2]
 
 radius = sys.argv[3]
 
+vox_size = sys.argv[4]
+
 results_dir = os.path.join(config['resultsdir'], model_template +"_"+ radius)
 
 try:
@@ -26,9 +28,13 @@ def electrode_search(fname, threshold=10):
     thresh_bool = kurt_vals > threshold
     return sum(~thresh_bool)
 
-locs_file = os.path.join(config['pyFRlocsdir'], 'locs.npz')
+if model_template == 'pyFR_union':
+    locs_file = os.path.join(config['pyFRlocsdir'], 'locs.npz')
 
-R = np.load(locs_file)['locs']
+    R = np.load(locs_file)['locs']
+else:
+
+    R_nii = se.load(model_template, vox_size=vox_size)
 
 elec_count = electrode_search(sys.argv[1])
 
