@@ -27,11 +27,14 @@ model = str('pyFR_union')
 # options for vox_size: 5, 10, 20, 30
 radius =  str('20')
 
-job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + model+" "+ radius, zip([job_script]*len(files), files)))
+# options for vox_size: 5, 10, 20, 30
+vox_size =  str('20')
+
+job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + model+" "+ radius+" "+ vox_size, zip([job_script]*len(files), files)))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
-job_names = list(map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_' + model +'_'+ radius+ '.sh', files))
+job_names = list(map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_' + model +'_'+ radius+'_'+ vox_size + '.sh', files))
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
 assert(len(job_commands) == len(job_names))
