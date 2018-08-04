@@ -11,9 +11,11 @@ model_template = sys.argv[1]
 
 radius = sys.argv[2]
 
-model_dir = os.path.join(config['datadir'],  model_template +"_"+ radius)
+vox_size = sys.argv[3]
 
-results_dir = os.path.join(config['resultsdir'],  model_template +"_"+ radius)
+model_dir = os.path.join(config['datadir'],  model_template +"_" + vox_size)
+
+results_dir = os.path.join(config['resultsdir'],  model_template +"_"+ vox_size)
 
 locs_file = os.path.join(config['pyFRlocsdir'], 'locs.npz')
 R = np.load(locs_file)['locs']
