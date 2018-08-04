@@ -13,12 +13,13 @@ radius = sys.argv[2]
 
 vox_size = sys.argv[3]
 
-model_dir = os.path.join(config['datadir'],  model_template +"_" + vox_size)
+if model_template == 'pyFR_union':
+    model_dir = os.path.join(config['datadir'],  model_template +"_" + vox_size)
+
+else:
+    model_dir = os.path.join(config['datadir'], model_template + "_" + vox_size)
 
 results_dir = os.path.join(config['resultsdir'],  model_template +"_"+ vox_size)
-
-locs_file = os.path.join(config['pyFRlocsdir'], 'locs.npz')
-R = np.load(locs_file)['locs']
 
 try:
     if not os.path.exists(results_dir):

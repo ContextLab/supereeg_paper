@@ -8,7 +8,8 @@ import os
 import socket
 import getpass
 import datetime as dt
-
+import supereeg as se
+from supereeg.helpers import filter_subj
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 try:
@@ -16,26 +17,31 @@ try:
 except:
     os.makedirs(config['resultsdir'])
 
-# each job command should be formatted as a string
-job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
 
-# only make a few:
-# bos = ('FR130.mo', 'TJ018_2.mo', 'CH066.mo','CH008b.mo')
-#
-# files = map(lambda x: os.path.join(config['datadir'],x), bos)
+def electrode_search(fname):
+    values = filter_subj(fname, return_locs=True)
+    if values is None:
+        return 0
+    else:
+        meta, locs = values
+        return locs.shape[0]
+
+
+# each job command should be formatted as a string
+job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon.py')
 
 # or make all:
 files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
 # options for model: 'pyFR_union'
-model = str('pyFR_union')
-#model = str('gray')
+
+model = str('gray')
 
 # options for vox_size: 5, 10, 20, 30
 radius =  str('20')
 
 # options for vox_size: 5, 10, 20, 30
-vox_size =  str('6')
+vox_size =  str('20')
 
 job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + model+" "+ radius+" "+ vox_size,
                         zip([job_script]*len(files), files)))
@@ -43,6 +49,8 @@ job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + model+" "+ radius+" "
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
 job_names = list(map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_' + model +'_'+ radius+'_'+ vox_size + '.sh', files))
+
+
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
 assert(len(job_commands) == len(job_names))
