@@ -40,7 +40,7 @@ rolling =bo.get_data().rolling(window=int(window)).corr(other=pd_audio[0])
 
 bo_s = se.Brain(data=rolling[int(window):], locs = bo.get_locs(), sample_rate=512)
 
-bo_nii = bo_s.to_nii(vox_size=20)
+bo_nii = bo_s.to_nii(vox_size=vox_size)
 
 gif_dir = os.path.join(results_dir, 'gif_' + window)
 
