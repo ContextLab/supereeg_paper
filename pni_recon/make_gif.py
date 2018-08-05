@@ -5,6 +5,7 @@ import pandas as pd
 import sys
 import os
 from config import config
+plt.switch_backend('agg')
 
 
 ### for cluster:
