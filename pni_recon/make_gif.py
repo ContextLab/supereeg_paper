@@ -27,8 +27,9 @@ gif_args = {'cmap': cmap,
             'vmin': -.1,
             'vmax': .1}
 
+fname = 'nn_brain_data_5000_'+ model_template+'_'+vox_size+'.bo'
 
-bo = se.load(os.path.join(results_dir, 'nn_brain_data_5000_gray_20.bo'))
+bo = se.load(os.path.join(results_dir, fname))
 
 audio = np.load(os.path.join(results_dir,'audio_5000.npy'))
 
@@ -48,4 +49,4 @@ try:
 except OSError as err:
    print(err)
 
-bo_nii.make_gif(gif_dir,name='recon', index=np.arange(20), **gif_args)
+bo_nii.make_gif(gif_dir,name='recon', index=np.arange(300), **gif_args)
