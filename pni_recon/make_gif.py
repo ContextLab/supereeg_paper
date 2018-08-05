@@ -29,6 +29,7 @@ gif_args = {'cmap': cmap,
 
 fname = 'nn_brain_data_5000_'+ model_template+'_'+vox_size+'.bo'
 
+
 bo = se.load(os.path.join(results_dir, fname))
 
 audio = np.load(os.path.join(results_dir,'audio_5000.npy'))
