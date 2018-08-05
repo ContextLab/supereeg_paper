@@ -1,0 +1,22 @@
+#!/bin/bash -l
+# Queue to use
+#PBS -q default
+# NAME of job
+#PBS -N compile_corrs
+# Account resources to use
+#PBS -A DBIC
+# Resources to reserve
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=10:00:00
+# Send email to this address
+#PBS -M Lucy.W.Owen.GR@Dartmouth.edu
+# When to send defined here
+#PBS -m ea
+# Change to job working directory
+cd $PBS_O_WORKDIR
+##############################
+# Enter your code to run below
+##############################
+source activate supereeg_env
+python make_gif.py gray 20 200
+source deactivate supereeg_env
