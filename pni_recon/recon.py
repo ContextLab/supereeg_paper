@@ -42,16 +42,3 @@ bo.apply_filter()
 bo_r = mo.predict(bo, nearest_neighbor=True, force_update=True)
 
 bo_r.save(os.path.join(results_dir, file_name + '_' + model_template + '_' + vox_size + '.bo'))
-
-
-cmap=plt.cm.get_cmap('gray')
-
-gif_args = {'window_min': 0,
-            'window_max': 8,
-            'cmap': cmap,
-            'display_mode': 'lyrz',
-            'threshold': 0,
-            'plot_abs': False,
-            'colorbar': False,
-            'vmin': -5,
-            'vmax': 5}
