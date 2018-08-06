@@ -32,25 +32,44 @@ fname = 'nn_brain_data_5000_'+ model_template+'_'+vox_size+'.bo'
 
 bo = se.load(os.path.join(results_dir, fname))
 
-audio = np.load(os.path.join(results_dir,'audio_signal_contol_lucy_1.npy'))
+control = np.load(os.path.join(results_dir,'audio_control_5000.npy'))
 
+audio = np.load(os.path.join(results_dir,'audio_5000.npy'))
 
 pd_audio = pd.DataFrame(audio)
+pd_control = pd.DataFrame(control)
 
 rolling =bo.get_data().rolling(window=int(window)).corr(other=pd_audio[0])
 
 bo_s = se.Brain(data=rolling[int(window):], locs = bo.get_locs(), sample_rate=512)
 
-bo_s.save(os.path.join(results_dir,'corr_'+fname))
+rolling_c =bo.get_data().rolling(window=int(window)).corr(other=pd_control[0])
+
+bo_c = se.Brain(data=rolling[int(window):], locs = bo.get_locs(), sample_rate=512)
+
+bo_s.save(os.path.join(results_dir,'audio_'+fname))
+bo_c.save(os.path.join(results_dir,'control_'+fname))
 
 bo_nii = bo_s.to_nii(vox_size=int(vox_size))
+bo_nii_c = bo_c.to_nii(vox_size=int(vox_size))
 
-gif_dir = os.path.join(results_dir, 'gif_' + window)
+gif_audio_dir = os.path.join(results_dir, 'gif_audio' + window)
+
+gif_control_dir = os.path.join(results_dir, 'gif_control' + window)
 
 try:
-    if not os.path.exists(gif_dir):
-        os.makedirs(gif_dir)
+    if not os.path.exists(gif_audio_dir):
+        os.makedirs(gif_audio_dir)
 except OSError as err:
    print(err)
 
-bo_nii.make_gif(gif_dir,name='recon', index=np.arange(300), **gif_args)
+
+try:
+    if not os.path.exists(gif_control_dir):
+        os.makedirs(gif_control_dir)
+except OSError as err:
+   print(err)
+
+bo_nii.make_gif(gif_audio_dir,name='audio', index=np.arange(300), **gif_args)
+
+bo_nii_c.make_gif(gif_audio_dir,name='control', index=np.arange(300), **gif_args)
