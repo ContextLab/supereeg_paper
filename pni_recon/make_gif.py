@@ -72,4 +72,4 @@ except OSError as err:
 
 bo_nii.make_gif(gif_audio_dir,name='audio', index=np.arange(300), **gif_args)
 
-bo_nii_c.make_gif(gif_audio_dir,name='control', index=np.arange(300), **gif_args)
+bo_nii_c.make_gif(gif_control_dir,name='control', index=np.arange(300), **gif_args)
