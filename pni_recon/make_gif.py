@@ -47,8 +47,8 @@ rolling_c =bo.get_data().rolling(window=int(window)).corr(other=pd_control[0])
 
 bo_c = se.Brain(data=rolling_c[int(window):], locs = bo.get_locs(), sample_rate=512)
 
-bo_s.save(os.path.join(results_dir,'audio_'+fname))
-bo_c.save(os.path.join(results_dir,'control_'+fname))
+bo_s.save(os.path.join(results_dir,'audio_'+ window + '_' + fname))
+bo_c.save(os.path.join(results_dir,'control_'+ window + '_' +fname))
 
 bo_nii = bo_s.to_nii(vox_size=int(vox_size))
 bo_nii_c = bo_c.to_nii(vox_size=int(vox_size))
@@ -69,6 +69,6 @@ try:
 except OSError as err:
    print(err)
 
-bo_nii.make_gif(gif_audio_dir,name='audio', index=range(1000, 1200, 1), **gif_args)
+bo_nii.make_gif(gif_audio_dir,name='audio', index=range(100, 500, 1), **gif_args)
 
-bo_nii_c.make_gif(gif_control_dir,name='control', index=range(1000, 1200, 1), **gif_args)
+bo_nii_c.make_gif(gif_control_dir,name='control', index=range(100, 500, 1), **gif_args)
