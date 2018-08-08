@@ -31,7 +31,7 @@ def electrode_search(fname):
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon.py')
 
 bos = ('BW001.bo', 'BW013.bo')
-files = map(lambda x: os.path.join(config['datadir'],x), bos)
+files = list(map(lambda x: os.path.join(config['datadir'],x), bos))
 print(files)
 #files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
@@ -42,10 +42,10 @@ model = str('pyFR_union')
 
 radius = str('20')
 
-job_commands = map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model + " " + radius, zip([job_script]* len(file_nums), file_nums))
+job_commands = list(map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model + " " + radius, zip([job_script]* len(file_nums), file_nums)))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
-job_names = map(lambda x: os.path.basename(x[0])+"_"+str(x[1])+"_" + model+ "_" + radius + '.sh', file_nums)
+job_names = list(map(lambda x: os.path.basename(x[0])+"_"+str(x[1])+"_" + model+ "_" + radius + '.sh', file_nums))
 
 
 

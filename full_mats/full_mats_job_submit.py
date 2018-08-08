@@ -20,7 +20,7 @@ except:
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
 
 # only make a few:
-# bos = ('FR130.mo', 'TJ018_2.mo', 'CH066.mo','CH008b.mo')
+bos = ('FR029.mo', 'TJ001.mo', 'TJ015.mo','TJ017.mo', 'TJ025.mo','TJ027.mo')
 #
 # files = map(lambda x: os.path.join(config['datadir'],x), bos)
 
