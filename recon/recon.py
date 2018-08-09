@@ -26,13 +26,6 @@ ave_dir = os.path.join(config['avedir'], model_template+ '_' + radius)
 
 results_dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
 
-across_dir = os.path.join(results_dir, 'across_subjects')
-
-try:
-    if not os.path.exists(across_dir):
-        os.makedirs(across_dir)
-except OSError as err:
-    print(err)
 
 try:
     if not os.path.exists(results_dir):
@@ -67,7 +60,7 @@ c = _corr_column(recon.get_data().as_matrix(), actual.get_zscore_data())
 
 print(c)
 
-recon_outfile_across = os.path.join(across_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
+recon_outfile_across = os.path.join(results_dir, os.path.basename(sys.argv[1][:-3] + '_' + sys.argv[2] + '.npz'))
 np.savez(recon_outfile_across, coord=electrode, corrs=c)
 
 

@@ -32,7 +32,7 @@ job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon.py
 
 bos = ('BW001.bo', 'BW013.bo')
 files = list(map(lambda x: os.path.join(config['datadir'],x), bos))
-print(files)
+#print(files)
 #files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
 file_nums = [(a, i) for item, (a,b) in enumerate(zip(files, map(lambda e :electrode_search(e), files))) for i in range(b)]
@@ -45,7 +45,7 @@ radius = str('20')
 job_commands = list(map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model + " " + radius, zip([job_script]* len(file_nums), file_nums)))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
-job_names = list(map(lambda x: os.path.basename(x[0])+"_"+str(x[1])+"_" + model+ "_" + radius + '.sh', file_nums))
+job_names = list(map(lambda x: os.path.splitext(os.path.basename(x[0]))[0]+"_"+str(x[1])+"_" + model+ "_" + radius + '.sh', file_nums))
 
 
 
