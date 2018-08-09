@@ -5,9 +5,34 @@ import numpy as np
 import sys
 import os
 from config import config
-from bookkeeping import remove_electrode, known_unknown
 
-## load brain object
+
+## add this to supereeg.helpers
+def remove_electrode(subkarray, subarray, electrode):
+    """
+        Removes electrode from larger array
+
+        Parameters
+        ----------
+        subkarray : ndarray
+            Subject's electrode locations that pass the kurtosis test
+
+        subarray : ndarray
+            Subject's electrode locations (all)
+
+        electrode : str
+            Index of electrode in subarray to remove
+
+        Returns
+        ----------
+        results : ndarray
+            Subject's electrode locations that pass kurtosis test with electrode removed
+
+        """
+    rm_ind = get_rows(subkarray, subarray[electrode])
+    other_inds = [i for i in range(np.shape(subkarray)[0]) if i != electrode]
+    return np.delete(subkarray, rm_ind, 0), other_inds
+
 bo_fname = sys.argv[1]
 bo = se.load(bo_fname)
 
@@ -24,8 +49,10 @@ mo_mo = se.load(mo_mo_fname)
 
 ave_dir = os.path.join(config['avedir'], model_template+ '_' + radius)
 
-results_dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
+ave ='ave_mat.mo'
+mo = se.load(os.path.join(ave_dir, ave))
 
+results_dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
 
 try:
     if not os.path.exists(results_dir):
@@ -33,8 +60,6 @@ try:
 except OSError as err:
    print(err)
 
-ave ='ave_mat.mo'
-mo = se.load(os.path.join(ave_dir, ave))
 
 bo.apply_filter()
 
