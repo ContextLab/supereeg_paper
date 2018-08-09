@@ -14,8 +14,17 @@
 # specify the number of cores and nodes (estimate 4GB of RAM per core)
 #PBS -l nodes=<config['nnodes']>:ppn=<config['ppn']>
 
+# specify more memory
+#PBS -l feature 'cellk|cellm|celle|cellh|cellg'
+
 # specify how long the job should run (wall time)
 #PBS -l walltime=<config['walltime']>
+
+#PBS -m ea
+export MKL_NUM_THREADS=16
+export NUMEXPR_NUM_THREADS=16
+export OMP_NUM_THREADS=16
+
 
 # set the working directory *of this script* to the directory from which the job was submitted
 
