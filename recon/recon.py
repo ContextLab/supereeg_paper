@@ -1,37 +1,10 @@
 
 import supereeg as se
-from supereeg.helpers import _corr_column, get_rows
+from supereeg.helpers import _corr_column, get_rows, known_unknown, remove_electrode
 import numpy as np
 import sys
 import os
 from config import config
-
-
-## add this to supereeg.helpers
-def remove_electrode(subkarray, subarray, electrode):
-    """
-        Removes electrode from larger array
-
-        Parameters
-        ----------
-        subkarray : ndarray
-            Subject's electrode locations that pass the kurtosis test
-
-        subarray : ndarray
-            Subject's electrode locations (all)
-
-        electrode : str
-            Index of electrode in subarray to remove
-
-        Returns
-        ----------
-        results : ndarray
-            Subject's electrode locations that pass kurtosis test with electrode removed
-
-        """
-    rm_ind = get_rows(subkarray, subarray[electrode])
-    other_inds = [i for i in range(np.shape(subkarray)[0]) if i != electrode]
-    return np.delete(subkarray, rm_ind, 0), other_inds
 
 bo_fname = sys.argv[1]
 bo = se.load(bo_fname)
@@ -71,17 +44,19 @@ R_K_subj = bo.get_locs().as_matrix()
 
 R_K_removed, other_inds = remove_electrode(R_K_subj, R_K_subj, elec_ind)
 
+known_inds, unknown_inds, e_ind = known_unknown(R, R_K_removed, R_K_subj, elec_ind)
+
+electrode_ind = get_rows(R, electrode.values)
+
 bo_s = bo[:, other_inds]
 
 mo_s = mo - mo_mo
 
-bo_r = mo_s.predict(bo_s)
-
-electrode_ind = get_rows(R, electrode.values)
-recon = bo_r[:, electrode_ind[0]]
 actual = bo[:,elec_ind]
 
-c = _corr_column(recon.get_data().as_matrix(), actual.get_zscore_data())
+bo_r = mo_s.predict(bo_s, recon_loc_inds=e_ind)
+
+c = _corr_column(bo_r.data.as_matrix(), actual.get_zscore_data())
 
 print(c)
 
