@@ -6,18 +6,18 @@ import glob as glob
 import pandas as pd
 import sys
 
-# ### for cluster:
-# model_template = sys.argv[1]
-#
-# radius = sys.argv[2]
-#
-# results_dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
-#
-# dir = os.path.join(results_dir, sys.argv[3])
+### for cluster:
+model_template = sys.argv[1]
+
+radius = sys.argv[2]
+
+dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
+
+#dir = os.path.join(results_dir, sys.argv[3])
 
 
 ### locally
-dir = sys.argv[1]
+#dir = sys.argv[1]
 
 
 files = glob.glob(os.path.join(dir, '*.npz'))

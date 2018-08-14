@@ -10,8 +10,10 @@ import pandas as pd
 import os
 from scipy import linalg
 from sklearn.decomposition import PCA
-#from itertools import zip_longest
-from itertools import izip_longest as zip_longest
+try:
+    from itertools import zip_longest as zip_longest
+except:
+    from itertools import izip_longest as zip_longest
 
 
 

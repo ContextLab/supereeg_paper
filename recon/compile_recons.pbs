@@ -18,5 +18,5 @@ cd $PBS_O_WORKDIR
 # Enter your code to run below
 ##############################
 source activate supereeg_env
-python compile_recons.py pyFR_union 20 across_subjects
+python compile_recons.py pyFR_union 20
 source deactivate supereeg_env
