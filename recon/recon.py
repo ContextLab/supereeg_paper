@@ -7,7 +7,6 @@ import os
 from config import config
 
 bo_fname = sys.argv[1]
-bo = se.load(bo_fname)
 
 file_name = os.path.basename(os.path.splitext(bo_fname)[0])
 
@@ -25,6 +24,14 @@ ave_dir = os.path.join(config['avedir'], model_template+ '_' + radius)
 ave ='ave_mat.mo'
 mo = se.load(os.path.join(ave_dir, ave))
 
+R = mo.get_locs().as_matrix()
+
+mo_s = mo - mo_mo
+
+mo = None
+mo_mo = None
+
+print('models deleted')
 results_dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
 
 try:
@@ -33,12 +40,12 @@ try:
 except OSError as err:
    print(err)
 
-
+bo = se.load(bo_fname)
 bo.apply_filter()
 
-electrode = bo.get_locs().iloc[elec_ind]
+print('filter applied')
 
-R = mo.get_locs().as_matrix()
+electrode = bo.get_locs().iloc[elec_ind]
 
 R_K_subj = bo.get_locs().as_matrix()
 
@@ -47,14 +54,12 @@ R_K_removed, other_inds = remove_electrode(R_K_subj, R_K_subj, elec_ind)
 known_inds, unknown_inds, e_ind = known_unknown(R, R_K_removed, R_K_subj, elec_ind)
 
 electrode_ind = get_rows(R, electrode.values)
-
-bo_s = bo[:, other_inds]
-
-mo_s = mo - mo_mo
-
 actual = bo[:,elec_ind]
+bo = bo[:, other_inds]
 
-bo_r = mo_s.predict(bo_s, recon_loc_inds=e_ind)
+print('bo indexed')
+
+bo_r = mo_s.predict(bo, recon_loc_inds=e_ind)
 
 c = _corr_column(bo_r.data.as_matrix(), actual.get_zscore_data())
 

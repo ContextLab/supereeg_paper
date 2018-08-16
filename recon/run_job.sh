@@ -15,7 +15,7 @@
 #PBS -l nodes=<config['nnodes']>:ppn=<config['ppn']>
 
 # specify more memory
-#PBS -l feature='cellk|cellm|celle|cellh|cellg'
+#PBS -l feature='cellk|cellm|cellj'
 
 # specify how long the job should run (wall time)
 #PBS -l walltime=<config['walltime']>

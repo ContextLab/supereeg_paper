@@ -28,8 +28,8 @@ config['pyFRlocsdir'] = os.path.join(config['startdir'], 'pyFR_locs/results')
 # runtime options
 config['jobname'] = "recon"  # default job name
 config['q'] = "default"  # options: default, testing, largeq
-config['nnodes'] = 4  # how many nodes to use for this one job
-config['ppn'] = 4  # how many processors to use for this one job (assume 4GB of RAM per processor)
+config['nnodes'] = 2  # how many nodes to use for this one job
+config['ppn'] = 16  # how many processors to use for this one job (assume 4GB of RAM per processor)
 config['walltime'] = '05:00:00'  # maximum runtime, in h:MM:SS
 #config['startdir'] = '/ihome/lowen/repos/supereeg/examples'  # directory to start the job in
 config['cmd_wrapper'] = "python"  # replace with actual command wrapper (e.g. matlab, python, etc.)
