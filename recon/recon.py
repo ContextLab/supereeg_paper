@@ -87,7 +87,7 @@ elif not os.path.exists(recon_outfile_within):
 
     print(bo_r.get_locs())
     print(electrode)
-    
+
     c = _corr_column(bo_r.data.as_matrix(), actual.get_zscore_data())
 
     print(c)

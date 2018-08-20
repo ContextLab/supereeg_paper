@@ -132,19 +132,38 @@ def density(n_by_3_Locs, nearest_n):
     return np.exp(-(distances.sum(axis=1) / (np.shape(distances)[1] - 1)))
 
 
-files = glob.glob(os.path.join(dir, '*.npz'))
+# files = glob.glob(os.path.join(dir, '*.npz'))
+#
+# all_corrs_across = pd.DataFrame()
+#
+# for i in files:
+#
+#     compile_temp = compile_corrs(config['datadir'], i)
+#     if all_corrs.empty:
+#         all_corrs = compile_temp
+#     else:
+#         all_corrs = all_corrs.append(compile_temp)
+#         all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
+#
+# all_corrs['Density'] = density(all_corrs['R'].tolist(), 3)
+#
+# all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
 
+
+
+recon_data = glob.glob(os.path.join(dir, '*within.npz'))
 all_corrs = pd.DataFrame()
 
-for i in files:
-
-    compile_temp = compile_corrs(config['datadir'], i)
+for i in recon_data:
+    corr_data = np.load(i, mmap_mode='r')
+    tempsub = os.path.basename(i)[:-4]
+    tempmeancorr = z2r(np.mean(r2z(corr_data['corrs'])))
+    tempR = corr_data['coord']
+    temp_pd = pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [tempsub]})
     if all_corrs.empty:
-        all_corrs = compile_temp
+        all_corrs = temp_pd
     else:
-        all_corrs = all_corrs.append(compile_temp)
-        all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
+        all_corrs = all_corrs.append(temp_pd)
 
-all_corrs['Density'] = density(all_corrs['R'].tolist(), 3)
-
-all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
+all_corrs_within = os.path.join(dir, 'all_corrs_within.csv')
+all_corrs.to_csv(all_corrs_within)
