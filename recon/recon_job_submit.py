@@ -30,14 +30,14 @@ def electrode_search(fname):
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon.py')
 
-bos = ('BW001.bo', 'TJ013.bo')
+bos = ('BW001.bo', 'BW013.bo')
 files = list(map(lambda x: os.path.join(config['datadir'],x), bos))
 #print(files)
 #files = glob.glob(os.path.join(config['datadir'],'*.bo'))
 
 file_nums = [(a, i) for item, (a,b) in enumerate(zip(files, map(lambda e :electrode_search(e), files))) for i in range(b)]
 
-file_nums =file_nums[0:12]
+#file_nums =file_nums[0:12]
 # options for model: 'pyFR_union', 'example_model', 'gray'
 model = str('pyFR_union')
 
@@ -147,7 +147,7 @@ for n, c in zip(job_names, job_commands):
         if lock(next_lockfile):
             next_job = create_job(n, c)
 
-            if (socket.gethostname() == 'discovery.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
+            if (socket.gethostname() == 'discovery7.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
                 submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; qsub'
             else:
                 submit_command = 'echo "[RUNNING JOB: ' + next_job + ']"; sh'
