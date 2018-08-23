@@ -1,34 +1,44 @@
 import supereeg as se
 import numpy as np
+from supereeg.helpers import get_rows
 import sys
 import os
 import glob as glob
 from scipy.spatial.distance import cdist
 from config import config
 
-bos =glob.glob(os.path.join(config['bo_datadir'], '*.bo'))
 
-bo_locs = []
-for i in bos:
-    bo = se.load(i)
-    bo_locs.append(bo.get_locs().as_matrix())
+locs_dir = config['locs_resultsdir']
+
+fmri_dir = config['fmri_datadir']
+
+bo_dir = config['bof_datadir']
+
+locs_data = np.load(os.path.join(locs_dir, 'locs.npz'))
+
+loc_list = locs_data['loc_list']
+
+locs = locs_data['locs']
+
+subs= list(range(1, len(os.listdir(fmri_dir))+1))
+
+for i, loc in enumerate(loc_list[:2]):
+
+    ind = np.random.choice(subs, 1)
+    bo = se.load(os.path.join(bo_dir, 'sub-%d-task-intact1.bo' % ind))
+
+    d = cdist(loc, bo.get_locs().values, metric='Euclidean')
+
+    for i in range(len(loc)):
+        min_ind = list(zip(*np.where(d == d.min())))[0]
+        loc[min_ind[0], :] = bo.get_locs().values[min_ind[1], :]
+        d[min_ind[0]] = np.inf
+        d[:, min_ind[1]] = np.inf
+
+    sub_inds = get_rows(bo.get_locs().values, loc)
+
+    subbo = bo[:, sub_inds]
+
+    subbo.save(os.path.join(bo_dir, 'fmri_subsampled_s%d_%d.bo' % (i, ind)))
 
 
-bo = se.load(bos[0])
-
-
-std = se.Brain(se.load('std', vox_size=7))
-
-d = cdist(bo.get_locs(), std.get_locs(), metric='Euclidean')
-
-from supereeg.helpers import get_rows
-
-for i in range(len(bo.get_locs())):
-    min_ind = list(zip(*np.where(d == d.min())))[0]
-    bo.locs.iloc[min_ind[0], :] = std.locs.iloc[min_ind[1], :]
-    d[min_ind[0]] = np.inf
-    d[:, min_ind[1]] = np.inf
-
-sub_inds = get_rows(std.get_locs().values, bo.get_locs().values)
-
-std[:, sub_inds]
