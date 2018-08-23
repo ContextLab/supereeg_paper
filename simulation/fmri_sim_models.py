@@ -14,7 +14,7 @@ def electrode_search(fname, threshold=10):
 
 fname = sys.argv[1]
 
-results_dir = os.path.join(config['model_dir'])
+results_dir = os.path.join(config['model_datadir'])
 
 try:
     if not os.path.exists(results_dir):
