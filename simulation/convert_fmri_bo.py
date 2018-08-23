@@ -1,9 +1,6 @@
 
 import supereeg as se
-from supereeg.helpers import _unique
 import os
-import pandas as pd
-import numpy as np
 import glob as glob
 from config import config
 
