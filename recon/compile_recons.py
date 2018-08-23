@@ -132,26 +132,26 @@ def density(n_by_3_Locs, nearest_n):
     return np.exp(-(distances.sum(axis=1) / (np.shape(distances)[1] - 1)))
 
 
-# files = glob.glob(os.path.join(dir, '*.npz'))
-#
-# all_corrs_across = pd.DataFrame()
-#
-# for i in files:
-#
-#     compile_temp = compile_corrs(config['datadir'], i)
-#     if all_corrs.empty:
-#         all_corrs = compile_temp
-#     else:
-#         all_corrs = all_corrs.append(compile_temp)
-#         all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
-#
-# all_corrs['Density'] = density(all_corrs['R'].tolist(), 3)
-#
-# all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
+files = glob.glob(os.path.join(dir, '*.npz'))
+
+all_corrs_across = pd.DataFrame()
+
+for i in files:
+
+    compile_temp = compile_corrs(config['datadir'], i)
+    if all_corrs.empty:
+        all_corrs = compile_temp
+    else:
+        all_corrs = all_corrs.append(compile_temp)
+        all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
+
+all_corrs['Density'] = density(all_corrs['R'].tolist(), 3)
+
+all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
 
 
 
-recon_data = glob.glob(os.path.join(dir, '*within.npz'))
+recon_data = glob.glob(os.path.join(dir, 'within/*within.npz'))
 all_corrs = pd.DataFrame()
 
 for i in recon_data:
