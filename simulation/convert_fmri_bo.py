@@ -14,17 +14,14 @@ except OSError as err:
 
 fmri_dir = config['fmri_datadir']
 
-niis =glob.glob(os.path.join(config['fmri_datadir'], '*.nii'))
-
-
 for i in list(range(1, len(os.listdir(config['fmri_datadir']))+1)):
 
 
-    bo_file = os.path.join(results_dir, 'sub-%d' % i, 'func', 'sub-%d-task-intact1' % i)
+    bo_file = os.path.join(results_dir, 'sub-%d-task-intact1' % i)
 
     if not os.path.exists(bo_file):
-        bo = se.Brain(se.load(os.path.join(fmri_dir,'sub-%d-task-intact1.nii' % i)))
-        bo.save(os.path.join(results_dir, 'sub-%d-task-intact1' % i))
+        bo = se.Brain(se.load(os.path.join(fmri_dir,'sub-%d' % i, 'func', 'sub-%d-task-intact1' % i)))
+        bo.save(bo_file)
 
 
 print('done converting brain objects')
