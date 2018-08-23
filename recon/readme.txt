@@ -1,8 +1,8 @@
 For FMRI analysis:
 
-1) Run convert_fmri_bo.py
+1) Run convert_fmri_bo.pbs
 
-This script converts the nifti files to brain objects
+This script runs convert_fmri_bo.py which converts the nifti files to brain objects.
 
 2) Run fmri_sim.py
 
