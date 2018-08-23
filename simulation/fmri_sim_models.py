@@ -17,14 +17,12 @@ try:
 except OSError as err:
    print(err)
 
-locs_dir = config['locs_resultsdir']
 
-bo_dir = config['bof_datadir']
+#bo_dir = config['bof_datadir']
 
-locs_data = np.load(os.path.join(locs_dir, 'locs.npz'))
+nii = se.load('gray', vox_size=3)
 
-locs = locs_data['locs']
-
+locs = nii.get_locs()
 
 fname = os.path.basename(os.path.splitext(fname)[0])
 

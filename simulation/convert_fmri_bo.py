@@ -2,6 +2,7 @@
 import supereeg as se
 import os
 import numpy as np
+import pandas as pd
 from nilearn.input_data import NiftiMasker
 import nibabel as nib
 import warnings
@@ -52,7 +53,14 @@ def nii2cmu(nifti_file, mask_file=None):
 
     R = np.array(np.dot(vox_coords, S[0:3, 0:3])) + S[:3, 3]
 
-    return Y, R
+    Y = pd.DataFrame(Y)
+    R = pd.DataFrame(R)
+
+    null_inds = ~(Y == 0).all()
+    Y = Y.loc[:, null_inds]
+    R = R.loc[null_inds]
+
+    return Y.values, R.values
 
 results_dir = config['bof_datadir']
 
@@ -65,6 +73,7 @@ except OSError as err:
 fmri_dir = config['fmri_datadir']
 
 nii = os.path.join(config['locs_resultsdir'], 'gray_3.nii')
+
 
 for i in list(range(1, len(os.listdir(config['fmri_datadir']))+1)):
 
@@ -82,10 +91,6 @@ for i in list(range(1, len(os.listdir(config['fmri_datadir']))+1)):
             print(bo.get_locs().shape)
         except:
             print(bo_file + '_issue')
-
-    bo_file = os.path.join(results_dir, 'sub-%d' % i + '.bo')
-
-    if not os.path.exists(bo_file):
 
         try:
             ## need to do this for intact1 and intact 2!

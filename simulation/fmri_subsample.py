@@ -28,29 +28,26 @@ loc_list = locs_data['loc_list']
 
 locs = locs_data['locs']
 
-tasks = ['intact1', 'intact2']
 
-for t in tasks:
+subs =list(range(1, len(glob.glob(os.path.join(bo_dir, '*.bo'))) + 1))
 
-    subs =list(range(1, len(glob.glob(os.path.join(bo_dir, '*' + t + '*.bo'))) + 1))
+for i, loc in enumerate(loc_list):
 
-    for i, loc in enumerate(loc_list):
+    ind = np.random.choice(subs, 1)
+    bo = se.load(os.path.join(bo_dir, 'sub-%d.bo' % ind))
 
-        ind = np.random.choice(subs, 1)
-        bo = se.load(os.path.join(bo_dir, 'sub-%d-task-intact1.bo' % ind))
+    d = cdist(loc, bo.get_locs().values, metric='Euclidean')
 
-        d = cdist(loc, bo.get_locs().values, metric='Euclidean')
+    for l in range(len(loc)):
+        min_ind = list(zip(*np.where(d == d.min())))[0]
+        loc[min_ind[0], :] = bo.get_locs().values[min_ind[1], :]
+        d[min_ind[0]] = np.inf
+        d[:, min_ind[1]] = np.inf
 
-        for l in range(len(loc)):
-            min_ind = list(zip(*np.where(d == d.min())))[0]
-            loc[min_ind[0], :] = bo.get_locs().values[min_ind[1], :]
-            d[min_ind[0]] = np.inf
-            d[:, min_ind[1]] = np.inf
+    sub_inds = get_rows(bo.get_locs().values, loc)
 
-        sub_inds = get_rows(bo.get_locs().values, loc)
+    subbo = bo[:, sub_inds]
 
-        subbo = bo[:, sub_inds]
-
-        subbo.save(os.path.join(results_dir, 'fmri_subsampled_' + t + '_s_%d_%d.bo' % (i, ind)))
+    subbo.save(os.path.join(results_dir, 'fmri_subsampled_s_%d_%d.bo' % (i, ind)))
 
 
