@@ -48,3 +48,7 @@ locations, l_indices = _unique(union_locs)
 results = os.path.join(results_dir, 'locs.npz')
 
 np.savez(results, locs = locations, loc_list = bo_locs)
+
+nii = se.load('gray', vox_size=3)
+
+nii.save(os.path.join(results_dir,'gray_3.nii'))
