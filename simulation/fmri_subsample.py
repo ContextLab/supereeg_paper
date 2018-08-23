@@ -36,6 +36,7 @@ for i, loc in enumerate(loc_list):
     ind = np.random.choice(subs, 1)
     bo = se.load(os.path.join(bo_dir, 'sub-%d.bo' % ind))
 
+    bo.filter=None
     d = cdist(loc, bo.get_locs().values, metric='Euclidean')
 
     for l in range(len(loc)):
