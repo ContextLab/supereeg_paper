@@ -7,11 +7,19 @@ config['template'] = 'run_job.sh'
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 if (socket.gethostname() == 'Lucys-MacBook-Pro-3.local') or (socket.gethostname() == 'vertex.kiewit.dartmouth.edu') or (socket.gethostname() == 'vertex.local'):
+    config['bo_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/bo/'
+    config['fmri_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/fmri/'
+    config['bof_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/bo/'
+    config['locs_resultsdir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/fmri_locs/'
     config['datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations'
     config['workingdir'] = config['datadir']
     config['startdir'] = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))  # directory to start the job in
     config['template'] = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'run_job_local.sh')
 else:
+    config['bo_datadir'] = '/idata/cdl/data/ECoG/pyFR/data/bo/'
+    config['fmri_datadir'] = '/idata/cdl/data/fMRI/andy/new_pieman'
+    config['bof_datadir'] = '/idata/cdl/lowen/simulations/bo/'
+    config['locs_resultsdir'] = '/idata/cdl/lowen/simulations/fmri_locs/'
     config['datadir'] = '/idata/cdl/lowen/simulations'
     config['workingdir'] = '/idata/cdl/lowen/simulations'
     config['startdir'] = '/idata/cdl/lowen'
