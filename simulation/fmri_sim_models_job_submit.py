@@ -17,7 +17,7 @@ except:
     os.makedirs(config['resultsdir'])
 
 # each job command should be formatted as a string
-job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
+job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fmri_sim_models.py')
 
 # only make a few:
 #bos = ('FR029.mo', 'TJ001.mo', 'TJ015.mo','TJ017.mo', 'TJ025.mo','TJ027.mo')
