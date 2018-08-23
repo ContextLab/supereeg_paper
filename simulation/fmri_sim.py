@@ -20,9 +20,9 @@ loc_list = locs_data['loc_list']
 
 locs = locs_data['locs']
 
-subs= list(range(1, len(os.listdir(fmri_dir))+1))
+subs =list(range(1, len(glob.glob(os.path.join(bo_dir, 'sub*.bo'))) + 1))
 
-for i, loc in enumerate(loc_list[:2]):
+for i, loc in enumerate(loc_list):
 
     ind = np.random.choice(subs, 1)
     bo = se.load(os.path.join(bo_dir, 'sub-%d-task-intact1.bo' % ind))
