@@ -139,15 +139,15 @@ all_corrs_across = pd.DataFrame()
 for i in files:
 
     compile_temp = compile_corrs(config['datadir'], i)
-    if all_corrs.empty:
-        all_corrs = compile_temp
+    if all_corrs_across.empty:
+        all_corrs_across = compile_temp
     else:
-        all_corrs = all_corrs.append(compile_temp)
-        all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
+        all_corrs_across = all_corrs_across.append(compile_temp)
+        all_corrs_across.to_csv(os.path.join(dir, 'all_corrs.csv'))
 
-all_corrs['Density'] = density(all_corrs['R'].tolist(), 3)
+all_corrs_across['Density'] = density(all_corrs_across['R'].tolist(), 3)
 
-all_corrs.to_csv(os.path.join(dir, 'all_corrs.csv'))
+all_corrs_across.to_csv(os.path.join(dir, 'all_corrs_across.csv'))
 
 
 
