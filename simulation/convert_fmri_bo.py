@@ -53,14 +53,13 @@ def nii2cmu(nifti_file, mask_file=None):
 
     R = np.array(np.dot(vox_coords, S[0:3, 0:3])) + S[:3, 3]
 
-    Y = pd.DataFrame(Y)
-    R = pd.DataFrame(R)
+    null_inds = ~np.all(Y == Y[0, :], axis=0)
 
-    null_inds = ~(Y == 0).all()
-    Y = Y.loc[:, null_inds]
-    R = R.loc[null_inds]
 
-    return Y.values, R.values
+    Y = Y[:, null_inds]
+    R = R[null_inds]
+
+    return Y, R
 
 results_dir = config['bof_datadir']
 
