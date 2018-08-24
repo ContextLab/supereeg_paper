@@ -85,7 +85,7 @@ for i in list(range(1, len(os.listdir(config['fmri_datadir']))+1)):
             ## need to do this for intact1 and intact 2!
 
             data, locs = nii2cmu(os.path.join(fmri_dir, 'sub-%d-task-intact1' % i + '.nii'), mask_file=nii)
-            bo = se.Brain(data=data, locs=locs)
+            bo = se.Brain(data=data, locs=locs, sample_rate=1)
             bo.save(bo_file)
             print(bo.get_locs().shape)
         except:
@@ -94,7 +94,7 @@ for i in list(range(1, len(os.listdir(config['fmri_datadir']))+1)):
         try:
             ## need to do this for intact1 and intact 2!
             data, locs = nii2cmu(os.path.join(fmri_dir, 'sub-%d-task-intact2' % i + '.nii'), mask_file=nii)
-            bo = se.Brain(data=data, locs=locs)
+            bo = se.Brain(data=data, locs=locs, sample_rate=1)
             bo.save(bo_file)
             print(bo.get_locs().shape)
         except:
