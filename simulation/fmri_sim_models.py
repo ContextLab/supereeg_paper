@@ -26,6 +26,10 @@ locs_dir = config['locs_resultsdir']
 
 mo_locs = np.load(os.path.join(locs_dir, 'mo_locs.npz'))
 
+## for full locations
+#locs = mo_locs['full_locs']
+
+## for every 100th locations
 locs = mo_locs['sub_locs']
 
 fname = os.path.basename(os.path.splitext(fname)[0])
