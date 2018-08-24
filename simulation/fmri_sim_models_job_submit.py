@@ -12,9 +12,9 @@ import datetime as dt
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 try:
-    os.stat(config['resultsdir'])
+    os.stat(config['model_datadir'])
 except:
-    os.makedirs(config['resultsdir'])
+    os.makedirs(config['model_datadir'])
 
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fmri_sim_models.py')
@@ -25,7 +25,7 @@ job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fmri_sim
 # files = map(lambda x: os.path.join(config['datadir'],x), bos)
 
 # or make all:
-files = glob.glob(os.path.join(config['bof_datadir'],'fmri*.bo'))
+files = glob.glob(os.path.join(config['bof_sub_datadir'],'*.bo'))
 
 job_commands = list(map(lambda x: x[0]+" "+str(x[1]),
                         zip([job_script]*len(files), files)))

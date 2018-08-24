@@ -18,11 +18,15 @@ except OSError as err:
    print(err)
 
 
-#bo_dir = config['bof_datadir']
+# nii = se.load('gray', vox_size=3)
+#
+# locs = nii.get_locs()
 
-nii = se.load('gray', vox_size=3)
+locs_dir = config['locs_resultsdir']
 
-locs = nii.get_locs()
+mo_locs = np.load(os.path.join(locs_dir, 'mo_locs.npz'))
+
+locs = mo_locs['sub_locs']
 
 fname = os.path.basename(os.path.splitext(fname)[0])
 
