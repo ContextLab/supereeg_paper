@@ -19,4 +19,6 @@ mos =glob.glob(os.path.join(config['model_datadir'], '*.mo'))
 mo = se.Model(mos, n_subs=len(mos))
 
 mo.save(os.path.join(results_dir, 'sub_locs_ave_model'))
+
 #mo.save(os.path.join(results_dir, 'ave_model'))
+

@@ -30,6 +30,15 @@ ave ='sub_locs_ave_model.mo'
 
 mo = se.load(os.path.join(ave_dir, ave))
 
+## if we want to add pyfr info into it:
+
+# pyfr_ave ='pyfr_ave_mat.mo'
+# mo_pyfr = se.load(os.path.join(ave_dir, pyfr_ave))
+#
+# new_mo = se.Model(mo_pyfr, locs = mo.get_locs(), n_subs = mo_pyfr.n_subs)
+#
+# mo = new_mo + mo
+
 ## if we want to remove subjects data:
 #mo = mo - mo_mo
 
@@ -69,4 +78,4 @@ c = _corr_column(bo_r.data.as_matrix(), actual.get_zscore_data())
 
 print(c)
 
-np.savez(recon_outfile, corrs=c)
+np.savez(recon_outfile, corrs=c, locs=bo_r.get_locs().values)
