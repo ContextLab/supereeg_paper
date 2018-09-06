@@ -43,9 +43,9 @@ m = 50
 
 noise_vals = [.1, .25, .5]
 
-time_vals = range(10, 1010, 100)
+time_vals = range(10, 1010, 200)
 
-iter_val = 5
+iter_val = 1
 
 append_d = pd.DataFrame()
 
