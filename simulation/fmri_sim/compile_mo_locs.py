@@ -45,7 +45,7 @@ union_locations, l_indices = _unique(union_locs)
 
 known_inds, unknown_inds = known_unknown(full_locations, union_locations, union_locations)
 
-sub_inds = unknown_inds[::100]
+sub_inds = unknown_inds[::1000]
 
 
 

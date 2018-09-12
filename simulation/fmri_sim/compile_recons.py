@@ -26,7 +26,7 @@ all_corrs = pd.DataFrame()
 for i in recon_data:
     corr_data = np.load(i, mmap_mode='r')
     tempsub = os.path.basename(i)[16:-4]
-    tempcorr = _r2z(corr_data['corrs'])
+    tempcorr = corr_data['corrs']
     tempR = corr_data['locs']
     temp_pd = pd.DataFrame()
     for l, item in enumerate(tempR):
@@ -37,5 +37,5 @@ for i in recon_data:
     else:
         all_corrs = all_corrs.append(temp_pd)
 
-all_corrs = os.path.join(results_dir, 'all_corrs_fmri_sim.csv')
-all_corrs.to_csv(all_corrs)
+all_corrs_fmri_sim = os.path.join(results_dir, 'all_corrs_fmri_sim.csv')
+all_corrs.to_csv(all_corrs_fmri_sim)

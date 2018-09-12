@@ -1,6 +1,6 @@
 
 import supereeg as se
-from supereeg.helpers import _corr_column, get_rows, known_unknown, remove_electrode
+from supereeg.helpers import _corr_column, get_rows, known_unknown
 import numpy as np
 import sys
 import os
