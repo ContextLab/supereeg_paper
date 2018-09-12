@@ -36,22 +36,23 @@ locs = se.simulate_locations(n_elecs=100)
 n = 50
 
 # m_patients - number of patients in the model
-p = 10
+m_patients = [5, 10]
 
 # m_electrodes - number of electrodes for each patient in the model
 m = 50
 
-noise_vals = [.1, .25, .5]
+noise_vals = [0, .25, .5, .75, 1]
+#noise_vals = [0, .5]
 
-time_vals = range(10, 1010, 200)
+time_vals = [300]
 
-iter_val = 1
+iter_val = 10
 
 append_d = pd.DataFrame()
 
-param_grid = [(t, no) for t in time_vals for no in noise_vals]
+param_grid = [(p, t, no) for p in m_patients for t in time_vals for no in noise_vals]
 
-for t, no in param_grid:
+for p, t, no in param_grid:
     d = []
 
     for i in range(iter_val):
@@ -90,16 +91,16 @@ for t, no in param_grid:
 
 
         d.append(
-            {'Time': t, 'Noise':no, 'Correlations': corr_vals.mean()})
+            {'Time': t, 'Noise':no, 'Correlations': corr_vals.mean(), 'Patients': p})
 
-    d = pd.DataFrame(d, columns=['Time', 'Noise', 'Correlations'])
+    d = pd.DataFrame(d, columns=['Time', 'Noise', 'Correlations', 'Patients'])
     append_d = append_d.append(d)
     append_d.index.rename('Iteration', inplace=True)
 
-append_d['Patients'] = p
 
-#fig, axs = plt.subplots(ncols=len(np.unique(new_df['Subjects in model'])), sharex=True, sharey=True)
-fig, axs = plt.subplots(ncols=2, sharex=True, sharey=True)
+
+fig, axs = plt.subplots(ncols=len(np.unique(append_d['Patients'])), sharex=True, sharey=True)
+#fig, axs = plt.subplots(ncols=2, sharex=True, sharey=True)
 
 axs_iter = 0
 
@@ -111,7 +112,7 @@ for i in np.unique(append_d['Patients']):
     data_plot = append_d[append_d['Patients'] == i].pivot_table(index=['Time'],
                                                                          columns='Noise',
                                                                          values='Correlations')
-    axs[axs_iter].set_title('Time by Noise')
+    axs[axs_iter].set_title('Patients = ' + str(i))
     sns.heatmap(data_plot, cmap="coolwarm", cbar=axs_iter == 0, ax=axs[axs_iter], cbar_ax=None if axs_iter else cbar_ax)
     axs[axs_iter].invert_yaxis()
     axs_iter += 1
