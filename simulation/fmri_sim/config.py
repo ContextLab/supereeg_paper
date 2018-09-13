@@ -15,7 +15,7 @@ if (socket.gethostname() == 'Lucys-MacBook-Pro-3.local') or (socket.gethostname(
     config['ave_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/ave_mats/'
     config['recon_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/recons/'
     config['compiled_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/compiled/'
-    config['compare_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/compare/'
+    config['compare_datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/compare_mats/'
     config['locs_resultsdir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations/fmri_locs/'
     config['datadir'] = '/Users/lucyowen/Desktop/supereeg_env/simulations'
     config['workingdir'] = config['datadir']
@@ -30,7 +30,7 @@ else:
     config['ave_datadir'] = '/idata/cdl/lowen/simulations/ave_mats/'
     config['recon_datadir'] = '/idata/cdl/lowen/simulations/recons/'
     config['compiled_datadir'] = '/idata/cdl/lowen/simulations/compiled/'
-    config['compare_datadir'] = '/idata/cdl/lowen/simulations/compare/'
+    config['compare_datadir'] = '/idata/cdl/lowen/simulations/compare_mats/'
     config['locs_resultsdir'] = '/idata/cdl/lowen/simulations/fmri_locs/'
     config['datadir'] = '/idata/cdl/lowen/simulations'
     config['workingdir'] = '/idata/cdl/lowen/simulations'

@@ -2,10 +2,10 @@ import supereeg as se
 import numpy as np
 import sys
 import os
+import scipy.spatial.distance as sd
 from supereeg.helpers import get_rows
 from supereeg.helpers import _z2r, _r2z
 import glob as glob
-from scipy.spatial.distance import cdist
 from config import config
 
 
@@ -52,15 +52,20 @@ subbo = bo[:, sub_inds]
 
 true_model = se.Model(subbo, locs = ave_mo.get_locs().values)
 
-d_mo = (1. - cdist(mo.get_model(), true_model.get_model(), metric='correlation'))
+def upper_tri_indexing(A):
+    m = A.shape[0]
+    r,c = np.triu_indices(m,1)
+    return A[r,c]
 
-c_d_mo = np.diagonal(d_mo).mean()
+def model_diff(z_model1, z_model2):
 
-d_ave = (1. - cdist(ave_mo.get_model(), true_model.get_model(), metric='correlation'))
+    return np.abs(upper_tri_indexing(z_model1) - upper_tri_indexing(z_model2))
 
-c_d_ave = np.diagonal(d_ave).mean()
+d_mo = model_diff(mo.get_model(z_transform=True), true_model.get_model(z_transform=True))
+
+d_ave = model_diff(ave_mo.get_model(z_transform=True), true_model.get_model(z_transform=True))
 
 
 recon_outfile = os.path.join(results_dir, os.path.basename(fname + '.npz'))
 
-np.savez(recon_outfile, c_d_ave=c_d_ave, c_d_mo=c_d_mo)
+np.savez(recon_outfile, d_ave=d_ave.mean(), d_mo=d_mo.mean())
