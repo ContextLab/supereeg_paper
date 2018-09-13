@@ -29,4 +29,7 @@ This script compiles 3 things.
 
  Average the models
 
- 7)
+ 7) Run fmri_sim_recon.py
+
+ Run the reconstructions
+
