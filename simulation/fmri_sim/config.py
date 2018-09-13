@@ -23,7 +23,7 @@ if (socket.gethostname() == 'Lucys-MacBook-Pro-3.local') or (socket.gethostname(
     config['template'] = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'run_job_local.sh')
 else:
     config['bo_datadir'] = '/idata/cdl/data/ECoG/pyFR/data/bo/'
-    config['fmri_datadir'] = '/idata/cdl/data/fMRI/pieman/nii_files'
+    config['fmri_datadir'] = '/idata/cdl/data/fMRI/sherlock/nii'
     config['bof_datadir'] = '/idata/cdl/lowen/simulations/bo/'
     config['bof_sub_datadir'] = '/idata/cdl/lowen/simulations/bo_sub/'
     config['model_datadir'] = '/idata/cdl/lowen/simulations/models/'

@@ -28,7 +28,9 @@ for i in data:
     temp_d_mo = compare_data['d_mo']
     temp_d_ave = compare_data['d_ave']
     temp_pd = pd.DataFrame()
-    temp_pd = temp_pd.append(pd.DataFrame({'d_mo': [temp_d_mo], 'd_ave': [temp_d_ave], 'Subject': [tempsub]}))
+    for l, item in enumerate(temp_d_mo):
+
+        temp_pd = temp_pd.append(pd.DataFrame({'d_mo': [temp_d_mo[l]], 'd_ave': [temp_d_ave[l]], 'Subject': [tempsub]}))
 
     if all_compare.empty:
         all_compare = temp_pd
