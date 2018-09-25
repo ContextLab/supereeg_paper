@@ -46,7 +46,7 @@ union_locations, l_indices = _unique(union_locs)
 known_inds, unknown_inds = known_unknown(full_locations, union_locations, union_locations)
 
 ### if you want to downsample:
-sub_inds = unknown_inds[::1000]
+sub_inds = unknown_inds[::100]
 
 
 

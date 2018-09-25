@@ -3,8 +3,8 @@ FMRI analysis:
 1) Run compile_bo_locs.py
 
 This script compiles 3 things.
- - A list of locations from brain objects in pyfr analysis
- - The union of those locations
+ - A list of locations from brain objects in pyfr analysis ('loc_list')
+ - The union of those locations ('locs')
  - The gray matter masked nifti image downsampled to 3mm
 
  To run this, submit `qsub compile_bo_locs.pbs`
@@ -13,9 +13,13 @@ This script compiles 3 things.
 
  This script runs the nii2cmu for the fmri data.
 
+ To run this, submit `qsub convert_fmri_bo.pbs`
+
  3) Run fmri_subsample.py
 
  This script subsamples the fmri data to the pyfr patient locations.
+
+ To run this, submit `qsub fmri_subsample.pbs`
 
  4) Run compile_mo_locs.py
 
