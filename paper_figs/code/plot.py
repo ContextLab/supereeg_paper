@@ -370,7 +370,7 @@ def interp_density(locs, density, width=10, vox_size=10, outfile=None):
     interp_corrs =  np.dot(density, W.T)
     bo_nii = se.Brain(data=interp_corrs, locs=full_locs)
     nii_bo = _brain_to_nifti(bo_nii, nii)
-    ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=.02, vmin=0, display_mode='lyrz')
+    ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=.05, vmin=0, display_mode='lyrz')
 
     if not outfile is None:
         plt.savefig(outfile)
