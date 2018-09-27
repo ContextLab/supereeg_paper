@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import glob as glob
 from scipy import stats, signal
+import scipy.spatial as spatial
 import numpy.matlib as mat
 import matplotlib.patches as patches
 from scipy.spatial.distance import cdist, pdist
@@ -15,10 +16,40 @@ from supereeg.helpers import _corr_column, get_rows, known_unknown, remove_elect
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.ticker as mtick
 import matplotlib.cm as cm
 import seaborn as sns
 from scipy import stats
 
+############## General functions #################
+
+def r2z(r):
+    return 0.5 * (np.log(1 + r) - np.log(1 - r))
+
+def z2r(z):
+    r = np.divide((np.exp(2*z) - 1), (np.exp(2*z) + 1))
+    r[np.isnan(r)] = 0
+    r[np.isinf(r)] = np.sign(r)[np.isinf(r)]
+    return r
+
+def compile_df_locs(df_column):
+
+    R_locs = []
+
+    for i, e in enumerate(df_column):
+
+        R = np.array(e[1:-1].split())
+        R = np.atleast_2d(np.array(R.astype(np.float)))
+        if R_locs == []:
+            R_locs = R
+        else:
+
+            R_locs = np.vstack((R_locs, R))
+
+    return R_locs
+
+
+############## Methods ##########################
 
 def plot_hist(dataframe, title=None, outfile=None):
     fig = plt.gcf()
@@ -55,93 +86,6 @@ def plot_hist(dataframe, title=None, outfile=None):
         plt.savefig(outfile)
         plt.clf()
 
-def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
-
-    grouped_results = df.groupby('Subject')[Y, X].mean()
-    t_stat_group = stats.ttest_rel(grouped_results[Y],grouped_results[X])
-
-    fig = plt.gcf()
-    fig.set_size_inches(18.5, 8.5)
-    bin_values = np.arange(start=-1, stop=1, step=.01)
-
-    ax = sns.distplot(z2r(df[X]), hist=True, kde=True,
-             bins=bin_values, color = 'k',
-             hist_kws={'edgecolor':'lightgray', 'alpha':.3},
-             kde_kws={'linewidth': 4, 'alpha':1, 'color':'lightgray'})
-
-
-    ax = sns.distplot(z2r(df[Y]), hist=True, kde=True,
-             bins=bin_values, color = 'k',
-             hist_kws={'edgecolor':'k', 'alpha':.7},
-             kde_kws={'linewidth': 4, 'alpha':1, 'color':'k'})
-
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    left, width = .05, .5
-    bottom, height = .25, .5
-    n_count = len(df[Y].values)
-    vals = ax.get_yticks()
-
-    ax.set_yticklabels([np.round(x/n_count,5) for x in vals])
-    ax.set_xlim(-1, 1)
-
-    if legend:
-        leg = ax.legend(['Within', 'Across'], fontsize=50, loc='upper left')
-        LH = leg.legendHandles
-        LH[1].set_color('k')
-        LH[1].set_alpha(1)
-
-    ylim = ax.get_ylim()[1]
-    # ax.plot(z2r(df[X]).mean(), ylim, 'vline', color='k')
-    # ax.plot(z2r(df[Y]).mean(), ylim, 'vline', color='k')
-    #plt.plot(z2r(df[X]).mean(), ylim, z2r(df[Y]).mean(), ylim, marker = '|', color='k')
-    m1, n1 = [z2r(df[X]).mean(), z2r(df[Y]).mean()], [ylim, ylim]
-    plt.plot(m1, n1, marker = '|', mew=4, markersize=20, color='k', linewidth=4)
-    a1 = (z2r(df[X]).mean() + z2r(df[Y]).mean()) /2
-    print(a1)
-    ax.plot(a1, ylim + .1, marker = '*', markersize=20, color='k')
-    ax.tick_params(axis='x', labelsize=40)
-    ax.tick_params(axis='y', labelsize=40)
-    ax.set_ylabel('Proportion \n of electrodes', fontsize=50)
-
-    if not xticks:
-        plt.tick_params(
-            axis='x',          # changes apply to the x-axis
-            which='both',      # both major and minor ticks are affected
-            bottom=False,      # ticks along the bottom edge are off
-            top=False,         # ticks along the top edge are off
-            labelbottom=False)
-        ax.set_xlabel('')
-    else:
-        ax.set_xlabel('Correlation', fontsize=50)
-        for index, label in enumerate(ax.xaxis.get_ticklabels()):
-            if index % 2 == 0:
-                label.set_visible(False)
-
-    plt.tight_layout()
-
-
-    if outfile:
-        plt.savefig(outfile)
-
-    print(t_stat_group)
-
-
-def plot_column(X, Y, title=None, outfile=None):
-    mpl.rcParams['axes.facecolor'] = 'white'
-    fig, ax = plt.subplots()
-    ax.scatter(X, Y, color='k', alpha=.1)
-    #ax.set_xscale('log')
-    ax.set_title(title)
-    ax.set_ylabel(X.name)
-    ax.set_xlabel(Y.name)
-    left, width = .05, .5
-    bottom, height = .05, .5
-    rstat = stats.pearsonr(X, Y)
-    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + ' p = ' + str(rstat[1]),
-            horizontalalignment='left',
-            verticalalignment='top',
-            transform=ax.transAxes)
 
 def plot_times_series(time_data_df, lower_bound, upper_bound, outfile = None):
     """
@@ -167,13 +111,16 @@ def plot_times_series(time_data_df, lower_bound, upper_bound, outfile = None):
     time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['actual'].plot(ax=ax, color='k', lw=1, fontsize=21)
     time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['predicted'].plot(ax=ax, color='r', lw=1)
     ax.legend(['Actual', 'Predicted'], fontsize=21)
-    ax.set_xlabel("Time", fontsize=21)
+    ax.set_xlabel("Time (s)", fontsize=21)
     ax.set_ylabel("Voltage (normalized)", fontsize=21)
 
     xvals = ax.get_xticks()
-    ax.set_xticklabels([np.round(x, 4) for x in xvals])
+    #ax.set_xticklabels([np.round(x, 4) for x in xvals])
 
     ax.set_xticklabels([np.round(x / 400, 4) for x in xvals])
+    for index, label in enumerate(ax.xaxis.get_ticklabels()):
+        if index % 2 == 0:
+            label.set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
     ax.tick_params(axis='x', labelsize=18)
@@ -217,64 +164,12 @@ def plot_Y_electrode(time_data, bo, lower_bound, upper_bound, electrode, outfile
     else:
         plt.show()
 
-def plot_density(df, outfile = None):
-    fig = plt.gcf()
-    fig.set_size_inches(18.5, 10.5)
-    sns.set_style("white")
-    mybins =np.linspace(0, 1, 200)
-    g = sns.JointGrid('Density', 'Correlation', df, xlim=[-.2,.8],ylim=[-1,1])
-    g.ax_marg_x.hist(df['Density'], bins=mybins, color = 'k', alpha = .3)
-    g.ax_marg_y.hist(df['Correlation'], bins=np.arange(-1, 1, .01), orientation='horizontal', color = 'k', alpha = .3)
-    #g.ax_marg_x.set_xscale('log')
-    g.ax_marg_x.set_xscale('linear')
-    g.ax_marg_y.set_yscale('linear')
-    g.plot_joint(plt.scatter, color='black', edgecolor='black', alpha = .6)
-    ax = g.ax_joint
-    left, width = .05, .5
-    bottom, height = .1, .5
-    rstat = stats.pearsonr(df['Density'], r2z(df['Correlation']))
-    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
-            horizontalalignment='left',
-            verticalalignment='top',
-            transform=ax.transAxes, fontsize=18)
-    ax.set_xlabel("Density", fontsize=21)
-    ax.set_ylabel("Correlation", fontsize=21)
-    ax.tick_params(axis='x', labelsize=18)
-    ax.tick_params(axis='y', labelsize=18)
-    ax.set_xscale('linear')
-    ax.set_yscale('linear')
 
-    plt.tight_layout()
-
-    if not outfile is None:
-        plt.savefig(outfile)
-    else:
-        plt.show()
-
-def r2z(r):
-    return 0.5 * (np.log(1 + r) - np.log(1 - r))
-
-def z2r(z):
-    r = np.divide((np.exp(2*z) - 1), (np.exp(2*z) + 1))
-    r[np.isnan(r)] = 0
-    r[np.isinf(r)] = np.sign(r)[np.isinf(r)]
-    return r
-
-def compile_df_locs(df_column):
-
-    R_locs = []
-
-    for i, e in enumerate(df_column):
-
-        R = np.array(e[1:-1].split())
-        R = np.atleast_2d(np.array(R.astype(np.float)))
-        if R_locs == []:
-            R_locs = R
-        else:
-
-            R_locs = np.vstack((R_locs, R))
-
-    return R_locs
+def gkern(kernlen=100, std=10):
+    """Returns a 2D Gaussian kernel array for bullseye"""
+    gkern1d = signal.gaussian(kernlen, std=std).reshape(kernlen, 1)
+    gkern2d = np.outer(gkern1d, gkern1d)
+    return gkern2d
 
 def draw_bounds(ax, model):
     bounds = np.where(np.diff(np.argmax(model.segments_[0], axis=1)))[0]
@@ -335,6 +230,81 @@ def normalizeRows(M):
     row_sums = M.sum(axis=1)
     return M / row_sums[:, np.newaxis]
 
+
+############## Corrmap #################
+
+def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
+
+    grouped_results = df.groupby('Subject')[Y, X].mean()
+    t_stat_group = stats.ttest_rel(grouped_results[Y],grouped_results[X])
+
+    fig = plt.gcf()
+    fig.set_size_inches(18.5, 8.5)
+    bin_values = np.arange(start=-1, stop=1, step=.01)
+
+
+    ax = sns.distplot(z2r(df[X]), hist=True, kde=True,
+             bins=bin_values, color = 'k',
+             hist_kws={'edgecolor':'lightgray', 'alpha':.3},
+             kde_kws={'linewidth': 4, 'alpha':1, 'color':'lightgray'})
+
+
+    ax = sns.distplot(z2r(df[Y]), hist=True, kde=True,
+             bins=bin_values, color = 'k',
+             hist_kws={'edgecolor':'k', 'alpha':.7},
+             kde_kws={'linewidth': 4, 'alpha':1, 'color':'k'})
+
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    left, width = .05, .5
+    bottom, height = .25, .5
+    n_count = len(df[Y].values)
+
+    ax.set_xlim(-1, 1)
+
+    ax.get_yaxis().set_major_formatter(mtick.FormatStrFormatter('%.1e'))
+
+
+    if legend:
+        leg = ax.legend(['Within', 'Across'], fontsize=50, loc='upper left')
+        LH = leg.legendHandles
+        LH[1].set_color('k')
+        LH[1].set_alpha(1)
+
+    ylim = ax.get_ylim()[1]
+    m1, n1 = [z2r(df[X]).mean(), z2r(df[Y]).mean()], [ylim, ylim]
+    plt.plot(m1, n1, marker = '|', mew=4, markersize=20, color='k', linewidth=4)
+    a1 = (z2r(df[X]).mean() + z2r(df[Y]).mean()) /2
+    ax.plot(a1, ylim + .1, marker = '*', markersize=20, color='k')
+    ax.tick_params(axis='x', labelsize=40)
+    ax.tick_params(axis='y', labelsize=40)
+    ax.set_ylabel('Proportion \n of electrodes', fontsize=50)
+    # n = 2  # Keeps every 7th label
+    # [l.set_visible(False) for (i,l) in enumerate(ax.yaxis.get_ticklabels()) if i % n != 0]
+    ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
+
+    if not xticks:
+        plt.tick_params(
+            axis='x',          # changes apply to the x-axis
+            which='both',      # both major and minor ticks are affected
+            bottom=False,      # ticks along the bottom edge are off
+            top=False,         # ticks along the top edge are off
+            labelbottom=False)
+        ax.set_xlabel('')
+    else:
+        ax.set_xlabel('Correlation', fontsize=50)
+        for index, label in enumerate(ax.xaxis.get_ticklabels()):
+            if index % 2 == 0:
+                label.set_visible(False)
+
+    plt.tight_layout()
+
+
+    if outfile:
+        plt.savefig(outfile)
+
+    print(t_stat_group)
+
 def interp_corr_old(locs, corrs, width=10, vox_size=10, outfile=None):
     nii = se.load('std', vox_size=vox_size)
     full_locs = nii.get_locs().values
@@ -363,6 +333,107 @@ def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None):
     else:
         plt.show()
 
+
+############ Density ########################
+
+def plot_density(df, X, Y, outfile = None):
+    fig = plt.gcf()
+    fig.set_size_inches(18.5, 10.5)
+    sns.set_style("white")
+    mybins =np.linspace(0, .02, 200)
+    g = sns.JointGrid(X, Y, df, xlim=[0,.02],ylim=[-1,1])
+    g.ax_marg_x.hist(df[X], bins=mybins, color = 'k', alpha = .3)
+    g.ax_marg_y.hist(df[Y], bins=np.arange(-1, 1, .01), orientation='horizontal', color = 'k', alpha = .3)
+    #g.ax_marg_x.set_xscale('log')
+    g.ax_marg_x.set_xscale('linear')
+    g.ax_marg_y.set_yscale('linear')
+    g.plot_joint(plt.scatter, color='black', edgecolor='black', alpha = .6)
+    ax = g.ax_joint
+    left, width = .05, .5
+    bottom, height = .1, .5
+    rstat = stats.pearsonr(df[X], df[Y])
+    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
+            horizontalalignment='left',
+            verticalalignment='top',
+            transform=ax.transAxes, fontsize=18)
+    ax.set_xlabel("Density", fontsize=21)
+    ax.set_ylabel("Correlation", fontsize=21)
+    ax.tick_params(axis='x', labelsize=18)
+    ax.tick_params(axis='y', labelsize=18)
+    ax.set_xscale('linear')
+    ax.set_yscale('linear')
+
+    plt.tight_layout()
+
+    if not outfile is None:
+        plt.savefig(outfile)
+    else:
+        plt.show()
+
+
+def density_within_r(locs, r):
+    point_tree = spatial.cKDTree(locs)
+    density_locs = np.array([])
+
+    for l in locs:
+        density_locs = np.append(density_locs, np.divide(len(point_tree.query_ball_point(l, r)), np.shape(locs)[0]))
+
+    return density_locs
+
+
+def density_within_r_plot(locs, r, vox_size=4, outfile=None):
+
+    nii = se.load('std', vox_size=vox_size)
+    full_locs = nii.get_locs().values
+    point_tree = spatial.cKDTree(locs)
+    density_locs = np.array([])
+
+    for l in locs:
+        density_locs = np.append(density_locs, np.divide(len(point_tree.query_ball_point(l, r)), np.shape(locs)[0]))
+
+    bo_nii = se.Brain(data=np.atleast_2d(density_locs), locs=locs)
+    nii_bo = se.helpers._brain_to_nifti(bo_nii, nii)
+    ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=.1, vmin=0)
+
+    if not outfile is None:
+        plt.savefig(outfile)
+    else:
+        plt.show()
+
+
+def density_by_voxel(locs, r=20, vox_size=4):
+
+    sub_nii = se.load('std', vox_size=4)
+    sub_locs = sub_nii.get_locs().values
+
+    point_tree = spatial.cKDTree(locs)
+    density_locs = np.array([])
+
+    for l in sub_locs:
+        density_locs = np.append(density_locs, np.divide(len(point_tree.query_ball_point(l, r)), np.shape(locs)[0]))
+
+    return density_locs
+
+def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None):
+
+    sub_nii = se.load('std', vox_size=4)
+    sub_locs = sub_nii.get_locs().values
+
+    point_tree = spatial.cKDTree(locs)
+    density_locs = np.array([])
+
+    for l in sub_locs:
+        density_locs = np.append(density_locs, np.divide(len(point_tree.query_ball_point(l, r)), np.shape(locs)[0]))
+
+    bo_nii = se.Brain(data=np.atleast_2d(density_locs), locs=sub_locs)
+    nii_bo = se.helpers._brain_to_nifti(bo_nii, sub_nii)
+    ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=.1, vmin=0, display_mode='lyrz')
+    if not outfile is None:
+        plt.savefig(outfile)
+    else:
+        plt.show()
+
+
 def interp_density(locs, density, width=10, vox_size=10, outfile=None):
     nii = se.load('std', vox_size=vox_size)
     full_locs = nii.get_locs().values
@@ -376,14 +447,6 @@ def interp_density(locs, density, width=10, vox_size=10, outfile=None):
         plt.savefig(outfile)
     else:
         plt.show()
-
-
-
-def gkern(kernlen=100, std=10):
-    """Returns a 2D Gaussian kernel array for bullseye"""
-    gkern1d = signal.gaussian(kernlen, std=std).reshape(kernlen, 1)
-    gkern2d = np.outer(gkern1d, gkern1d)
-    return gkern2d
 
 
 def density(n_by_3_Locs, nearest_n, tau=.2):
@@ -403,6 +466,124 @@ def density(n_by_3_Locs, nearest_n, tau=.2):
     nbrs = NearestNeighbors(n_neighbors=nearest_n, algorithm='ball_tree').fit(n_by_3_Locs)
     distances, indices = nbrs.kneighbors(n_by_3_Locs)
     return np.exp(-tau*(distances.sum(axis=1) / (np.shape(distances)[1] - 1)))
-#     nbrs = NearestNeighbors(n_neighbors=nearest_n, algorithm='ball_tree').fit(n_by_3_Locs)
-#     distances, indices = nbrs.kneighbors(n_by_3_Locs)
-#     return np.exp(-(distances.sum(axis=1) / (np.shape(distances)[1] - 1)))
+
+######### Best locs ##############
+def most_informative_locs_plot(df, vox_size=5, width=10, outfile=None):
+
+    locs = compile_df_locs(df['R'])
+
+    sub_nii = se.load('std', vox_size=vox_size)
+    sub_locs = sub_nii.get_locs().values
+
+    point_tree = spatial.cKDTree(locs)
+
+
+    most_info = np.array([])
+
+    for l in sub_locs:
+        most_info = np.append(most_info, df['Correlation'][point_tree.query_ball_point(l, width)].mean())
+
+    bo_nii = se.Brain(data=np.atleast_2d(z2r(most_info)), locs=sub_locs)
+    nii_bo = se.helpers._brain_to_nifti(bo_nii, sub_nii)
+    ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=1, vmin=0, display_mode='lyrz')
+    if not outfile is None:
+        plt.savefig(outfile)
+    else:
+        plt.show()
+
+def most_informative_locs(df, vox_size=5, width=10):
+
+    locs = compile_df_locs(df['R'])
+
+    sub_nii = se.load('std', vox_size=vox_size)
+    sub_locs = sub_nii.get_locs().values
+
+    point_tree = spatial.cKDTree(locs)
+
+
+    most_info = np.array([])
+
+    for l in sub_locs:
+        most_info = np.append(most_info, df['Correlation'][point_tree.query_ball_point(l, width)].mean())
+
+    return most_info
+
+def plot_2d_corr_hist(df, outfile=None):
+
+    fig = plt.gcf()
+    fig.set_size_inches(18.5, 10.5)
+    sns.set_style("white")
+
+    g = (sns.jointplot('RAM', 'PyFR', df, kind="kde", color='k', height=8).set_axis_labels('RAM', 'PyFR', fontsize=24))
+    ax = g.ax_joint
+
+    left, width = .05, .5
+    bottom, height = .1, .5
+    rstat = stats.pearsonr(r2z(df['RAM']), r2z(df['PyFR']))
+    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
+            horizontalalignment='left',
+            verticalalignment='top',
+            transform=ax.transAxes, fontsize=18)
+    ax.set_xlabel("Best locations Dataset 1", fontsize=21)
+    ax.set_ylabel("Best locations Dataset 2", fontsize=21)
+    ax.tick_params(axis='x', labelsize=18)
+    ax.tick_params(axis='y', labelsize=18)
+
+    plt.tight_layout()
+    if not outfile is None:
+        plt.savefig(outfile)
+    else:
+        plt.show()
+
+
+######### Supplemental ###########
+
+def plot_split_violin(df, legend=True, yticks=True, outfile=None):
+    fig = plt.gcf()
+    fig.set_size_inches(10.5, 10.5)
+    plt.ylim(-1.2,1.2)
+    ax = sns.violinplot(x="Experiment", y="Correlation", hue="Subject", ylim=[-1,1], data=df, palette="gray", split=True)
+    if legend:
+        handles, labels = fig.get_axes()[0].get_legend_handles_labels()
+        fig.get_axes()[0].legend(handles, ['Across', 'Within'], loc='center left', bbox_to_anchor=(1, 0.5), fontsize=30)
+    else:
+        ax.legend().set_visible(False)
+    ax.tick_params(axis='x', labelsize=18)
+    ax.tick_params(axis='y', labelsize=18)
+    ax.set_xticklabels(['Across', 'All', 'Within'])
+    ax.set_xlabel('Experiment', fontsize=30)
+    if not yticks:
+        plt.tick_params(
+            axis='y',          # changes apply to the x-axis
+            which='both',      # both major and minor ticks are affected
+            right=False,      # ticks along the bottom edge are off
+            top=False,         # ticks along the top edge are off
+            labelbottom=False)
+        ax.set_ylabel('')
+    else:
+        ax.set_ylabel('Correlation', fontsize=30)
+    plt.tight_layout()
+    if outfile:
+        plt.savefig(outfile)
+
+
+
+########### Dont need ####################
+
+
+
+def plot_column(X, Y, title=None, outfile=None):
+    mpl.rcParams['axes.facecolor'] = 'white'
+    fig, ax = plt.subplots()
+    ax.scatter(X, Y, color='k', alpha=.1)
+    #ax.set_xscale('log')
+    ax.set_title(title)
+    ax.set_ylabel(X.name)
+    ax.set_xlabel(Y.name)
+    left, width = .05, .5
+    bottom, height = .05, .5
+    rstat = stats.pearsonr(X, Y)
+    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + ' p = ' + str(rstat[1]),
+            horizontalalignment='left',
+            verticalalignment='top',
+            transform=ax.transAxes)
