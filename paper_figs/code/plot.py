@@ -511,10 +511,10 @@ def most_informative_locs(df, vox_size=5, width=10):
 def plot_2d_corr_hist(df, outfile=None):
 
     fig = plt.gcf()
-    fig.set_size_inches(18.5, 10.5)
+    fig.set_size_inches(18.5, 18.5)
     sns.set_style("white")
 
-    g = (sns.jointplot('RAM', 'PyFR', df, kind="kde", color='k', height=8).set_axis_labels('RAM', 'PyFR', fontsize=24))
+    g = (sns.jointplot('RAM', 'PyFR', df, kind="kde", color='k', height=8).set_axis_labels('RAM', 'PyFR', fontsize=30))
     ax = g.ax_joint
 
     left, width = .05, .5
@@ -523,11 +523,12 @@ def plot_2d_corr_hist(df, outfile=None):
     ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
             horizontalalignment='left',
             verticalalignment='top',
-            transform=ax.transAxes, fontsize=18)
-    ax.set_xlabel("Best locations Dataset 1", fontsize=21)
-    ax.set_ylabel("Best locations Dataset 2", fontsize=21)
-    ax.tick_params(axis='x', labelsize=18)
-    ax.tick_params(axis='y', labelsize=18)
+            transform=ax.transAxes, fontsize=24)
+    ax.set_xlabel("Best locations \n Dataset 1", fontsize=30)
+    ax.set_ylabel("Best locations \n Dataset 2", fontsize=30)
+    ax.tick_params(axis='x', labelsize=24)
+    ax.tick_params(axis='y', labelsize=24)
+    ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
 
     plt.tight_layout()
     if not outfile is None:
@@ -545,7 +546,7 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     ax = sns.violinplot(x="Experiment", y="Correlation", hue="Subject", ylim=[-1,1], data=df, palette="gray", split=True)
     if legend:
         handles, labels = fig.get_axes()[0].get_legend_handles_labels()
-        fig.get_axes()[0].legend(handles, ['Across', 'Within'], loc='center left', bbox_to_anchor=(1, 0.5), fontsize=30)
+        fig.get_axes()[0].legend(handles, ['Across', 'Within'], loc='lower right', fontsize=30)
     else:
         ax.legend().set_visible(False)
     ax.tick_params(axis='x', labelsize=18)
@@ -556,18 +557,25 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
         plt.tick_params(
             axis='y',          # changes apply to the x-axis
             which='both',      # both major and minor ticks are affected
-            right=False,      # ticks along the bottom edge are off
+            left=False,      # ticks along the bottom edge are off
             top=False,         # ticks along the top edge are off
             labelbottom=False)
         ax.set_ylabel('')
+        ax.axes.get_yaxis().set_ticks([])
     else:
         ax.set_ylabel('Correlation', fontsize=30)
     plt.tight_layout()
     if outfile:
         plt.savefig(outfile)
 
-
-
+        #
+        # plt.tick_params(
+        #     axis='x',          # changes apply to the x-axis
+        #     which='both',      # both major and minor ticks are affected
+        #     bottom=False,      # ticks along the bottom edge are off
+        #     top=False,         # ticks along the top edge are off
+        #     labelbottom=False)
+        # ax.set_xlabel('')
 ########### Dont need ####################
 
 
