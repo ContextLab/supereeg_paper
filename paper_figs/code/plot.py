@@ -519,13 +519,13 @@ def plot_2d_corr_hist(df, outfile=None):
 
     left, width = .05, .5
     bottom, height = .1, .5
-    rstat = stats.pearsonr(r2z(df['RAM']), r2z(df['PyFR']))
+    rstat = stats.pearsonr(df['RAM'], df['PyFR'])
     ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
             horizontalalignment='left',
             verticalalignment='top',
             transform=ax.transAxes, fontsize=24)
-    ax.set_xlabel("Best locations \n Dataset 1", fontsize=30)
-    ax.set_ylabel("Best locations \n Dataset 2", fontsize=30)
+    ax.set_xlabel("Dataset 1 \n z-transformed correlations", fontsize=30)
+    ax.set_ylabel("Dataset 2 \n z-transformed correlations", fontsize=30)
     ax.tick_params(axis='x', labelsize=24)
     ax.tick_params(axis='y', labelsize=24)
     ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
