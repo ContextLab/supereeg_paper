@@ -240,6 +240,7 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
 
     fig = plt.gcf()
     fig.set_size_inches(18.5, 8.5)
+    fig.subplots_adjust(left=0.2, bottom=.2)
     bin_values = np.arange(start=-1, stop=1, step=.01)
 
 
@@ -262,8 +263,20 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
 
     ax.set_xlim(-1, 1)
 
-    ax.get_yaxis().set_major_formatter(mtick.FormatStrFormatter('%.1e'))
+    #ax.get_yaxis().set_major_formatter(mtick.FormatStrFormatter('%.1e'))
 
+    vals = ax.get_yticks()
+    ax.set_yticklabels([np.round(x/n_count*10000,2) for x in vals])
+    f = mtick.ScalarFormatter(useOffset=False, useMathText=True)
+    g = lambda x,pos : "${}$".format(f._formatSciNotation('%1.10e' % x))
+    fmt = mtick.FuncFormatter(g)
+
+    t_left, t_width = 0, .5
+    t_bottom, t_height = 1, .5
+    ax.text(t_left, t_bottom, 'x' + str(fmt(10**-4)),
+            horizontalalignment='left',
+            verticalalignment='bottom',
+            transform=ax.transAxes, fontsize=40)
 
     if legend:
         leg = ax.legend(['Within', 'Across'], fontsize=50, loc='upper left')
@@ -279,9 +292,9 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
     ax.tick_params(axis='x', labelsize=40)
     ax.tick_params(axis='y', labelsize=40)
     ax.set_ylabel('Proportion \n of electrodes', fontsize=50)
-    # n = 2  # Keeps every 7th label
-    # [l.set_visible(False) for (i,l) in enumerate(ax.yaxis.get_ticklabels()) if i % n != 0]
+
     ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
+    ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=9))
 
     if not xticks:
         plt.tick_params(
@@ -296,8 +309,8 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
         for index, label in enumerate(ax.xaxis.get_ticklabels()):
             if index % 2 == 0:
                 label.set_visible(False)
-
-    plt.tight_layout()
+    #plt.tight_layout()
+    bbox_inches='tight'
 
 
     if outfile:
@@ -542,17 +555,38 @@ def plot_2d_corr_hist(df, outfile=None):
 def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     fig = plt.gcf()
     fig.set_size_inches(10.5, 10.5)
-    plt.ylim(-1.2,1.2)
-    ax = sns.violinplot(x="Experiment", y="Correlation", hue="Subject", ylim=[-1,1], data=df, palette="gray", split=True)
+    plt.ylim(-1.2,2.0)
+    ax = sns.violinplot(x="Experiment", y="Correlation", hue="Subject", order=[ "a", "w", "all"], ylim=[-1,1], data=df, palette="gray", split=True)
     if legend:
         handles, labels = fig.get_axes()[0].get_legend_handles_labels()
         fig.get_axes()[0].legend(handles, ['Across', 'Within'], loc='lower right', fontsize=30)
     else:
         ax.legend().set_visible(False)
-    ax.tick_params(axis='x', labelsize=18)
-    ax.tick_params(axis='y', labelsize=18)
-    ax.set_xticklabels(['Across', 'All', 'Within'])
+    ax.tick_params(axis='x', length=0, labelsize=18)
+    ax.tick_params(axis='y', which='both', length=0, labelsize=18)
+    ax.set_xticklabels(['Across', 'Within', 'All'])
     ax.set_xlabel('Experiment', fontsize=30)
+    ### first two significance lines:
+    ylim = 1
+    for l in range(3):
+        ylim += .2
+        for i in range(2):
+            ylim += i/10
+            if l==2:
+                m1, n1 = [l, l-l], [ylim, ylim]
+                a1 = (l + (l-l)) /2
+            else:
+                m1, n1 = [l, l+1], [ylim, ylim]
+                a1 = (l + (l+1)) /2
+            if i == 0:
+                plt.plot(m1, n1, marker = '|', mew=2, markersize=10, color='lightgray', linewidth=2)
+                ax.plot(a1, ylim + .05, marker = '*', markersize=10, color='lightgray')
+            else:
+                plt.plot(m1, n1, marker = '|', mew=2, markersize=10, color='k', linewidth=2)
+                ax.plot(a1, ylim + .05, marker = '*', markersize=10, color='k')
+
+
+
     if not yticks:
         plt.tick_params(
             axis='y',          # changes apply to the x-axis
@@ -564,6 +598,10 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
         ax.axes.get_yaxis().set_ticks([])
     else:
         ax.set_ylabel('Correlation', fontsize=30)
+        for index, label in enumerate(ax.yaxis.get_ticklabels()):
+            if index > 5:
+                print(index)
+                label.set_visible(False)
     plt.tight_layout()
     if outfile:
         plt.savefig(outfile)
