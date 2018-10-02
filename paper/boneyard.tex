@@ -1,0 +1,288 @@
+
+
+  
+
+
+
+
+
+, the gross \textit{structural} aspects of our brain are essentailly static over the timescales of typical experiments (on the order of 
+
+Current human brain recording techniques are fraught with compromise.
+Commonly used approaches include functional magnetic resonance imaging
+(fMRI), scalp electroencephalography (EEG), and magnetoencephalography
+(MEG).  For each of these techniques, neuroscientists
+and electrophysiologists must choose to optimize spatial resolution
+at the cost of temporal resolution (e.g.\ as in fMRI) or temporal
+resolution at the cost of spatial resolution (e.g.\ as in EEG
+and MEG).  A less widely used approach (due to requiring work with
+neurosurgical patients) is to record from electrodes implanted
+directly onto the cortical surface (electrocorticography; ECoG) or
+into deep brain structures (intracranial EEG; iEEG).  However, these
+intracranial approaches also require compromise: the high temporal and
+spatial resolutions of intracranial recordings come at the cost of
+substantially reduced brain coverage, since safety considerations
+limit the number of electrodes one may implant in a given patient's
+brain.  Further, the locations of implanted electrodes are determined by clinical,
+rather than research, needs.
+
+%Beamforming: huge advance for scalp recordings, but the inverse
+%problem is fundamentally ambiguous.  This limits the precision with
+%which one can measure activity from deep brain structures.
+An increasingly popular approach is to improve the effective spatial resolution
+of MEG or scalp EEG data by using a geometric approach called
+\textit{beamforming} to solve the biomagnetic or bioelectrical inverse
+problem~\cite{Sarv87}.  This approach entails using detailed brain
+conductance models (often informed by high spatial resolution
+anatomical MRI images) along with the known sensor placements
+(localized precisely in 3D space) to reconstruct brain signals
+originating from theoretical point sources deep in the brain (and far
+from the sensors).  Traditional beamforming approaches must overcome
+two obstacles.  First, the inverse problem beamforming seeks to solve
+has infinitely many solutions.  Researchers have made traction towards
+constraining the solution space by assuming that signal-generating
+sources are localized on a regularly spaced grid spanning the brain
+and that individual sources are small relative to their distances to
+the sensors~\cite{Snyd91, BailEtal01, HillEtal05}.  The second, and in
+some ways much more serious, obstacle is that the magnetic fields
+produced by external (noise) sources are substantially stronger than
+those produced by the neuronal changes being sought (i.e.\ at deep structures, as measured by sensors at the scalp).  This means that
+obtaining adequate signal quality often requires averaging the measured
+responses over tens to hundreds of responses or trials (e.g. see
+review by~\cite{HillEtal05}).
+
+Another approach to obtaining high spatial and temporal resolution
+neural data has been to collect fMRI and EEG data simultaneously.
+Simultaneous fMRI-EEG has the potential to balance the high spatial
+resolution of fMRI with the high temporal resolution of scalp EEG,
+thereby, in theory, providing the best of both worlds.  In practice,
+however, the signal quality of both recordings suffers substantially
+when the two techniques are applied simultaneously (e.g. see review
+by~\cite{HustEtal12}).  In addition, the experimental designs that are
+ideally suited to each technique individually are somewhat at odds.
+For example, fMRI experiments typically lock stimulus presentation
+events to the regularly spaced image acquisition time (TR), which
+maximizes the number of post-stimulus samples.  By contrast, EEG
+experiments typically employ jittered stimulus presentation times to
+maximize the experimentalist's ability to distinguish electrical brain
+activity from external noise sources such as from 60 Hz alternating
+current power sources.
+
+%Direct intracranial recordings are the gold standard method for
+%measuring activity from deep brain structures in both humans and
+%animals.
+%However, one can only implant a limited number of electrodes in a
+%given person's brain.  This begs the question: what can we infer
+%about the activity exhibited by the rest of that person's brain,
+%given what we learn from recordings taken from \textit{other people's
+%brains}?
+The current ``gold standard'' for precisely localizing signals and
+sampling at high temporal resolution is to take (ECoG or iEEG)
+recordings from implanted electrodes (but from a limited set of
+locations in any given brain).  This begs the following question: what
+can we infer about the activity exhibited by the rest of a person's
+brain, given what we learn from the limited intracranial recordings we
+have from their brain and additional recordings taken from
+\textit{other} people's brains?  Here we develop an approach, based on
+Gaussian process regression~\cite{Rasm06}, that uses data from
+multiple people to estimate activity at arbitrary
+locations in each person's brain (i.e., independent of their electrode
+placements).  We test this \textit{Super EEG} approach using two large
+datasets of intracranial recordings collected as neurosurgical patients
+studied and recalled random word lists~\cite{SedeEtal03, SedeEtal07a,
+  SedeEtal07b, MannEtal11, MannEtal12}.  We show that the Super EEG
+algorithm recovers signals well from electrodes that were held out of
+the training dataset.  We replicate this finding using a second dataset, which contains data from two experiments for each patient, allowing us to also probe the task-specific contributions to reconstruction accuracy.  Additionally, we examine the factors that influence how
+accurately activity may be estimated (recovered), which may have important
+implications for electrode design and for electrode placement in
+neurosurgical applications.
+
+Further, if some aspects of our connectomes are static, can we use them to fill in ``missing'' data?  In other words, given recordings from a subset of brain locations, how reliably can activity patterns from the rest of the brain be inferred using an estimated static connectome?  And to what extent can those 
+
+
+Human \textit{Super EEG}\footnote{The term ``Super EEG'' was
+coined by Robert J. Sawyer in his popular science fiction novel
+\textit{The Terminal Experiment}~\cite{Sawy95}} entails
+measuring ongoing activity from every cell in a living human brain
+at millisecond-scale temporal resolutions.  Although direct
+cell-by-cell Super EEG recordings are impossible using existing
+methods, here we present a technique for \textit{inferring} neural
+activity at millimeter-scale spatial resolutions and millisecond-scale temporal resolutions by fitting a model to existing human intracranial electrophysiological recordings.  Our approach, based
+on Gaussian process regression, relies on two assumptions.  First,
+we assume that some of the correlational structure of people's
+brain activity is similar across individuals.  Second, we resolve
+ambiguities in the data by assuming that neural activity from
+nearby sources will tend to be similar, all else being equal.  One
+can then ask, for an arbitrary individual's brain: given what we
+know about the correlational structure of \textother people's brains,
+and given the recordings we made from electrodes implanted in this
+person's brain, how would those recordings most likely have looked
+at \textit{other} locations throughout this person's brain?  Our work examines a deep neuroscientific question: given recordings for one set of locations from a given person, how much can we infer about activity patterns throughout the rest of the same person's brain as those recordings were taken?
+
+The above finding that activity at densely sampled brain areas can be
+(slightly) better reconstructed than at sparsely sampled brain areas
+could have important implications for patient surgeries.  For example,
+when implanting electrodes into new patients, perhaps those electrodes
+should target regions
+
+we hypothesized might influence the quality of the
+data reconstructions is the 
+
+Whereas the above analyses show that the Super EEG algorithm may be
+used to estimate time-varying LFPs throught the brain using data from a small
+number of implanted electrodes, 
+
+Having established that data within and across patients may be used to
+accurately estimate neural recordings from unsampled locations, we
+next wondered whether certain electrode placements might be especially
+informative to these estimates.
+
+We also carried out an analogous analysis
+across patients by comparing the average correlation coefficients from
+each patient obtained using Super EEG versus using the nearest
+neighbor's voltages ($t(XXX) = XXX, p = XXX$).  
+
+%average correlation by nearest within-subject and across-subject electrode
+%distance
+
+%average correlation by holding out electrodes at various distances
+%within subject (include none and all).  note that the all case can
+%only be included for the covariance estimation; for the final
+%reconstruction step that datapoint should be separate (on the plot)
+%and should indicate reconstruction correlation using just the
+%furthest-away electrode.
+
+%map showing how informative each location is: if you include
+% electrodes within a searchlight surrounding the location vs. don't
+% include them, how substantially do the average reconstruction
+% correlations change?  use k-means clustering to find sets of
+% electrodes whose correlation change profiles group together, and
+% pick the electrode with the highest correlation difference within
+% each set.  (show maps of each correlation profile.)  show the
+% average reconstruction correlation as a function of the numbers of
+% electrodes near these regions.  this can be used to suggest
+% electrode placements for the best accuracy.
+
+%maybe there's a dataset I could use that includes single neuron
+%recordings?  I could use broadband LFPs to predict firing rates.
+
+
+
+%The preceding analyses elucidate how the quality of the Super EEG
+%algorithm's estimates varies with spatial location, and how the
+%predictive power of the recordings vary with spatial location.  In
+%addition to the spatial properties of the electrodes, the temporal
+%resolutions of the recordings can vary substantially from patient to
+%patient (e.g. according to the sampling rate of each hospital's
+%clinical recording hardware).  In the above analyses, each patients'
+%data were reconstructed at the sampling rates of their original
+%recordings.  However, these across-patient differences in sampling
+%rates could affect the degrees to which different features of the
+%underlying neural activity were reflected in the recordings.  For
+%example, high frequency oscillations could not be measured in low
+%temporal resolution recordings, whereas they may be measured using
+%high temporal resolution recordings.  In turn, this could affect the
+%estimates of how different brain structures were interacting, such
+%that the estimates contributed by some patients' data would be driven
+%by high frequency activity that was not present in other patients'
+%data due to differences in sampling rates. 
+
+
+
+
+
+% To evaluate the quality of the reconstruction of a given
+% electrode from a given patient $s$, we computed the average Pearson's
+% correlation (across recording sessions) between the Super
+% EEG-reconstructed voltage trace, $\hat{Y}_{s,k}$, and the observed
+% voltage trace, $Y_{s,k}$ at that location (specifically, the corresponding
+% columns of those matrices).  (Note that here $k$ denotes the recording
+% session number.)  In other words, we computed $\hat{Y}_{s,k,\beta}$
+% using Equations~\ref{eqn:Kba}, \ref{eqn:Kaa}, and
+% \ref{eqn:reconstruction}, but we treated the to-be-reconstructed
+% electrode location $i$ as a member of $\beta$ (the unobserved set of
+% recording locations) rather than as a member of $\alpha$ (the observed
+% set of recording locations).
+
+We present a method for inferring local field potentials throughout the brain from recordings at a limited number sites.
+
+Methods overview. Electrode
+      locations.  Each dot reflects the location of a single
+    electrode in the dataset.  One patient's electrode locations are
+    highlighted in red and the to-be-reconstructed recording location
+    is highlighted in blue. \textbf{B. Radial basis function (RBF).}
+    Each electrode contributed by the patient (red) weights on the
+    full set of locations under consideration (all dots in panel A,
+    defined as $\bar{R}$ in the text).  The weights fall off with
+    positional distance (in MNI space) according to an RBF.
+    \textbf{C. Per-patient correlation matrices.}  After computing the
+    pairwise correlations between the recordings from each patient's
+    electrodes, we use RBF-weighted averages to estimate correlations
+    between all locations in $\bar{R}$.  We obtain an estimated
+    full-brain correlation matrix using each patient's
+    data. \textbf{D.  Combined correlation matrix.}  We estimate a
+    single full-brain correlation matrix by averaging 
+    the patient-specific correlation matrices.  \textbf{E.
+      Reconstructing ``missing'' activity.}  Given the observed
+    activity from the patient's electrodes and the estimated
+    correlation matrix (Panel D), we can compute a maximum likelihood
+    estimate of the voltage trace at any location in $\bar{R}$.  An
+    example reconstruction (at the blue dot in Panel A) is shown in
+    gray.
+
+% Across all electrodes, from all patients, the correlations between
+% observed and estimated activity were reliably greater than 0
+% (Fig.~\ref{fig:corrmap}B; $t(4148) = 107, p < 10^{-10}$; $t$-test on
+% the distribution of $z$-transformed correlation
+% coefficients). Furthermore, across patients the average correlations
+% between observed and estimated activity were also reliably greater
+% than 0 $(t(66) = 23.3, p < 10^{-10}$; $t$-test on the distribution of
+% averaged $z$-transformed correlation coefficients for each patient).
+% Overall, these analyses suggest that data from held-out electrodes may
+% be reliably estimated using Super EEG.
+
+% %%% should the remaining equations be in this section or in the methods?
+% Finally, we wished to infer activity at all locations in the standard MNI152 brain. First, we calculate the location similarity $\theta$ between each voxel location in the standard MNI152 brain $i$ and every location $j \in \bar{R}$. With this similarity value, we can create a map in MNI space by interpolating a correlation value $\hat{\rho}$ at every voxel $i$ using the corresponding correlation value $\rho$ at each location in $\bar{R}$ with the following equations:
+
+% \begin{align}
+% \hat{\rho}(i) &= \mathrm{r}\left\{\frac{\sum_{j=1}^{|\bar{R}|}\theta(i,j)\cdot\mathrm{z}(\rho(i))}{\sum_{j=1}^{|\bar{R}|}\theta(i,j)} \right\}, \mathrm{where}\\
+% \theta(i,j) &= \mathrm{exp} \left\{-||i-j||^2\right\}.\\
+% \end{align}
+
+% As mentioned above, the reconstruction procedure for $\hat{Y}_i$ cannot account
+% for across-electrode impedance differences, so the estimates will be
+% off by a constant scaling factor.
+
+% % already mention this above... 
+
+% the next section addresses 'patient 1' and 'electrode 1'... keep this way of describing??
+
+
+% We also used a permutation-based procedure to assess which
+% correlations were both positive and statistically reliable (see
+% \textit{Supplemental Methods}).
+
+
+One potential application of the Super EEG algorithm is localizing
+seizures.  For example, whereas examining recordings from implanted
+electrodes can yield insights into which electrode is closest to where
+the seizure was kindled, the Super EEG algorithm could provide a full 3D
+map of activity throughout the brain at each moment in time as the
+seizure evolves.  However, reconstruction quality
+
+
+
+, which we hypothesized might be
+related to how
+
+More generally, we can ask about the quality of this type of
+reconstruction across all electrodes and patients in the dataset.
+Figure~\ref{fig:corrmap}A displays the correlation between the
+observed and estimated LFPs as a function of electrode location (i.e.,
+holding out each electrode in turn, and comparing the estimated versus
+observed data for the held-out electrode).  The map
+reveals that the reconstruction quality varies somewhat with the spatial
+location being considered.  Specifically, activity at locations that
+receive dense electrode coverage within and across patients
+(e.g. medial temporal lobe) is estimated more accurately than activity
+at sparsely sampled locations (Fig.~\ref{fig:density}B).  
