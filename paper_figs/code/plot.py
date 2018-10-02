@@ -564,7 +564,7 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
         ax.legend().set_visible(False)
     ax.tick_params(axis='x', length=0, labelsize=18)
     ax.tick_params(axis='y', which='both', length=0, labelsize=18)
-    ax.set_xticklabels(['Across', 'Within', 'All'])
+    ax.set_xticklabels(['Within', 'Across','All'])
     ax.set_xlabel('Experiment', fontsize=30)
     ### first two significance lines:
     ylim = 1
