@@ -103,3 +103,9 @@ ENV/
 
 *.pyc
 *.idea/
+
+*.aux
+*.bbl
+*.blg
+*.out
+*.synctex.gz
