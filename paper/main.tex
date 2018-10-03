@@ -1,6 +1,6 @@
 % Use only LaTeX2e, calling the article.cls class and 12-point type.
 
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 
 % Users of the {thebibliography} environment or BibTeX should use the
 % scicite.sty package, downloadable from *Science* at
@@ -62,7 +62,7 @@
 
 % Include your paper's title here
 
-\title{Towards human Super EEG} 
+\title{Towards human SuperEEG} 
 
 
 % Place the author information here.  Please hand-code the contact
@@ -98,51 +98,177 @@ Boston, MA 02110, USA}
 \maketitle 
 
 \begin{abstract}
-A growing body of literature over the past several decades reports that the dynamic correlational structure of functional neuroimaging data may be used to predict which moment of movie or story an individual is experiencing, identify which person's brain a recording came from, and identify the task a person is performing.  However, our structural (anatomical) connectome is roughly static for the duration of typical neuroimaging experiments.  How might these notions of dynamic functional connectomes versus static structural connectomes be reconciled?  We use two human electrocorticographic (ECoG) datasets to ask: to what extent can we use a static connectome model (trained using within versus across subject data, and within versus across task data) to explain dynamic full-brain activity patterns?  Given a fixed connectome model, and given recordings from a subset of brain locations, we test how reliably can one infer activity patterns throughout the rest of the brain.  Our model-based approach, termed \textit{SuperEEG}\footnote{The term ``Super EEG'' was
-coined by Robert J. Sawyer in his popular science fiction novel
-\textit{The Terminal Experiment}~\cite{Sawy95}}, is in itself useful for inferring full-brain activity patterns (at millimeter-scale spatial resolutions and millisecond-scale temporal resolutions) from ECoG recordings from a limited set of brain locations.  For both datasets, we found that full-brain activity patterns can be best explained using connectomes from \textit{other} people who performed a shared task.\\
-
-\small{\textbf{Keywords: Electrocorticography (ECoG), intracranial electroencephalography (iEEG),
-local field potential (LFP), epilepsy, maximum likelihood estimation, Gaussian process regression}}
+  Human \textit{SuperEEG}\footnote{The term ``SuperEEG'' was coined by
+    Robert J. Sawyer in his popular science fiction novel \textit{The
+      Terminal Experiment}~\cite{Sawy95}} entails measuring ongoing
+  neural activity with perfect precision and at arbitrarily high
+  spatiotemporal resolution.  Although true SuperEEG is impossible
+  using existing methods, here we present a model-based method for
+  \textit{inferring} neural activity at millimeter-scale spatial
+  resolutions and millisecond-scale temporal resolutions using
+  standard human intracranial recordings.  Our approach assumes that
+  different people's brains exhibit similar spatial correlations, and
+  that (all else being equal) neural activity at nearby locations will
+  tend to be similar.  One can then ask, for an arbitrary individual's
+  brain: given recordings from a limited set of locations in that
+  individual's brain, along with the observed spatial correlations in
+  other people's recordings, what would recordings most likely have
+  looked like at \textit{other} locations in that individual's brain?
+%\\
+%\small{\textbf{Keywords: Electrocorticography (ECoG), intracranial electroencephalography (iEEG),
+%local field potential (LFP), epilepsy, maximum likelihood estimation, Gaussian process regression}}
 \end{abstract}
 
-Are our brain's networks static or dynamic?  And to what extent are the network properties of our brains stable across people and tasks?  One body of work suggests that our brain's \textit{functional} networks are dynamic~\citep[e.g., ][]{MannEtal18}, person-specific~\citep[e.g., ][]{FinnEtal15}, and task-specific~\citep[e.g., ][]{Turk13}.  In contrast, although the gross anatomical structure of our brains changes meaningfully over the course of years as our brains develop, on the timescales of typical neuroimaging experiments (i.e., hours to days) our anatomical networks are largely stable~\citep[e.g., ][]{CaseEtal00}.  Further, many aspects of brain anatomy, including white matter structure, is largely preserved across people~\citep[e.g., ][]{TalaTour88, JahaEtal13, MoriEtal08}  There are several possible means of reconciling this apparent contradiction between dynamic person- and task-specific functional networks versus stable anatomical networks.  For example, relatively small magnitude anatomical differences across people may be reflected in reliable functional connectivity differences.  Along these lines, one recent study found that diffusion tensor imaging (DTI) structural data is similar across people, but may be used to predict person-specific resting state functional connectivity data~\citep{BeckEtal18}.  Another (potentially complementary) possibility is that our functional networks are constrained by anatomy, but nevertheless exhibit rapid task-dependent changes~\citep[e.g., ][]{SporBetz16}.
+\section*{Introduction}
+Modern human brain recording techniques are fraught with
+compromise~\citep{SejnEtal14}.  Commonly used approaches include
+functional magnetic resonance imaging (fMRI), scalp
+electroencephalography (EEG), and magnetoencephalography (MEG).  For
+each of these techniques, neuroscientists and electrophysiologists
+must choose to optimize spatial resolution at the cost of temporal
+resolution (e.g.\ as in fMRI) or temporal resolution at the cost of
+spatial resolution (e.g.\ as in EEG and MEG).  A less widely used
+approach (due to requiring work with neurosurgical patients) is to
+record from electrodes implanted directly onto the cortical surface
+(electrocorticography; ECoG) or into deep brain structures
+(intracranial EEG; iEEG).  However, these intracranial approaches also
+require compromise: the high temporal and spatial resolutions of
+intracranial recordings comes at the cost of substantially reduced
+brain coverage, since safety considerations limit the number of
+electrodes one may implant in a given patient's brain.  Further, the
+locations of implanted electrodes are determined by clinical, rather
+than research, needs.
 
-Here we take a model-based approach to studying whether high spatiotemporal resolution activity patterns throughout the human brain may be explained by a static connectome model that is shared across people and tasks.  Specifically, we trained a model to take in recordings from a subset of brain locations, and then predict activity patterns during the same interval, but at \textit{other} locations that were held out from the model.  Our model, based
-on Gaussian process regression, relies on three assumptions (each of which we test).  First, we assume that functional correlations are stable over time and across tasks.  Second, we assume that some of the correlational structure of people's brain activity is similar across individuals.  Third, we resolve
-ambiguities in the data by assuming that neural activity from
-nearby sources will tend to be similar, all else being equal.  After fitting the model to an ECoG dataset, one
-can then ask (for a held-out individual's brain): given what we
-know about the correlational structure of \textit{other} people's brains,
-and given the recordings we made from electrodes implanted in this
-person's brain, how would those recordings most likely have looked
-at \textit{other} locations throughout this person's brain?  We named our general approach \textit{SuperEEG} because the trained model provides a means of inferring full-brain activity patterns at high spatiotemporal resolutions, using ECoG recordings taken from a limited set of brain locations.  
+%Beamforming: huge advance for scalp recordings, but the inverse
+%problem is fundamentally ambiguous.  This limits the precision with
+%which one can measure activity from deep brain structures.
+An increasingly popular approach is to improve the effective spatial
+resolution of MEG or scalp EEG data by using a geometric approach
+called \textit{beamforming} to solve the biomagnetic or bioelectrical
+inverse problem~\cite{Sarv87}.  This approach entails using detailed
+brain conductance models (often informed by high spatial resolution
+anatomical MRI images) along with the known sensor placements
+(localized precisely in 3D space) to reconstruct brain signals
+originating from theoretical point sources deep in the brain (and far
+from the sensors).  Traditional beamforming approaches must overcome
+two obstacles.  First, the inverse problem beamforming seeks to solve
+has infinitely many solutions.  Researchers have made traction towards
+constraining the solution space by assuming that signal-generating
+sources are localized on a regularly spaced grid spanning the brain
+and that individual sources are small relative to their distances to
+the sensors~\cite{Snyd91, BailEtal01, HillEtal05}.  The second, and in
+some ways much more serious, obstacle is that the magnetic fields
+produced by external (noise) sources are substantially stronger than
+those produced by the neuronal changes being sought (i.e.\ at deep
+structures, as measured by sensors at the scalp).  This means that
+obtaining adequate signal quality often requires averaging the
+measured responses over tens to hundreds of responses or trials
+(e.g. see review by~\cite{HillEtal05}).
 
-We tested the SuperEEG approach using two large ECoG datasets. Dataset 1 comprises multi-hour recordings from 6876 electrodes taken across several recording sessions as 88 neurosurgical patients studied random word lists periodically throughout their day~\cite{SedeEtal03, SedeEtal07a,
-  SedeEtal07b, MannEtal11, MannEtal12}.  Dataset 2 comprises recordings from XXX electrodes taken as XXX patients performed a series of two memory tasks~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  In both datasets, 
-  we compared the predictions made using models trained across people to predictions made using within-person data.  We found that models that incorporate data from other patients yield far more reliable predictions about an individual patient's brain activity patterns than models trained solely on that individual's data.  This indicates that at least some functional correlations are common across people.  We also used Dataset 2 to compare predictions made using data from within task, across task, or combining within and across task data.  We found that all three approaches yielded reliable predictions, but the within task predictions were the most accurate.  This indicates that some aspects of our functional connectomes are common across tasks, whereas other aspects are task-specific.  Finally, all of the models we trained (within and across patients and tasks) assumed a static connectome and yielded above-chance accuracy.  This indicates that despite moment-by-moment fluctuations in the functional connectome, at least some aspects of our connectome appear to be stable over the course of several hours.
+Another approach to obtaining high spatial and temporal resolution
+neural data has been to collect fMRI and EEG data simultaneously.
+Simultaneous fMRI-EEG has the potential to balance the high spatial
+resolution of fMRI with the high temporal resolution of scalp EEG,
+thereby, in theory, providing the best of both worlds.  In practice,
+however, the signal quality of both recordings suffers substantially
+when the two techniques are applied simultaneously (e.g. see review
+by~\cite{HustEtal12}).  In addition, the experimental designs that are
+ideally suited to each technique individually are somewhat at odds.
+For example, fMRI experiments typically lock stimulus presentation
+events to the regularly spaced image acquisition time (TR), which
+maximizes the number of post-stimulus samples.  By contrast, EEG
+experiments typically employ jittered stimulus presentation times to
+maximize the experimentalist's ability to distinguish electrical brain
+activity from external noise sources such as from 60 Hz alternating
+current power sources.
+
+%Direct intracranial recordings are the gold standard method for
+%measuring activity from deep brain structures in both humans and
+%animals.
+%However, one can only implant a limited number of electrodes in a
+%given person's brain.  This begs the question: what can we infer
+%about the activity exhibited by the rest of that person's brain,
+%given what we learn from recordings taken from \textit{other people's
+%brains}?
+The current ``gold standard'' for precisely localizing signals and
+sampling at high temporal resolution is to take (ECoG or iEEG)
+recordings from implanted electrodes (but from a limited set of
+locations in any given brain).  This begs the following question: what
+can we infer about the activity exhibited by the rest of a person's
+brain, given what we learn from the limited intracranial recordings we
+have from their brain and additional recordings taken from
+\textit{other} people's brains?  Here we develop an approach, which we
+call \textit{SuperEEG}, based on Gaussian process
+regression~\cite{Rasm06}.  SuperEEG entails using data from multiple
+people to estimate activity patterns at arbitrary locations in each
+person's brain (i.e., independent of their electrode placements).  We
+test SuperEEG approach using two large datasets of intracranial
+recordings~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
+  MannEtal12, EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17,
+  LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  We show
+that the SuperEEG algorithm recovers signals well from electrodes that
+were held out of the training dataset.  We also examine the factors
+that influence how accurately activity may be estimated (recovered),
+which may have important implications for electrode design and
+placement in neurosurgical applications.
+
+\section*{Approach}
+The SuperEEG approach to inferring high temporal resolution full-brain
+activity patterns is outlined and summarized in
+Figure~\ref{fig:methods}. We describe (in this section) and evaluate
+(in \textit{Results}) our approach using a two large previously
+collected dataset comprising multi-session intracranial recordings.
+Dataset 1 comprises multi-session recordings taken from 6876
+electrodes implanted in the brains of 88 epilepsy
+patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
+  MannEtal12}.  Each recording session lasted from XXX--XXX hours, and
+includes data recorded roughly from when the patients woke up each
+morning, to before they went to sleep at the end of each day.  In
+addition to typical bed-ridden hospital patient activities (e.g.,
+lying in bed, reading, watching television, using personal electronic
+devices, listening to music, visiting with family and friends, etc.),
+the patients also performed a variety of experimental cognitive tasks
+throughout their day (primarily list-learning memory tasks).  For the
+purposes of the Dataset 1 analyses presented here, we aggregated all
+data across each recording session, ignoring the particular activities
+or tasks the patients were performing at any given moment.  We used
+Dataset 1 to develop and debug our main SuperEEG approach, and to
+examine the extent to which SuperEEG might be able to generate
+task-general predictions.  Dataset 2 comprised multi-session
+recordings from XXX electrodes implanted in the brains of XXX epilepsy
+patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17,
+  LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  Whereas
+Dataset 1 included recordings taken during a wide variety of
+behaviors, Dataset 2 included recordings taken as each patient
+performed each of two memory tasks: a random word list free recall
+task and a categorized word list free recall task.  We used Dataset 2
+to further examine the ability of SuperEEG to generalize its
+predictions within versus across tasks.
 
 \textbf{JRM STOPPED HERE}
-\section*{Approach}
-The SuperEEG approach to inferring high temporal resolution full-brain activity patterns is outlined and summarized in
-Figure~\ref{fig:methods}. We describe (in this section) and evaluate
-(in \textit{Results}) our approach using a two large previously collected
-dataset comprising multi-session intracranial recordings.  The first dataset was taken from
-6876 electrodes implanted in the brains of 88 epilepsy
-patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
-  MannEtal12}.  We first applied a fourth order Butterworth notch filter to remove
-60 Hz ($\pm$ .5 Hz) line noise.  We then excluded any electrodes that
-showed putative epileptiform activity.  Specifically, we excluded from
-further analysis any electrode that exhibited an average kurtosis of
-10 or greater across all of that patient's recording sessions.  We
-also excluded any patients with fewer than 2 electrodes that passed
-this criteria, as the Super EEG algorithm requires measuring
-correlations between 2 or more electrodes from each patient.
-Altogether this yielded clean recordings from 4168 electrodes
-implanted throughout the brains of 67 patients (Fig.~\ref{fig:methods}A). For the purposes of comparing task-specific contributions to reconstruction accuracy, we limited our analyses in the second dataset to patients that participated in two free recall experiments.  Applying the same kurtosis thresholding yielded clean recordings from 24 patients and 2975 electrodes for the second dataset. Each individual patient contributes
-electrodes from a limited set of brain locations, which we localized
-in a common space (MNI152); an example patient's 54 electrodes that
-passed the predefined kurtosis test are highlighted in black and red.
+
+The first dataset was taken from 6876 electrodes implanted in the
+brains of 88 epilepsy patients~\cite{SedeEtal03, SedeEtal07a,
+  SedeEtal07b, MannEtal11, MannEtal12}.  We first applied a fourth
+order Butterworth notch filter to remove 60 Hz ($\pm$ .5 Hz) line
+noise.  We then excluded any electrodes that showed putative
+epileptiform activity.  Specifically, we excluded from further
+analysis any electrode that exhibited an average kurtosis of 10 or
+greater across all of that patient's recording sessions.  We also
+excluded any patients with fewer than 2 electrodes that passed this
+criteria, as the SuperEEG algorithm requires measuring correlations
+between 2 or more electrodes from each patient.  Altogether this
+yielded clean recordings from 4168 electrodes implanted throughout the
+brains of 67 patients (Fig.~\ref{fig:methods}A). For the purposes of
+comparing task-specific contributions to reconstruction accuracy, we
+limited our analyses in the second dataset to patients that
+participated in two free recall experiments.  Applying the same
+kurtosis thresholding yielded clean recordings from 24 patients and
+2975 electrodes for the second dataset. Each individual patient
+contributes electrodes from a limited set of brain locations, which we
+localized in a common space (MNI152); an example patient's 54
+electrodes that passed the predefined kurtosis test are highlighted in
+black and red.
 
 
 The recording from a given electrode is maximally informative about
@@ -265,7 +391,7 @@ Let $\alpha$ be the set of indices of patient $s$'s electrode locations in
 $\bar{R}$, and let $\beta$ be the set of indices of all other
 locations in $\bar{R}$. In other words, $\beta$ reflects the locations
 in $\bar{R}$ where we did not observe a recording for patient $s$
-(these are the recording locations we will want to fill in using Super EEG).
+(these are the recording locations we will want to fill in using SuperEEG).
 We can sub-divide $\hat{K}$ as follows:
 
 \begin{align}
@@ -284,7 +410,7 @@ Let $Y_{s,k,\alpha}$ be the number-of-timepoints
 \begin{align}
 Y_{s,k,\beta} &= ((\hat{K}_{\beta,\alpha}\cdot\hat{K}_{\alpha,\alpha}^{-1})\cdot Y_{s,k,\alpha}^\mathrm{T})^\mathrm{T}.\label{eqn:reconstruction}
 \end{align}
-This equation is the foundation of the Super EEG algorithm.  Whereas
+This equation is the foundation of the SuperEEG algorithm.  Whereas
 we observe the recordings only at the locations in $\alpha$,
 Equation~\ref{eqn:reconstruction} allows us to estimate the recordings
 at all locations in $\beta$, which we can define \textit{a priori} to
@@ -305,16 +431,16 @@ manner by filling in $Y_{s,k,\beta}$ in blocks of size $b$ samples
 (using the corresponding samples from $Y_{s, k, \alpha}$).  In our
 computations we set $b = 25000$.
 
-The Super EEG algorithm described above and in
+The SuperEEG algorithm described above and in
 Figure~\ref{fig:methods} allows us to estimate (up to a constant
 scaling factor) LFPs for each patient at all arbitrarily chosen
 locations in the set $\bar{R}$, \textit{even if we did not record that
   patient's brain at all of those locations}.
 
 \section*{Results}
-To test the accuracy with which the Super EEG algorithm reconstructs activity throughout the brain, we held out each electrode from the full
+To test the accuracy with which the SuperEEG algorithm reconstructs activity throughout the brain, we held out each electrode from the full
 dataset in turn and treated it as unobserved. We then asked: how
-closely did each of the Super EEG-reconstructed LFPs match the
+closely did each of the SuperEEG-reconstructed LFPs match the
 observed data?  We sought to evaluate both the overall reconstruction
 accuracy as well as how reconstruction accuracy varied as a function
 of implantation location.
@@ -326,7 +452,7 @@ associated reconstruction, during a 5~s time window during one of the
 patient's 6 recording sessions.  Figure~\ref{fig:recon}B displays a 2D
 histogram of the observed versus reconstructed voltages for every
 sample across 14.2 total hours of recordings from that patient (correlation:
-$r = 0.91, p < 10\textsuperscript{-10}$).  Although the Super EEG
+$r = 0.91, p < 10\textsuperscript{-10}$).  Although the SuperEEG
 algorithm recovered the recordings from this electrode well, we sought to
 quantify the algorithm's performance across the full dataset.
 
@@ -363,20 +489,20 @@ that drove the reconstructions via Equation~\ref{eqn:reconstruction}
 (otherwise the analysis would be circular).
 
 We obtained a single correlation coefficient for each electrode
-location in $\bar{R}$, reflecting how well the Super EEG algorithm was
+location in $\bar{R}$, reflecting how well the SuperEEG algorithm was
 able to recover the recording at that location by incorporating data across patients (Across shown in black, see Fig.~\ref{fig:corrmap}A). We also reconstructed activity for each electrode using a model trained on the remaining electrodes from only that patient, to account for reconstruction accuracy attributed to volume conductance alone (Within shown in gray, see Fig.~\ref{fig:corrmap}A). For the first dataset, we compared these two distributions of correlation coefficients (paired $t$-test
 between $z$-transformed mean correlation coefficients by patient:
 $t(66) = 9.64, p < 10\textsuperscript{-10}$).  We repeated this analysis on a similar dataset Fig.~\ref{fig:corrmap}C) with similar results (paired $t$-test
 between $z$-transformed mean correlation coefficients by patient: $t(23) = 6.93, p < 10\textsuperscript{-5}$). This is an especially conservative
-test, given that the Super EEG reconstructions exclude (from the
+test, given that the SuperEEG reconstructions exclude (from the
 correlation matrix estimates) all data from the patient whose data is
 being reconstructed.  Furthermore, we also replicated this finding for each independent experiment within dataset 2 (Fig. S3 (paired $t$-test
-between $z$-transformed mean correlation coefficients by patient for experiment 1: $t(23) = 6.23, p < 10\textsuperscript{-5}$ and experiment 2: $t(23) = 6.62, p < 10\textsuperscript{-5}$).  That the Super EEG-derived correlations were reliably
+between $z$-transformed mean correlation coefficients by patient for experiment 1: $t(23) = 6.23, p < 10\textsuperscript{-5}$ and experiment 2: $t(23) = 6.62, p < 10\textsuperscript{-5}$).  That the SuperEEG-derived correlations were reliably
 stronger than these correlations obtained using a volume conductance null model is exciting
 for two reasons.  First, it implies that distant electrodes provide
 additional predictive power to the data reconstructions beyond the
 information contained in nearby electrodes.  Second, it implies that
-the spatial correlations driving the Super EEG algorithm are, to some
+the spatial correlations driving the SuperEEG algorithm are, to some
 extent, shared across people.
 
 %correlations by brain area, distribution of correlations
@@ -416,7 +542,7 @@ particular implantation locations that yield especially high
 reconstruction accuracies at other locations throughout the brain? To gain insights into this questions, we computed the average reconstruction correlation for each patient, then computed the average patient reconstruction correlation for any patients who had electrodes within a 20 MNI unit diameter sphere centered on each voxel location. The resulting maps highlight the locations of implanted electrodes from patients whose
 reconstructions were especially accurate  (Fig.~\ref{fig:informap}A and B). We found that the most informative locations were consistent across datasets which lends support to the notion that different electrode location are more informative about activity across patients (Fig.~\ref{fig:informap}C); $r = 0.22, p < 10^{-10}$).  The locations in dark red might therefore be good candidate
 implantation targets for neurosurgeons and neurologists who wish to
-use Super EEG to reconstruct full-brain electrophysiological signals.
+use SuperEEG to reconstruct full-brain electrophysiological signals.
 The above findings, that one can infer brain activity throughout a person's brain 
 using recordings from a limited number of locations from that person's brain in conjunction with recordings from other people's brains, have deep
 implications for the structure of brain data.  The first implication
@@ -437,7 +563,7 @@ is largely preserved across individuals. Despite recent evidence that different 
 \section*{Discussion}
 %DISCUSSION POINTS
 %recap main approach
-Super EEG infers full-brain activity patterns by leveraging
+SuperEEG infers full-brain activity patterns by leveraging
 correlations in those patterns of brain activity within and across people.  Although
 the approach may, in principle, be used to infer brain activity
 \textit{anywhere} in the brain, the inferences perform slightly better for
@@ -445,7 +571,7 @@ regions with dense electrode sampling across patients.  (Taken to the logical ex
 are included in the inference procedure, this suggests that reconstruction accuracy should improve.
 
 %why does it work?  redundancy of brain
-A fundamental assumption of the Super EEG algorithm is that the data
+A fundamental assumption of the SuperEEG algorithm is that the data
 covariance matrix is stable over time and across people.  This is a
 useful simplification.  However, a growing body of evidence from the
 fMRI community suggests that the data covariance matrix changes in
@@ -459,8 +585,8 @@ over time.  Other recent work has shown that people's resting state
 connectivity matrices may be used to uniquely identify individuals and
 predict fluid intelligence scores~\cite{FinnEtal15}.  This indicates
 that the full-brain covariance matrix is not stable across people.  If
-the fundamental stability assumptions that Super EEG relies on are
-violated, how can the Super EEG algorithm still accurately recover LFP
+the fundamental stability assumptions that SuperEEG relies on are
+violated, how can the SuperEEG algorithm still accurately recover LFP
 data?  It is important to recognize that the fact that variability
 (over time or across people) is predictive (e.g.\ of cognitive states
 during story listening or fluid intelligence scores) does not
@@ -470,7 +596,7 @@ individuals (and over time, at least on the timescale of typical
 clinical and experimental recording sessions), and any functional
 changes must occur within the framework of the underlying structural
 anatomy.  Nevertheless, one could imagine future improvements to the
-Super EEG approach that leverage resting state fMRI or structural data
+SuperEEG approach that leverage resting state fMRI or structural data
 [e.g. diffusion tensor imaging (DTI)] to estimate Bayesian priors over
 the correlation matrices inferred, in the current framing, using only
 ECoG data.  Further, relaxing the assumption that the covariance
@@ -486,7 +612,7 @@ approach.
 %generalize across studies?  For example, could one combine recordings
 %from several studies to improve our ability to reconstruct neural
 %activity?
-One potential limitation of the Super EEG approach is that the above
+One potential limitation of the SuperEEG approach is that the above
 assumption of covariance stability across people may be violated even
 more if different patients are performing different cognitive tasks.
 To understand of the extent to which the current findings generalize across
@@ -499,12 +625,12 @@ matrix (which could in turn be informed by fMRI or DTI data).
 % suggest that recordings from multiple studies could be combined to
 % improve the overall reconstruction accuracy.
 
-A second potential limitation of the Super EEG approach is that it
+A second potential limitation of the SuperEEG approach is that it
 does not provide a natural means of estimating the precise timing of
 single-neuron action potentials.  Prior work has shown that gamma band
 and broadband activity in the LFP may be used to estimate the firing
 rates of neurons that underly the population contributing to the
-LFP~\cite{MannEtal09}.  Because Super EEG reconstructs LFPs throughout
+LFP~\cite{MannEtal09}.  Because SuperEEG reconstructs LFPs throughout
 the brain, one could in principle use gamma or broadband power in the
 reconstructed signals to estimate the corresponding firing rates
 (though not the timings of individual action potentials).

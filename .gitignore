@@ -109,3 +109,5 @@ ENV/
 *.blg
 *.out
 *.synctex.gz
+
+*.#*

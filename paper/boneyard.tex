@@ -1,6 +1,147 @@
+\section*{Introduction}
+Current human brain recording techniques are fraught with compromise.
+Commonly used approaches include functional magnetic resonance imaging
+(fMRI), scalp electroencephalography (EEG), and magnetoencephalography
+(MEG).  For each of these techniques, neuroscientists
+and electrophysiologists must choose to optimize spatial resolution
+at the cost of temporal resolution (e.g.\ as in fMRI) or temporal
+resolution at the cost of spatial resolution (e.g.\ as in EEG
+and MEG).  A less widely used approach (due to requiring work with
+neurosurgical patients) is to record from electrodes implanted
+directly onto the cortical surface (electrocorticography; ECoG) or
+into deep brain structures (intracranial EEG; iEEG).  However, these
+intracranial approaches also require compromise: the high temporal and
+spatial resolutions of intracranial recordings comes at the cost of
+substantially reduced brain coverage, since safety considerations
+limit the number of electrodes one may implant in a given patient's
+brain.  Further, the locations of implanted electrodes are determined by clinical,
+rather than research, needs.
+
+%Beamforming: huge advance for scalp recordings, but the inverse
+%problem is fundamentally ambiguous.  This limits the precision with
+%which one can measure activity from deep brain structures.
+An increasingly popular approach is to improve the effective spatial resolution
+of MEG or scalp EEG data by using a geometric approach called
+\textit{beamforming} to solve the biomagnetic or bioelectrical inverse
+problem~\cite{Sarv87}.  This approach entails using detailed brain
+conductance models (often informed by high spatial resolution
+anatomical MRI images) along with the known sensor placements
+(localized precisely in 3D space) to reconstruct brain signals
+originating from theoretical point sources deep in the brain (and far
+from the sensors).  Traditional beamforming approaches must overcome
+two obstacles.  First, the inverse problem beamforming seeks to solve
+has infinitely many solutions.  Researchers have made traction towards
+constraining the solution space by assuming that signal-generating
+sources are localized on a regularly spaced grid spanning the brain
+and that individual sources are small relative to their distances to
+the sensors~\cite{Snyd91, BailEtal01, HillEtal05}.  The second, and in
+some ways much more serious, obstacle is that the magnetic fields
+produced by external (noise) sources are substantially stronger than
+those produced by the neuronal changes being sought (i.e.\ at deep structures, as measured by sensors at the scalp).  This means that
+obtaining adequate signal quality often requires averaging the measured
+responses over tens to hundreds of responses or trials (e.g. see
+review by~\cite{HillEtal05}).
+
+Another approach to obtaining high spatial and temporal resolution
+neural data has been to collect fMRI and EEG data simultaneously.
+Simultaneous fMRI-EEG has the potential to balance the high spatial
+resolution of fMRI with the high temporal resolution of scalp EEG,
+thereby, in theory, providing the best of both worlds.  In practice,
+however, the signal quality of both recordings suffers substantially
+when the two techniques are applied simultaneously (e.g. see review
+by~\cite{HustEtal12}).  In addition, the experimental designs that are
+ideally suited to each technique individually are somewhat at odds.
+For example, fMRI experiments typically lock stimulus presentation
+events to the regularly spaced image acquisition time (TR), which
+maximizes the number of post-stimulus samples.  By contrast, EEG
+experiments typically employ jittered stimulus presentation times to
+maximize the experimentalist's ability to distinguish electrical brain
+activity from external noise sources such as from 60 Hz alternating
+current power sources.
+
+%Direct intracranial recordings are the gold standard method for
+%measuring activity from deep brain structures in both humans and
+%animals.
+%However, one can only implant a limited number of electrodes in a
+%given person's brain.  This begs the question: what can we infer
+%about the activity exhibited by the rest of that person's brain,
+%given what we learn from recordings taken from \textit{other people's
+%brains}?
+The current ``gold standard'' for precisely localizing signals and
+sampling at high temporal resolution is to take (ECoG or iEEG)
+recordings from implanted electrodes (but from a limited set of
+locations in any given brain).  This begs the following question: what
+can we infer about the activity exhibited by the rest of a person's
+brain, given what we learn from the limited intracranial recordings we
+have from their brain and additional recordings taken from
+\textit{other} people's brains?  Here we develop an approach, based on
+Gaussian process regression~\cite{Rasm06}, that uses data from
+multiple people to estimate activity at arbitrary
+locations in each person's brain (i.e., independent of their electrode
+placements).  We test this \textit{Super EEG} approach using a large
+dataset of intracranial recordings collected as neurosurgical patients
+studied and recalled random word lists~\cite{SedeEtal03, SedeEtal07a,
+  SedeEtal07b, MannEtal11, MannEtal12}.  We show that the Super EEG
+algorithm recovers signals well from electrodes that were held out of
+the training dataset.  We also examine the factors that influence how
+accurately activity may be estimated (recovered), which may have important
+implications for electrode design and for electrode placement in
+neurosurgical applications.
+
+%%%%%
 
 
   
+  The correlational structure of functional neuroimaging data may be
+  used to predict which moment of movie or story an individual is
+  experiencing, identify which person's brain a recording came from,
+  and identify the task a person is performing.  In contrast, our
+  structural (anatomical) connectome is static for the duration of
+  typical neuroimaging experiments, is task invariant, and is similar
+  across people.  How might these seemingly opposing features of
+  functional connectomes versus static structural connectomes be
+  reconciled?  We developed a static task- and person-invariant
+  connectome model, and explored the extent to which the model could
+  explain dynamic full-brain activity patterns.  We trained the model
+  using ECoG recordings from two large datasets, and we tested its
+  ability to predict held-out data.  We found that neural activity
+  patterns are best explained by a connectome that is common across
+  individuals, but changes across tasks.
+
+
+
+
+Are our brain's networks static or dynamic?  And to what extent are the network properties of our brains stable across people and tasks?  One body of work suggests that our brain's \textit{functional} networks are dynamic~\citep[e.g., ][]{MannEtal18}, person-specific~\citep[e.g., ][]{FinnEtal15}, and task-specific~\citep[e.g., ][]{Turk13}.  In contrast, although the gross anatomical structure of our brains changes meaningfully over the course of years as our brains develop, on the timescales of typical neuroimaging experiments (i.e., hours to days) our anatomical networks are largely stable~\citep[e.g., ][]{CaseEtal00}.  Further, many aspects of brain anatomy, including white matter structure, is largely preserved across people~\citep[e.g., ][]{TalaTour88, JahaEtal13, MoriEtal08}  There are several possible means of reconciling this apparent inconsistency between dynamic person- and task-specific functional networks versus stable anatomical networks.  For example, relatively small magnitude anatomical differences across people may be reflected in reliable functional connectivity differences.  Along these lines, one recent study found that diffusion tensor imaging (DTI) structural data is similar across people, but may be used to predict person-specific resting state functional connectivity data~\citep{BeckEtal18}.  Another (potentially complementary) possibility is that our functional networks are constrained by anatomy, but nevertheless exhibit rapid task-dependent changes~\citep[e.g., ][]{SporBetz16}.
+
+Here we take a model-based approach to studying whether high
+spatiotemporal resolution activity patterns throughout the human brain
+may be explained by a static connectome model that is shared across
+people and tasks.  Specifically, we trained a model to take in
+recordings from a subset of brain locations, and then predicted
+activity patterns during the same interval, but at \textit{other}
+locations that were held out from the model.  Our model, based on
+Gaussian process regression, relies on three assumptions (each of
+which we test).  First, we assume that functional correlations are
+stable over time and across tasks.  Second, we assume that some of the
+correlational structure of people's brain activity is similar across
+individuals.  Third, we resolve ambiguities in the data by assuming
+that neural activity from nearby sources will tend to be similar, all
+else being equal.  After fitting the model to an ECoG dataset, one can
+then ask (for a held-out individual's brain): given what we know about
+the correlational structure of \textit{other} people's brains, and
+given the recordings we made from electrodes implanted in this
+person's brain, how would those recordings most likely have looked at
+\textit{other} locations throughout this person's brain?  We named our
+general approach \textit{SuperEEG} because the trained model provides
+a means of inferring full-brain activity patterns at high
+spatiotemporal resolutions, using ECoG recordings taken from a limited
+set of brain locations.
+
+We tested the SuperEEG approach using two large ECoG datasets. Dataset 1 comprises multi-hour recordings from 6876 electrodes taken across several recording sessions as 88 neurosurgical patients studied random word lists periodically throughout their day~\cite{SedeEtal03, SedeEtal07a,
+  SedeEtal07b, MannEtal11, MannEtal12}.  Dataset 2 comprises recordings from XXX electrodes taken as XXX patients performed a series of two memory tasks~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  In both datasets, 
+  we compared the predictions made using models trained across people to predictions made using within-person data.  We found that models that incorporate data from other patients yield far more reliable predictions about an individual patient's brain activity patterns than models trained solely on that individual's data.  This indicates that at least some functional correlations are common across people.  We also used Dataset 2 to compare predictions made using data from within task, across task, or combining within and across task data.  We found that all three approaches yielded reliable predictions, but the within task predictions were the most accurate.  This indicates that some aspects of our functional connectomes are common across tasks, whereas other aspects are task-specific.  Finally, all of the models we trained (within and across patients and tasks) assumed a static connectome and yielded above-chance accuracy.  This indicates that despite moment-by-moment fluctuations in the functional connectome, at least some aspects of our connectome appear to be stable over the course of several hours.
+
+%%%%%
 
 
 
