@@ -27,11 +27,13 @@ def npz2bo(infile):
 
 results_dir = config['resultsdir']
 
-
+RESAMPLERATE=250
 fname = sys.argv[1]
 
 file_name = os.path.basename(os.path.splitext(fname)[0])
 bo = npz2bo(fname)
+
+bo.resample(RESAMPLERATE)
 
 bo.save(fname=os.path.join(results_dir, file_name))
 
