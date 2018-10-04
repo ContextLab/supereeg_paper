@@ -28,8 +28,12 @@ def r2z(r):
 
 def z2r(z):
     r = np.divide((np.exp(2*z) - 1), (np.exp(2*z) + 1))
-    r[np.isnan(r)] = 0
-    r[np.isinf(r)] = np.sign(r)[np.isinf(r)]
+    try:
+        r[np.isnan(r)] = 0
+        r[np.isinf(r)] = np.sign(r)[np.isinf(r)]
+    except:
+        pass
+
     return r
 
 def compile_df_locs(df_column):
@@ -51,12 +55,12 @@ def compile_df_locs(df_column):
 
 ############## Methods ##########################
 
-def plot_hist(dataframe, title=None, outfile=None):
+def plot_hist(dataframe, X='Correlation', title=None, outfile=None):
     fig = plt.gcf()
     fig.set_size_inches(18.5, 10.5)
     sns.set_style("white")
     df_corrs = pd.DataFrame()
-    df_corrs['Correlations'] = dataframe['Correlation'].values
+    df_corrs[X] = dataframe[X].values
     n_count = len(df_corrs)
     bin_values = np.arange(start=-1, stop=1, step=.025)
     ax = sns.distplot(df_corrs, hist=True, kde=True,
@@ -67,7 +71,7 @@ def plot_hist(dataframe, title=None, outfile=None):
     vals = ax.get_yticks()
     ax.set_yticklabels([np.round(x/n_count,5) for x in vals])
     ax.set_ylabel('Proportion of electrodes', fontsize=21)
-    ax.set_xlabel('Correlation', fontsize=21)
+    ax.set_xlabel(X, fontsize=21)
     ax.set_xlim(-1, 1)
     ax.set_frame_on(False)
     ax.tick_params(axis='x', labelsize=18)
@@ -77,7 +81,7 @@ def plot_hist(dataframe, title=None, outfile=None):
     bottom, height = .75, .5
     plt.tight_layout()
 
-    ax.text(left, bottom, 'mean = '+ str(np.round(dataframe['Correlation'].mean(),3)),
+    ax.text(left, bottom, 'mean = '+ str(np.round(dataframe[X].mean(),3)),
             horizontalalignment='left',
             verticalalignment='top',
             transform=ax.transAxes, fontsize=18)
@@ -626,22 +630,70 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     if outfile:
         plt.savefig(outfile)
 
-########### Dont need ####################
 
+def plot_column(dataframe, X, Y, title=None, outfile=None):
 
-
-def plot_column(X, Y, title=None, outfile=None):
     mpl.rcParams['axes.facecolor'] = 'white'
     fig, ax = plt.subplots()
-    ax.scatter(X, Y, color='k', alpha=.1)
-    #ax.set_xscale('log')
-    ax.set_title(title)
-    ax.set_ylabel(X.name)
-    ax.set_xlabel(Y.name)
-    left, width = .05, .5
+    fig.set_size_inches(10, 8)
+    ax.scatter(dataframe[X], dataframe[Y], color='k', alpha=.1)
+    ax.set_title(title, fontsize=30)
+    ax.set_ylabel('Correlation', fontsize=30)
+    ax.set_xlabel(X, fontsize=30)
+    ax.tick_params(axis='x', length=0, labelsize=18)
+    ax.tick_params(axis='y', which='both', length=0, labelsize=18)
+    for index, label in enumerate(ax.xaxis.get_ticklabels()):
+        if index % 2 != 0:
+            label.set_visible(False)
+    for index, label in enumerate(ax.yaxis.get_ticklabels()):
+        if index % 2 != 0:
+            label.set_visible(False)
+    left, width = .75, .5
     bottom, height = .05, .5
-    rstat = stats.pearsonr(X, Y)
-    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + ' p = ' + str(rstat[1]),
+    rstat = stats.pearsonr(dataframe[X], dataframe[Y])
+    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)),
             horizontalalignment='left',
-            verticalalignment='top',
+            verticalalignment='bottom',
             transform=ax.transAxes)
+    print(rstat)
+    if outfile:
+        plt.savefig(outfile)
+
+def plot_corr_hist(dataframe, X, title=None, outfile=None):
+    mpl.rcParams['axes.facecolor'] = 'white'
+    df_corrs = pd.DataFrame()
+    df_corrs[X] = dataframe[X].values
+    n_count = len(df_corrs)
+    bin_values = np.arange(start=-1, stop=1, step=.025)
+    ax = df_corrs.plot(kind='hist', bins=bin_values, color='k', title = title, legend = False)
+    vals = ax.get_yticks()
+    ax.set_yticklabels([np.round(x/n_count,3) for x in vals])
+    ax.set_ylabel('Proportion of electrodes')
+    ax.set_xlabel(X)
+    ax.set_xlim(-1, 1)
+    plt.text(1,10, 'mean = '+ str(np.round(z2r(r2z(dataframe[X]).mean()),3)))
+    if outfile:
+        plt.savefig(outfile)
+
+def plot_hist_by_patient(dataframe, X, bins=20, title=None, outfile=None):
+    mpl.rcParams['axes.facecolor'] = 'white'
+    df = pd.DataFrame()
+    df[X] = dataframe[X].values
+    n_count = len(df)
+    fig, ax = plt.subplots()
+    fig.set_size_inches(10, 8)
+    df.plot(kind='hist',histtype='stepfilled', bins=bins, color='k', legend = False, fontsize=30, ax=ax)
+    ax.set_title(X, fontsize=30)
+    ax.set_ylabel('# Patients', fontsize=30)
+    ax.set_xlabel(X, fontsize=30)
+    ax.tick_params(axis='x', length=0, labelsize=18)
+    ax.tick_params(axis='y', which='both', length=0, labelsize=18)
+    for index, label in enumerate(ax.xaxis.get_ticklabels()):
+        if index % 2 != 0:
+            label.set_visible(False)
+    for index, label in enumerate(ax.yaxis.get_ticklabels()):
+        if index % 2 != 0:
+            label.set_visible(False)
+    print('mean: ' + str(np.round(df[X].mean(),3)))
+    if outfile:
+        plt.savefig(outfile)
