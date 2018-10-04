@@ -270,15 +270,19 @@ predictions within versus across tasks.
 
 We first applied fourth order Butterworth notch filter to remove 60 Hz
 ($\pm$ .5 Hz) line noise from every recording (from every electrode).
-We then excluded any electrodes that showed putative epileptiform
-activity.  Specifically, we excluded from further analysis any
-electrode that exhibited an average kurtosis of 10 or greater across
-all of that patient's recording sessions.  We also excluded any
-patients with fewer than 2 electrodes that passed this criteria, as
-the SuperEEG algorithm requires measuring correlations between 2 or
-more electrodes from each patient.  For Dataset 1, this yielded clean
-recordings from 4168 electrodes implanted throughout the brains of 67
-patients (Fig.~\ref{fig:methods}A); for Dataset 2, this yielded clean
+Next, we downsampled the recordings (regardless of the original
+samplerate) to 250 Hz.  (This downsampling step served to both
+normalize for differences in sampling rates across patients and to
+ease the computational burden of our subsequent analyses.)  We then
+excluded any electrodes that showed putative epileptiform activity.
+Specifically, we excluded from further analysis any electrode that
+exhibited an average kurtosis of 10 or greater across all of that
+patient's recording sessions.  We also excluded any patients with
+fewer than 2 electrodes that passed this criteria, as the SuperEEG
+algorithm requires measuring correlations between 2 or more electrodes
+from each patient.  For Dataset 1, this yielded clean recordings from
+4168 electrodes implanted throughout the brains of 67 patients
+(Fig.~\ref{fig:methods}A); for Dataset 2, this yielded clean
 recordings from 2975 electrodes from 24 patients.  Each individual
 patient contributes electrodes from a limited set of brain locations,
 which we localized in a common space~\citep[MNI152;][]{GrabEtal06}; an
@@ -441,27 +445,30 @@ locations in the set $\bar{R}$, \textit{even if we did not record that
   patient's brain at all of those locations}.  We next turn to an
 evaluation of the accuracy of those estimates.
 
-\textbf{JRM STOPPED HERE}
-
 \section*{Results}
 To test the accuracy with which the SuperEEG algorithm reconstructs
 activity throughout the brain, we held out each electrode from the
 full dataset in turn and treated it as unobserved. We then asked: how
-closely did each of the SuperEEG-reconstructed LFPs match the observed
-data?  We sought to evaluate both the overall reconstruction accuracy
-as well as how reconstruction accuracy varied as a function of
-implantation location.
+closely did each of the SuperEEG-estimated recordings at those
+electrodes match the observed recordings from those electrodes?
 
-We first examined raw LFP traces and their associated Super
-EEG-derived reconstructions.  Figure~\ref{fig:recon}A displays the
-LFP from the red electrode in Figure~\ref{fig:methods}A, and its
-associated reconstruction, during a 5~s time window during one of the
-patient's 6 recording sessions.  Figure~\ref{fig:recon}B displays a 2D
-histogram of the observed versus reconstructed voltages for every
-sample across 14.2 total hours of recordings from that patient (correlation:
+\textbf{JRM STOPPED HERE}
+% JRM thoughts:
+% - Do we need to use the term "LFP"?
+% - Tie in stats from supplemental analyses.  Fig S4: total number of
+% electrodes, total number of used electrodes, prop thresholded, total
+% recording time, average session time, number of sessions.
+
+We first examined raw LFP traces and their associated SuperEEG-derived
+reconstructions.  Figure~\ref{fig:recon}A displays the LFP from the
+red electrode in Figure~\ref{fig:methods}A, and its associated
+reconstruction, during a 5~s time window during one of the patient's 6
+recording sessions.  Figure~\ref{fig:recon}B displays a 2D histogram
+of the observed versus reconstructed voltages for every sample across
+14.2 total hours of recordings from that patient (correlation:
 $r = 0.91, p < 10\textsuperscript{-10}$).  Although the SuperEEG
-algorithm recovered the recordings from this electrode well, we sought to
-quantify the algorithm's performance across the full dataset.
+algorithm recovered the recordings from this electrode well, we sought
+to quantify the algorithm's performance across the full dataset.
 
 %sample trace & reconstruction, several frames of activity snapshot?
 \begin{figure}
@@ -497,20 +504,34 @@ that drove the reconstructions via Equation~\ref{eqn:reconstruction}
 
 We obtained a single correlation coefficient for each electrode
 location in $\bar{R}$, reflecting how well the SuperEEG algorithm was
-able to recover the recording at that location by incorporating data across patients (Across shown in black, see Fig.~\ref{fig:corrmap}A). We also reconstructed activity for each electrode using a model trained on the remaining electrodes from only that patient, to account for reconstruction accuracy attributed to volume conductance alone (Within shown in gray, see Fig.~\ref{fig:corrmap}A). For the first dataset, we compared these two distributions of correlation coefficients (paired $t$-test
-between $z$-transformed mean correlation coefficients by patient:
-$t(66) = 9.64, p < 10\textsuperscript{-10}$).  We repeated this analysis on a similar dataset Fig.~\ref{fig:corrmap}C) with similar results (paired $t$-test
-between $z$-transformed mean correlation coefficients by patient: $t(23) = 6.93, p < 10\textsuperscript{-5}$). This is an especially conservative
-test, given that the SuperEEG reconstructions exclude (from the
-correlation matrix estimates) all data from the patient whose data is
-being reconstructed.  Furthermore, we also replicated this finding for each independent experiment within dataset 2 (Fig. S3 (paired $t$-test
-between $z$-transformed mean correlation coefficients by patient for experiment 1: $t(23) = 6.23, p < 10\textsuperscript{-5}$ and experiment 2: $t(23) = 6.62, p < 10\textsuperscript{-5}$).  That the SuperEEG-derived correlations were reliably
-stronger than these correlations obtained using a volume conductance null model is exciting
-for two reasons.  First, it implies that distant electrodes provide
-additional predictive power to the data reconstructions beyond the
-information contained in nearby electrodes.  Second, it implies that
-the spatial correlations driving the SuperEEG algorithm are, to some
-extent, shared across people.
+able to recover the recording at that location by incorporating data
+across patients (Across shown in black, see
+Fig.~\ref{fig:corrmap}A). We also reconstructed activity for each
+electrode using a model trained on the remaining electrodes from only
+that patient, to account for reconstruction accuracy attributed to
+volume conductance alone (Within shown in gray, see
+Fig.~\ref{fig:corrmap}A). For the first dataset, we compared these two
+distributions of correlation coefficients (paired $t$-test between
+$z$-transformed mean correlation coefficients by patient:
+$t(66) = 9.64, p < 10\textsuperscript{-10}$).  We repeated this
+analysis on a similar dataset Fig.~\ref{fig:corrmap}C) with similar
+results (paired $t$-test between $z$-transformed mean correlation
+coefficients by patient: $t(23) = 6.93, p <
+10\textsuperscript{-5}$). This is an especially conservative test,
+given that the SuperEEG reconstructions exclude (from the correlation
+matrix estimates) all data from the patient whose data is being
+reconstructed.  Furthermore, we also replicated this finding for each
+independent experiment within dataset 2 (Fig. S3 (paired $t$-test
+between $z$-transformed mean correlation coefficients by patient for
+experiment 1: $t(23) = 6.23, p < 10\textsuperscript{-5}$ and
+experiment 2: $t(23) = 6.62, p < 10\textsuperscript{-5}$).  That the
+SuperEEG-derived correlations were reliably stronger than these
+correlations obtained using a volume conductance null model is
+exciting for two reasons.  First, it implies that distant electrodes
+provide additional predictive power to the data reconstructions beyond
+the information contained in nearby electrodes.  Second, it implies
+that the spatial correlations driving the SuperEEG algorithm are, to
+some extent, shared across people.
 
 %correlations by brain area, distribution of correlations
 \begin{figure}
