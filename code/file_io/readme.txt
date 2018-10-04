@@ -1,5 +1,5 @@
 This script converts pyFR patient data from npz format to brain objects.
-It also converts electrodes from tal to MNI space.
+It also converts electrodes from tal to MNI space and resamples the sample rate to 250 Hz.
 
 One job submitted for each patient. 
 
