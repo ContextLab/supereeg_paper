@@ -552,11 +552,12 @@ def plot_2d_corr_hist(df, outfile=None):
 
 ######### Supplemental ###########
 
+
 def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     fig = plt.gcf()
-    fig.set_size_inches(10.5, 10.5)
+    fig.set_size_inches(12.5, 10.5)
     plt.ylim(-1.2,2.0)
-    ax = sns.violinplot(x="Experiment", y="Correlation", hue="Subject", order=[ "a", "w", "all"], ylim=[-1,1], data=df, palette="gray", split=True)
+    ax = sns.violinplot(x="Experiment", y="Correlation", hue="Subject", order=["w", "a", "all"], ylim=[-1,1], data=df, palette="gray", split=True)
     if legend:
         handles, labels = fig.get_axes()[0].get_legend_handles_labels()
         fig.get_axes()[0].legend(handles, ['Across', 'Within'], loc='lower right', fontsize=30)
@@ -566,12 +567,31 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     ax.tick_params(axis='y', which='both', length=0, labelsize=18)
     ax.set_xticklabels(['Within', 'Across','All'])
     ax.set_xlabel('Experiment', fontsize=30)
+
+    yposlist_df = df.groupby(['Experiment', 'Subject'])['Correlation'].mean()
+    yposlist = yposlist_df.reindex(["w", "a", "all"], level='Experiment').tolist()
+    xposlist = range(3)
+
+    c = 0
+    for i in range(len(yposlist)):
+
+        if (i%2) == 0:
+            ax.text(c-.12, yposlist[i], np.round(yposlist[i],2), fontsize=14, color='white')
+        else:
+            ax.text(c+.02, yposlist[i], np.round(yposlist[i],2) , fontsize=14, color='white')
+            c +=1
+
     ### first two significance lines:
-    ylim = 1
+    ylim = 1.2
     for l in range(3):
-        ylim += .2
+        plt.plot([l-.05, l+.05], [1.15, 1.15], marker = '|', mew=2, markersize=10, color='k', linewidth=2)
+        ax.plot(l, 1.15 + .05, marker = '*', markersize=10, color='k')
+
+        ylim += .15
         for i in range(2):
-            ylim += i/10
+            ylim += i/14
+
+
             if l==2:
                 m1, n1 = [l, l-l], [ylim, ylim]
                 a1 = (l + (l-l)) /2
@@ -580,10 +600,10 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
                 a1 = (l + (l+1)) /2
             if i == 0:
                 plt.plot(m1, n1, marker = '|', mew=2, markersize=10, color='lightgray', linewidth=2)
-                ax.plot(a1, ylim + .05, marker = '*', markersize=10, color='lightgray')
+                ax.plot(a1, ylim-.1 + .05, marker = '*', markersize=10, color='lightgray')
             else:
-                plt.plot(m1, n1, marker = '|', mew=2, markersize=10, color='k', linewidth=2)
-                ax.plot(a1, ylim + .05, marker = '*', markersize=10, color='k')
+                plt.plot(m1, n1, marker = '|', mew=2, markersize=10, color='darkgray', linewidth=2)
+                ax.plot(a1, ylim + .05, marker = '*', markersize=10, color='darkgray')
 
 
 
@@ -606,14 +626,6 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     if outfile:
         plt.savefig(outfile)
 
-        #
-        # plt.tick_params(
-        #     axis='x',          # changes apply to the x-axis
-        #     which='both',      # both major and minor ticks are affected
-        #     bottom=False,      # ticks along the bottom edge are off
-        #     top=False,         # ticks along the top edge are off
-        #     labelbottom=False)
-        # ax.set_xlabel('')
 ########### Dont need ####################
 
 
