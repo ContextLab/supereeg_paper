@@ -32,8 +32,8 @@ fname = sys.argv[1]
 
 file_name = os.path.basename(os.path.splitext(fname)[0])
 bo = npz2bo(fname)
+bo.resample(resample_rate=RESAMPLERATE)
 
-bo.resample(RESAMPLERATE)
 
 bo.save(fname=os.path.join(results_dir, file_name))
 
