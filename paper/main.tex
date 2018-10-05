@@ -452,45 +452,46 @@ full dataset in turn and treated it as unobserved. We then asked: how
 closely did each of the SuperEEG-estimated recordings at those
 electrodes match the observed recordings from those electrodes?
 
-We first examined held-out raw LFP traces and their associated
-SuperEEG-derived reconstructions.  Figure~\ref{fig:recon}A displays
-the observed LFP from the red electrode in Figure~\ref{fig:methods}A
-(red), and its associated reconstruction (black), during a 5~s time
-window during one of the example patient's six recording sessions.
-The two traces match closely ($r = XXX, p = XXX$).  Where the traces
-do not align, the predicted trace tends to be rounded towards zero,
-reflecting the zero-mean prior implicit in
-Equation~\ref{eqn:reconstruction} (paired $t$-test comparing absolute
-values of actual versus predicted voltages: $t(XXX) = XXX, p = XXX$).
-
-\textbf{JRM STOPPED HERE}
-% JRM thoughts:
-% - Tie in stats from supplemental analyses.  Fig S4: total number of
-% electrodes, total number of used electrodes, prop thresholded, total
-% recording time, average session time, number of sessions.
-
-Figure~\ref{fig:recon}B displays a two-dimensional histogram of the
-actual versus reconstructed voltages for every sample across 14.2
-total hours of recordings from that patient (correlation:
-$r = 0.91, p < 10\textsuperscript{-10}$).  Although the SuperEEG
-algorithm recovered the recordings from this electrode well, we sought
-to quantify the algorithm's performance across the full dataset.
+We first examined individual held-out raw LFP traces and their
+associated SuperEEG-derived reconstructions.  Figure~\ref{fig:recon}A
+displays the observed LFP from the red electrode in
+Figure~\ref{fig:methods}A (red), and its associated reconstruction
+(blue), during a 5~s time window during one of the example patient's
+six recording sessions.  The two traces match closely
+($r = XXX, p = XXX$).
+%Where the traces do not align, the predicted
+%trace tends to be rounded towards zero, reflecting the zero-mean prior
+%implicit in Equation~\ref{eqn:reconstruction} (paired $t$-test
+%comparing absolute values of actual versus predicted voltages:
+%$t(XXX) = XXX, p = XXX$).
+Figure~\ref{fig:recon}B displays a
+two-dimensional histogram of the actual versus reconstructed voltages
+for the entire 14.2 total hours of recordings from the electrode
+(correlation: $r = XXX, p = XXX$).
+%Like in the shorter example trace
+%shown in panel A, the reconstructed voltages throughout the full
+%recording tended to be smaller in magnitude than the original
+%recording ($t(XXX) = XXX, p = XXX$).
+Having confirmed that the SuperEEG algorithm recovered the recordings
+from this electrode well, we next sought to quantify the algorithm's
+performance across the full dataset.
 
 %sample trace & reconstruction, several frames of activity snapshot?
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/recon}
   \caption{\textbf{Observed and reconstructed LFP from a single
-      electrode.} \textbf{A. Example LFP.}  A 2~s recording from the blue
-    electrode in Figure~\ref{fig:methods}A is displayed in red, and
-    the reconstructed LFP during the same time window is shown in
-   black.  All voltages are plotted in standard deviation units.
-    \textbf{B. Observed versus reconstructed voltages over 14.2~hours.}
-    The 2D histogram reflects the relation between distributions of
-    observed versus reconstructed voltages from one patient, across the
-    14.2 hours of recorded data collected in 6 recording sessions.  The
-    correlation reported in the panel is between the observed and reconstructed
-    voltages.}
+      electrode.} \textbf{A. Example LFP.}  A 5~s recording from the
+    red electrode in Figure~\ref{fig:methods}A is displayed in red,
+    and the reconstructed LFP during the same time window is shown in
+    blue.  \textbf{B. Observed versus reconstructed voltages over
+      14.2~hours.}  The two-dimensional histogram reflects the
+    relation between distributions of observed versus reconstructed
+    voltages from one patient, across the 14.2 hours of recorded data
+    collected over 6 recording sessions.  The correlation reported in
+    the panel is between the observed and reconstructed voltages.
+    Both panels: all voltages are represented in standard deviation units
+   (computed within session).}
   \label{fig:recon}
 \end{figure}
 
