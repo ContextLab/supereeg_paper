@@ -75,7 +75,10 @@ if not os.path.exists(recon_outfile_across):
 
     np.savez(recon_outfile_across, coord=electrode, corrs=c)
 
-elif not os.path.exists(recon_outfile_within):
+else:
+    print('across reconstructions are done')
+
+if not os.path.exists(recon_outfile_within):
 
     Model = se.Model(bo, locs=R_K_subj)
 
