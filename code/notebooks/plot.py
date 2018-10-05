@@ -12,7 +12,7 @@ from scipy.spatial.distance import cdist, pdist
 from sklearn.neighbors import NearestNeighbors
 from nilearn import plotting as ni_plt
 from supereeg.helpers import _log_rbf, _brain_to_nifti, _plot_borderless
-from supereeg.helpers import _corr_column, get_rows, known_unknown, remove_electrode
+from supereeg.helpers import _corr_column, get_rows, known_unknown
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib
@@ -35,6 +35,31 @@ def z2r(z):
         pass
 
     return r
+
+def remove_electrode(subkarray, subarray, electrode):
+    """
+        Removes electrode from larger array
+
+        Parameters
+        ----------
+        subkarray : ndarray
+            Subject's electrode locations that pass the kurtosis test
+
+        subarray : ndarray
+            Subject's electrode locations (all)
+
+        electrode : str
+            Index of electrode in subarray to remove
+
+        Returns
+        ----------
+        results : ndarray
+            Subject's electrode locations that pass kurtosis test with electrode removed
+
+        """
+    rm_ind = get_rows(subkarray, subarray[electrode])
+    other_inds = [i for i in range(np.shape(subkarray)[0]) if i != electrode]
+    return np.delete(subkarray, rm_ind, 0), other_inds
 
 def compile_df_locs(df_column):
 
