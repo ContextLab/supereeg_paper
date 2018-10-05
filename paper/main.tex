@@ -438,12 +438,12 @@ invariant, we may compute $Y_{s,k,\beta_s}$ in a piecewise
 manner by filling in $Y_{s,k,\beta_s}$ one row at a time (using the
 corresponding samples from $Y_{s, k, \alpha_s}$).
 
-The SuperEEG algorithm described above and in
-Figure~\ref{fig:methods} allows us to estimate (up to a constant
-scaling factor) LFPs for each patient at all arbitrarily chosen
-locations in the set $\bar{R}$, \textit{even if we did not record that
-  patient's brain at all of those locations}.  We next turn to an
-evaluation of the accuracy of those estimates.
+The SuperEEG algorithm described above and in Figure~\ref{fig:methods}
+allows us to estimate, up to a constant scaling factor, local field
+potentials (LFPs) for each patient at all arbitrarily chosen locations
+in the set $\bar{R}$, \textit{even if we did not record that patient's
+  brain at all of those locations}.  We next turn to an evaluation of
+the accuracy of those estimates.
 
 \section*{Results}
 To test the accuracy with which the SuperEEG algorithm reconstructs
@@ -452,20 +452,26 @@ full dataset in turn and treated it as unobserved. We then asked: how
 closely did each of the SuperEEG-estimated recordings at those
 electrodes match the observed recordings from those electrodes?
 
+We first examined held-out raw LFP traces and their associated
+SuperEEG-derived reconstructions.  Figure~\ref{fig:recon}A displays
+the observed LFP from the red electrode in Figure~\ref{fig:methods}A
+(red), and its associated reconstruction (black), during a 5~s time
+window during one of the example patient's six recording sessions.
+The two traces match closely ($r = XXX, p = XXX$).  Where the traces
+do not align, the predicted trace tends to be rounded towards zero,
+reflecting the zero-mean prior implicit in
+Equation~\ref{eqn:reconstruction} (paired $t$-test comparing absolute
+values of actual versus predicted voltages: $t(XXX) = XXX, p = XXX$).
+
 \textbf{JRM STOPPED HERE}
 % JRM thoughts:
-% - Do we need to use the term "LFP"?
 % - Tie in stats from supplemental analyses.  Fig S4: total number of
 % electrodes, total number of used electrodes, prop thresholded, total
 % recording time, average session time, number of sessions.
 
-We first examined raw LFP traces and their associated SuperEEG-derived
-reconstructions.  Figure~\ref{fig:recon}A displays the LFP from the
-red electrode in Figure~\ref{fig:methods}A, and its associated
-reconstruction, during a 5~s time window during one of the patient's 6
-recording sessions.  Figure~\ref{fig:recon}B displays a 2D histogram
-of the observed versus reconstructed voltages for every sample across
-14.2 total hours of recordings from that patient (correlation:
+Figure~\ref{fig:recon}B displays a two-dimensional histogram of the
+actual versus reconstructed voltages for every sample across 14.2
+total hours of recordings from that patient (correlation:
 $r = 0.91, p < 10\textsuperscript{-10}$).  Although the SuperEEG
 algorithm recovered the recordings from this electrode well, we sought
 to quantify the algorithm's performance across the full dataset.
