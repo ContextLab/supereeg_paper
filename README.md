@@ -6,11 +6,12 @@ This repository contains data and code used to produce the paper "[_Towards huma
 root
 └── code : all code used in the paper
     └── scripts : python scripts used to perform pyfr analyses on a cluster
-└── paper_figs : all analyses for paper figures
-    ├── code : jupyter notebooks for paper analyses
-    └── final_figs : all final pdfs
+    └── notebooks : jupyter notebooks for paper analyses and paper figures
+└── data : processed data
+    ├── pyfr : compiled reconstruction accuracy from pyfr analyses
+    └── ram : compiled reconstruction accuracy from ram analyses
 └── paper : all latex and pdf files to generate paper
-
+    └── figs : all final pdfs
 ```
 
 We also include a Dockerfile to reproduce our computational environment. Instruction for use are below (copied and modified from [MIND](https://github.com/Summer-MIND/mind-tools) repo):
