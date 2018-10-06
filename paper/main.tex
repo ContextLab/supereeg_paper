@@ -60,8 +60,9 @@
 {\end{list}}
 
 \newcommand{\taskrecon}{S1}
-\newcommand{\perexptaskrecon}{S2}
-\newcommand{\perexpcorrmaps}{S3}
+\newcommand{\perexpcorrmaps}{S2}
+\newcommand{\perexptaskrecon}{S3}
+\newcommand{\perexptaskreconseparated}{S4}
 
 % Include your paper's title here
 
@@ -553,7 +554,9 @@ reconstructions exclude (from the correlation matrix estimates) all
 data from the patient whose data is being reconstructed.  We repeated
 each of these analyses on a second independent datset and found
 similar results (Fig.~\ref{fig:corrmap}B, D; within versus across
-reconstruction accuracy: $t(23) = 6.93, p < 10^{-5}$). Our finding,
+reconstruction accuracy: $t(23) = 6.93, p < 10^{-5}$). We also
+replicated this result separately for each of the two experiments from
+Dataset 2 (Fig.~\perexpcorrmaps).  This overall finding,
 that when reconstructing held-out data from a given patient
 correlation models derived from \textit{other} patient's data yield
 higher reconstruction accuracy than correlation models derived from
@@ -606,15 +609,34 @@ predictions for data from the other experiment.  Further, we wondered
 about the extent to which it might be benefitial or harmful to combine
 data across tasks.
 
-\textbf{JRM STOPPED HERE}
+To test the task-specificity of the SuperEEG-derived correlation
+models, we repeated our within- and across-patient cross validation
+procedures separately for Experiment 1 and Experiment 2 data from
+Dataset 2.  We then compared the reconstruction accuracies of held-out
+electrodes, for models trained within versus across the two
+experiments, or combining across both experiments
+(Fig.~\perexptaskrecon).  In every case we found that across-patient
+models trained using data from all other patients out-performed
+within-patient models trained on data only from the subject
+contributing the given electrode ($t$s$(XXX) > XXX, p$s$ < XXX$).  All
+reconstruction accuracies also reliably exceeded chance performance
+($t$s$(XXX) > XXX, p$s$ < XXX$).  Average reconstruction accuracy was
+highest for the across-patient models limited to data from the same
+experiment (mean accuracy: $0.55$), next-highest for the
+across-patient models that combined data across both experiments (mean
+accuracy: $0.50$), and lowest for models trained across task (mean
+accuracy: $0.37$).  This result also held for each of the Dataset 2
+experiments individually (Fig.~\perexptaskreconseparated).  Taken
+together, these results indicate that there are reliable commonalities
+in the spatial correlations of full-brain activity across tasks, but
+that there are also reliable differences in these spatial correlations
+across tasks.  Whereas reconstruction accuracy benefits from
+incorporating data from other patients, reconstruction accuracy is
+highest when constrained to within-task data, or data that includes a
+variety of tasks (e.g., Dataset 1, or combining across the two Dataset
+2 experiments).
 
-We were interested in the task specific contributions to the
-reconstruction accuracy.  Each patient in the the second dataset
-participated in two free recall experiments.  We ran similar analyses
-for both experiments and found that activity was best reconstructed
-when limiting the training data to within task, as opposed to across
-task or incorporating data from both tasks (Fig.~\taskrecon (mean reconstruction accuracy incorporating data within task: 0.55, across task: 0.37, all tasks: .50)). Although reconstruction accuracy in the across task analysis was still better than the volume conductance model alone (paired $t$-test
-between $z$-transformed mean correlation coefficients by patient: $t(47) = 5.65, p < 10\textsuperscript{-5}$), these results suggests that having a common tasks for patients may yield better reconstruction accuracy.  
+\textbf{JRM STOPPED HERE}  
 
 We also wondered whether reconstruction quality (measured as the
 correlation between the observed and reconstructed data) varied with
