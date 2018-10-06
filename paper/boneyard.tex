@@ -1,4 +1,37 @@
 \section*{Introduction}
+% JRM thoughts:
+% - Tie in stats from supplemental analyses.  Fig S4: total number of
+% electrodes, total number of used electrodes, prop thresholded, total
+% recording time, average session time, number of sessions.
+
+
+(i.e.,
+relying on a combination of volume conductance
+
+
+(Across shown in black, see Fig.~\ref{fig:corrmap}A). We also
+reconstructed activity for each electrode using a model trained on the
+remaining electrodes from only that patient, to account for
+reconstruction accuracy attributed to volume conductance alone (Within
+shown in gray, see Fig.~\ref{fig:corrmap}A). For the first dataset, we
+compared these two distributions of correlation coefficients (paired
+$t$-test between $z$-transformed mean correlation coefficients by
+patient: $t(66) = 9.64, p < 10\textsuperscript{-10}$).  We repeated
+this analysis on a similar dataset Fig.~\ref{fig:corrmap}C) with
+similar results (paired $t$-test between $z$-transformed mean
+correlation coefficients by patient:
+$t(23) = 6.93, p < 10\textsuperscript{-5}$). This is an especially
+conservative test, given that the SuperEEG reconstructions exclude
+(from the correlation matrix estimates) all data from the patient
+whose data is being reconstructed.  Furthermore, we also replicated
+this finding for each independent experiment within dataset 2 (Fig. S3
+(paired $t$-test between $z$-transformed mean correlation coefficients
+by patient for experiment 1:
+$t(23) = 6.23, p < 10\textsuperscript{-5}$ and experiment 2:
+$t(23) = 6.62, p < 10\textsuperscript{-5}$).  
+
+%%%
+
 Current human brain recording techniques are fraught with compromise.
 Commonly used approaches include functional magnetic resonance imaging
 (fMRI), scalp electroencephalography (EEG), and magnetoencephalography
