@@ -94,7 +94,6 @@ def compile_corrs(bo_path, corr_path, threshold=10):
     corr_data = np.load(corr_path, mmap_mode='r')
     tempR = np.round(corr_data['coord'], 2)
     tempmeancorr = z2r(np.mean(r2z(corr_data['corrs'])))
-    bo_data = se.load(os.path.join(bo_path, f_name + '.bo'))
     tempsamplerate = np.mean(se.load(os.path.join(bo_path, f_name + '.bo'), field='sample_rate'))
     tempsamples = se.load(os.path.join(bo_path, f_name + '.bo'), field='sessions').shape[0]
     kurt_vals = se.load(os.path.join(bo_path, f_name + '.bo'), field='kurtosis')
@@ -145,7 +144,7 @@ for i in files:
         all_corrs_across = all_corrs_across.append(compile_temp)
         all_corrs_across.to_csv(os.path.join(dir, 'all_corrs_across.csv'))
 
-all_corrs_across['Density'] = density(all_corrs_across['R'].tolist(), 3)
+# all_corrs_across['Density'] = density(all_corrs_across['R'].tolist(), 3)
 
 all_corrs_across.to_csv(os.path.join(dir, 'all_corrs_across.csv'))
 

@@ -139,7 +139,7 @@ def plot_times_series(time_data_df, lower_bound, upper_bound, outfile = None):
     sns.set_style("white")
     time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['actual'].plot(ax=ax, color='k', lw=1, fontsize=21)
     time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['predicted'].plot(ax=ax, color='r', lw=1)
-    ax.legend(['Actual', 'Predicted'], fontsize=21)
+    ax.legend(['Observed', 'Reconstructed'], fontsize=21)
     ax.set_xlabel("Time (s)", fontsize=21)
     ax.set_ylabel("Voltage (normalized)", fontsize=21)
 
