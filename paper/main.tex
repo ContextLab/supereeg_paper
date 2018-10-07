@@ -636,13 +636,38 @@ highest when constrained to within-task data, or data that includes a
 variety of tasks (e.g., Dataset 1, or combining across the two Dataset
 2 experiments).
 
+Although both datasets we examined provide good full-brain coverage
+(when considering data from every patient; e.g.\
+Fig.~\ref{fig:corrmap}B, D), electrodes are not placed uniformly
+throughout the brain.  For example, electrodes are more likely to be
+implanted in regions like the medial temporal lobe (MTL), and are
+rarely implanted in occipital cortex (Fig.~\ref{fig:density}A, B).
+Separately for each dataset, for each voxel in the XXX~mm$^3$ voxel
+MNI152 brain, we computed the proportion of electrodes contained
+within a 20 MNI unit radius sphere centered on that voxel.  We defined
+the \textit{density} at that location as this proportion.  Across
+Datasets 1 and 2, the electrode placement densities were similar
+(correlation by voxel: $r = 0.57, p < 10^{-10}$).  We wondered whether
+regions with good covererage might be associated with better
+reconstruction accuracy (e.g. Fig.~\ref{fig:corrmap}B, D indicate that
+many electrodes in the MTL have relatively high reconstruction
+accuracy, and occiptal electrodes tend to have relatively low
+reconstruction accuracy).  To test whether this held more generally
+across the entire brain, for each dataset we computed the electrode
+placement density for each electrode from each patient (using the
+proportion of \textit{other} patients' electrodes within 20 MNI units
+of the given electrode).  We then correlated these density values with
+the across-patient reconstruction accuracies for each electrode.
+Contrary to our expectation, rather than positive correlations, we
+found weak (but reliable) negative correlations between reconstruction
+accuracy and density for both datasets (Dataset 1: $r = XXX, p = XXX$;
+Dataset 2: $r = -0.16, p < 10^{-10}$).  This indicates that the
+reconstruction accuracies we observed are not driven solely by
+sampling density, but rather may also reflect higher order properties
+of neural dynamics such as functional correlations between distant
+voxels~\citep{BetzEtal17b}.
+
 \textbf{JRM STOPPED HERE}  
-
-We also wondered whether reconstruction quality (measured as the
-correlation between the observed and reconstructed data) varied with
-the electrode locations (Fig.~\ref{fig:corrmap}B \& D). In general, reconstruction quality remained high throughout the brain. Although reconstruction accuracy appeared high in the medial temporal lobe, which is a common epileptic focus (and therefore a common target for electrode implantation), we observed a weak but statistically reliable negative correlation between reconstruction quality and electrode density (defined as the proportion of electrodes within 20 MNI units for each location; dataset 1: $r = -0.07, p < 10^{-5}$, dataset 2: $r = -0.16, p < 10^{-10}$). This provides some evidence that our reconstruction accuracy results cannot be driven only by volume conductance.  Qualitatively, it appeared that the distribution of electrodes was similar across the datasets, suggesting potential commonalities of target locations across patients and similarities in surgical decisions. Indeed, we found a relatively strong correlation between the electrode densities within the two datasets (defined as the proportion of electrodes within 20 MNI units for each 34686 voxels (Fig.~\ref{fig:density}A, B); $r = 0.57, p < 10^{-10}$).  
-
-
 
 \begin{figure}
   \centering
