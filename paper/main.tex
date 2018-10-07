@@ -243,32 +243,38 @@ predictions within versus across tasks.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/methods}
-  \caption{\textbf{Methods overview.}  \textbf{A.  Electrode
+  \caption{\textbf{Methods overview.}  \textbf{A.~Electrode
       locations.}  Each dot reflects the location of a single
-    electrode in dataset 1, colored according to 7 factor labels (see
-    Panel D for details). One patient's electrode locations are
-    highlighted in black and the to-be-reconstructed recording
-    location is highlighted in red. \textbf{B. Radial basis function
-      (RBF).}  Each electrode contributed by the patient (black)
-    weights on the full set of locations under consideration (all dots
-    in Panel A, defined as $\bar{R}$ in the text).  The weights fall
-    off with positional distance (in MNI space) according to an RBF.
-    \textbf{C. Per-patient correlation matrices.}  After computing the
+    electrode implanted in the brain of a Dataset 1 patient.  A
+    held-out recording location from one patient is indicated in red,
+    and the patient's remaining electrodes are indicated in black.
+    The electrodes from the remaining patients are colored by
+    $k$-means cluster (computed using the full-brain correlation model
+    shown in Panel D).  \textbf{B.~Radial basis function kernel.}
+    Each electrode contributed by the patient (black) weights on the
+    full set of locations under consideration (all dots in Panel A,
+    defined as $\bar{R}$ in the text).  The weights fall off with
+    positional distance (in MNI space) according to an RBF.
+    \textbf{C.~Per-patient correlation matrices.}  After computing the
     pairwise correlations between the recordings from each patient's
     electrodes, we use RBF-weighted averages to estimate correlations
     between all locations in $\bar{R}$.  We obtain an estimated
     full-brain correlation matrix using each patient's
-    data. \textbf{D.  Combined correlation matrix.}  We estimate a
-    single full-brain correlation matrix by averaging the
-    patient-specific correlation matrices.  We sort the resulting
-    correlation matrix based on 7 factor labels obtained from k-means
-    clustering~\cite{YeoEtal11}). \textbf{E.  Reconstructing activity
-      throughout the brain.}  Given the observed activity from the
-    patient's electrodes and the estimated correlation matrix (Panel
-    D), we can compute a maximum likelihood estimate of the voltage
-    trace at any location in $\bar{R}$.  An example reconstruction (at
-    the red dot in Panel A) is shown in red, and the actual recording
-    at that location is highlighted above in blue.}
+    data. \textbf{D.~Merged correlation model.}  We combine the
+    per-patient correlation matrices (Panel C) to obtain a single
+    full-brain correlation model that captures information contributed
+    by every patient.  Here we have sorted the rows and columns to
+    reflect $k$-means clustering labels~\citep[using
+    $k$=7;][]{YeoEtal11}, whereby we grouped locations based on their
+    correlations with the rest of the brain (i.e., rows of the matrix
+    displayed in the panel).  The boundaries denote the cluster
+    groups.  The rows and columns of Panel C have been sorted using
+    teh Panel D-derived cluster labels.  \textbf{E.~Reconstructing activity
+      throughout the brain.}  Given the observed recordings from the
+    given patient (shown in black; held-out recording is shown in
+    blue), along with a full-brain correlation model (Panel D), we
+    use Equation~\ref{eqn:reconstruction} to reconstruct the most
+    probable activity at the held-out location (red).}
   \label{fig:methods}
 \end{figure}
 
@@ -642,7 +648,7 @@ Fig.~\ref{fig:corrmap}B, D), electrodes are not placed uniformly
 throughout the brain.  For example, electrodes are more likely to be
 implanted in regions like the medial temporal lobe (MTL), and are
 rarely implanted in occipital cortex (Fig.~\ref{fig:density}A, B).
-Separately for each dataset, for each voxel in the XXX~mm$^3$ voxel
+Separately for each dataset, for each voxel in the 4~mm$^3$ voxel
 MNI152 brain, we computed the proportion of electrodes contained
 within a 20 MNI unit radius sphere centered on that voxel.  We defined
 the \textit{density} at that location as this proportion.  Across
@@ -667,30 +673,86 @@ sampling density, but rather may also reflect higher order properties
 of neural dynamics such as functional correlations between distant
 voxels~\citep{BetzEtal17b}.
 
-\textbf{JRM STOPPED HERE}  
-
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/density}
-  \caption{\textbf{Sampling density and reconstruction quality.}
-    \textbf{A. \& B. } The glass brain maps show sampling density by voxel location for dataset 1 and dataset 2. \textbf{C.}
-      Correlation of sampling density by voxel location for dataset 1 vs. dataset 2.}
+  \caption{\textbf{Electrode sampling density by location.}
+    \textbf{A.~Electrode sampling density by voxel in Dataset 1.} Each
+    voxel is colored by the proportion of total electrodes in the
+    dataset that are
+    located within a 20~MNI unit radius sphere centered on the given
+    voxel.  \textbf{B.~Electrode sampling density by voxel in Dataset
+      2.}  This panel displays the sampling density map for Dataset 2,
+    in the same format as Panel A.  \textbf{C.~Correspondence in
+      sampling density by voxel across Datasets 1 and 2.}  The
+    two-dimensional histogram displays the by-voxel densities in the
+    two Datasets, and the one-dimensional histograms display the
+    proportions of voxels in each dataset with the given density
+    value.  The correlation reported in the panel is across voxels in
+    the 4~mm$^3$ MNI brain.}
   \label{fig:density}
 \end{figure}
 
-In addition to exploring how reconstruction quality varies with
-location, we also wondered whether there might be effects of electrode
-placements on reconstruction quality.  For example, are there
-particular implantation locations that yield especially high
-reconstruction accuracies at other locations throughout the brain? To gain insights into this questions, we computed the average reconstruction correlation for each patient, then computed the average patient reconstruction correlation for any patients who had electrodes within a 20 MNI unit diameter sphere centered on each voxel location. The resulting maps highlight the locations of implanted electrodes from patients whose
-reconstructions were especially accurate  (Fig.~\ref{fig:informap}A and B). We found that the most informative locations were consistent across datasets which lends support to the notion that different electrode location are more informative about activity across patients (Fig.~\ref{fig:informap}C); $r = 0.22, p < 10^{-10}$).  The locations in dark red might therefore be good candidate
-implantation targets for neurosurgeons and neurologists who wish to
-use SuperEEG to reconstruct full-brain electrophysiological signals.
-The above findings, that one can infer brain activity throughout a person's brain 
-using recordings from a limited number of locations from that person's brain in conjunction with recordings from other people's brains, have deep
+In neurosurgical applications where one wishes to infer full-brain
+activity patterns, can our framework yield insights into where the
+electrodes should be placed?  A basic assumption of our approach (and
+of most prior ECoG work) is that electrode recordings are most
+informative about the neural activity near the recording surface of
+the electrode.  But if we consider that activity patterns throughout
+the brain are meaningfully correlated, are there particular
+implantation locations that, if present in a patient's brain, yield
+especially high reconstruction accuracies throughout the rest of the
+brain?  For example, one might hypothesize that brain structures that
+are heavily interconnected with many other structures could be more
+informative about full-brain activity patterns than comparatively
+isolated structures.
+
+To gain insights into whether particular electrode locations might be
+especially informative, we first computed the average reconstruction
+accuracy across all of each patient's electrodes (using the
+across-patients cross validation test; black histograms in
+Fig.~\ref{fig:corrmap}A and C).  We labeled each patient's electrodes
+in each dataset with the average reconstruction accuracy for that
+patient.  In other words, we assigned every electrode from each
+patient the same value, reflecting how well the activity patterns at
+those electrodes were reconstructed on average.  Next, for each voxel
+in the 4~mm$^3$ MNI brain, we computed the average value across any
+electrode (from any patient) that came within 20 MNI units of that
+voxel's center.  Effectively, we computed the average reconstruction
+accuracy across any patients with electrodes near each voxel, where
+the avearges were weighted to reflect patients who had more electrodes
+implanted near that location.
+
+\textbf{JRM STOPPED HERE}
+% - report most-informative locations (i.e. which brain structures?)
+% - can we say anything bout whether these most-informative regions are heavily
+% interconnected, e.g. perhaps from the resting state literature?
+
+
+To gain insights into this question, we
+computed the average reconstruction accuracy for each patient, then
+computed the average patient reconstruction correlation for any
+patients who had electrodes within a 20 MNI unit diameter sphere
+centered on each voxel location. The resulting maps highlight the
+locations of implanted electrodes from patients whose reconstructions
+were especially accurate (Fig.~\ref{fig:informap}A and B). We found
+that the most informative locations were consistent across datasets
+which lends support to the notion that different electrode location
+are more informative about activity across patients
+(Fig.~\ref{fig:informap}C); $r = 0.22, p < 10^{-10}$).  The locations
+in dark red might therefore be good candidate implantation targets for
+neurosurgeons and neurologists who wish to use SuperEEG to reconstruct
+full-brain electrophysiological signals.  The above findings, that one
+can infer brain activity throughout a person's brain using recordings
+from a limited number of locations from that person's brain in
+conjunction with recordings from other people's brains, have deep
 implications for the structure of brain data.  The first implication
 is that the correlational structure of different people's brain data
-is largely preserved across individuals. Despite recent evidence that different people have stable but reliably different resting state connectome~\cite{FinnEtal15}, our results suggest that the correlational structure of different people's brain data is preserved enough across individuals to provide meaningful information. 
+is largely preserved across individuals. Despite recent evidence that
+different people have stable but reliably different resting state
+connectome~\cite{FinnEtal15}, our results suggest that the
+correlational structure of different people's brain data is preserved
+enough across individuals to provide meaningful information.
 
 \begin{figure}
   \centering
