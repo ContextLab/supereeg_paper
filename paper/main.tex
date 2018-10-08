@@ -243,32 +243,38 @@ predictions within versus across tasks.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/methods}
-  \caption{\textbf{Methods overview.}  \textbf{A.  Electrode
+  \caption{\textbf{Methods overview.}  \textbf{A.~Electrode
       locations.}  Each dot reflects the location of a single
-    electrode in dataset 1, colored according to 7 factor labels (see
-    Panel D for details). One patient's electrode locations are
-    highlighted in black and the to-be-reconstructed recording
-    location is highlighted in red. \textbf{B. Radial basis function
-      (RBF).}  Each electrode contributed by the patient (black)
-    weights on the full set of locations under consideration (all dots
-    in Panel A, defined as $\bar{R}$ in the text).  The weights fall
-    off with positional distance (in MNI space) according to an RBF.
-    \textbf{C. Per-patient correlation matrices.}  After computing the
+    electrode implanted in the brain of a Dataset 1 patient.  A
+    held-out recording location from one patient is indicated in red,
+    and the patient's remaining electrodes are indicated in black.
+    The electrodes from the remaining patients are colored by
+    $k$-means cluster (computed using the full-brain correlation model
+    shown in Panel D).  \textbf{B.~Radial basis function kernel.}
+    Each electrode contributed by the patient (black) weights on the
+    full set of locations under consideration (all dots in Panel A,
+    defined as $\bar{R}$ in the text).  The weights fall off with
+    positional distance (in MNI space) according to an RBF.
+    \textbf{C.~Per-patient correlation matrices.}  After computing the
     pairwise correlations between the recordings from each patient's
     electrodes, we use RBF-weighted averages to estimate correlations
     between all locations in $\bar{R}$.  We obtain an estimated
     full-brain correlation matrix using each patient's
-    data. \textbf{D.  Combined correlation matrix.}  We estimate a
-    single full-brain correlation matrix by averaging the
-    patient-specific correlation matrices.  We sort the resulting
-    correlation matrix based on 7 factor labels obtained from k-means
-    clustering~\cite{YeoEtal11}). \textbf{E.  Reconstructing activity
-      throughout the brain.}  Given the observed activity from the
-    patient's electrodes and the estimated correlation matrix (Panel
-    D), we can compute a maximum likelihood estimate of the voltage
-    trace at any location in $\bar{R}$.  An example reconstruction (at
-    the red dot in Panel A) is shown in red, and the actual recording
-    at that location is highlighted above in blue.}
+    data. \textbf{D.~Merged correlation model.}  We combine the
+    per-patient correlation matrices (Panel C) to obtain a single
+    full-brain correlation model that captures information contributed
+    by every patient.  Here we have sorted the rows and columns to
+    reflect $k$-means clustering labels~\citep[using
+    $k$=7;][]{YeoEtal11}, whereby we grouped locations based on their
+    correlations with the rest of the brain (i.e., rows of the matrix
+    displayed in the panel).  The boundaries denote the cluster
+    groups.  The rows and columns of Panel C have been sorted using
+    the Panel D-derived cluster labels.  \textbf{E.~Reconstructing activity
+      throughout the brain.}  Given the observed recordings from the
+    given patient (shown in black; held-out recording is shown in
+    blue), along with a full-brain correlation model (Panel D), we
+    use Equation~\ref{eqn:reconstruction} to reconstruct the most
+    probable activity at the held-out location (red).}
   \label{fig:methods}
 \end{figure}
 
@@ -552,7 +558,7 @@ patient electrode correlations: $t(XXX) = XXX, p = XXX$).  This is an
 especially conservative test, given that the across-patient SuperEEG
 reconstructions exclude (from the correlation matrix estimates) all
 data from the patient whose data is being reconstructed.  We repeated
-each of these analyses on a second independent datset and found
+each of these analyses on a second independent dataset and found
 similar results (Fig.~\ref{fig:corrmap}B, D; within versus across
 reconstruction accuracy: $t(23) = 6.93, p < 10^{-5}$). We also
 replicated this result separately for each of the two experiments from
@@ -562,7 +568,7 @@ correlation models derived from \textit{other} patient's data yield
 higher reconstruction accuracy than correlation models derived from
 that patient, has two important implications.  First, it implies that
 distant electrodes provide additional predictive power to the data
-reconstructions beynd the information contained solely in nearby
+reconstructions beyond the information contained solely in nearby
 electrodes.  (This follows from the fact that each patient's
 electrodes are implanted in a unique set of locations, so for any
 given electrode the closest electrodes in the full dataset are likely
@@ -606,7 +612,7 @@ each patient was participating in each of two experiments (Experiment
 categorized list free recall task).  We wondered whether a correlation
 model trained using data only from one experiment might yield good
 predictions for data from the other experiment.  Further, we wondered
-about the extent to which it might be benefitial or harmful to combine
+about the extent to which it might be beneficial or harmful to combine
 data across tasks.
 
 To test the task-specificity of the SuperEEG-derived correlation
@@ -636,122 +642,181 @@ highest when constrained to within-task data, or data that includes a
 variety of tasks (e.g., Dataset 1, or combining across the two Dataset
 2 experiments).
 
-\textbf{JRM STOPPED HERE}  
-
-We also wondered whether reconstruction quality (measured as the
-correlation between the observed and reconstructed data) varied with
-the electrode locations (Fig.~\ref{fig:corrmap}B \& D). In general, reconstruction quality remained high throughout the brain. Although reconstruction accuracy appeared high in the medial temporal lobe, which is a common epileptic focus (and therefore a common target for electrode implantation), we observed a weak but statistically reliable negative correlation between reconstruction quality and electrode density (defined as the proportion of electrodes within 20 MNI units for each location; dataset 1: $r = -0.07, p < 10^{-5}$, dataset 2: $r = -0.16, p < 10^{-10}$). This provides some evidence that our reconstruction accuracy results cannot be driven only by volume conductance.  Qualitatively, it appeared that the distribution of electrodes was similar across the datasets, suggesting potential commonalities of target locations across patients and similarities in surgical decisions. Indeed, we found a relatively strong correlation between the electrode densities within the two datasets (defined as the proportion of electrodes within 20 MNI units for each 34686 voxels (Fig.~\ref{fig:density}A, B); $r = 0.57, p < 10^{-10}$).  
-
-
+Although both datasets we examined provide good full-brain coverage
+(when considering data from every patient; e.g.\
+Fig.~\ref{fig:corrmap}B, D), electrodes are not placed uniformly
+throughout the brain.  For example, electrodes are more likely to be
+implanted in regions like the medial temporal lobe (MTL), and are
+rarely implanted in occipital cortex (Fig.~\ref{fig:density}A, B).
+Separately for each dataset, for each voxel in the 4~mm$^3$ voxel
+MNI152 brain, we computed the proportion of electrodes contained
+within a 20 MNI unit radius sphere centered on that voxel.  We defined
+the \textit{density} at that location as this proportion.  Across
+Datasets 1 and 2, the electrode placement densities were similar
+(correlation by voxel: $r = 0.57, p < 10^{-10}$).  We wondered whether
+regions with good covererage might be associated with better
+reconstruction accuracy (e.g. Fig.~\ref{fig:corrmap}B, D indicate that
+many electrodes in the MTL have relatively high reconstruction
+accuracy, and occipital electrodes tend to have relatively low
+reconstruction accuracy).  To test whether this held more generally
+across the entire brain, for each dataset we computed the electrode
+placement density for each electrode from each patient (using the
+proportion of \textit{other} patients' electrodes within 20 MNI units
+of the given electrode).  We then correlated these density values with
+the across-patient reconstruction accuracies for each electrode.
+Contrary to our expectation, rather than positive correlations, we
+found weak (but reliable) negative correlations between reconstruction
+accuracy and density for both datasets (Dataset 1: $r = XXX, p = XXX$;
+Dataset 2: $r = -0.16, p < 10^{-10}$).  This indicates that the
+reconstruction accuracies we observed are not driven solely by
+sampling density, but rather may also reflect higher order properties
+of neural dynamics such as functional correlations between distant
+voxels~\citep{BetzEtal17b}.
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/density}
-  \caption{\textbf{Sampling density and reconstruction quality.}
-    \textbf{A. \& B. } The glass brain maps show sampling density by voxel location for dataset 1 and dataset 2. \textbf{C.}
-      Correlation of sampling density by voxel location for dataset 1 vs. dataset 2.}
+  \caption{\textbf{Electrode sampling density by location.}
+    \textbf{A.~Electrode sampling density by voxel in Dataset 1.} Each
+    voxel is colored by the proportion of total electrodes in the
+    dataset that are
+    located within a 20~MNI unit radius sphere centered on the given
+    voxel.  \textbf{B.~Electrode sampling density by voxel in Dataset
+      2.}  This panel displays the sampling density map for Dataset 2,
+    in the same format as Panel A.  \textbf{C.~Correspondence in
+      sampling density by voxel across Datasets 1 and 2.}  The
+    two-dimensional histogram displays the by-voxel densities in the
+    two Datasets, and the one-dimensional histograms display the
+    proportions of voxels in each dataset with the given density
+    value.  The correlation reported in the panel is across voxels in
+    the 4~mm$^3$ MNI brain.}
   \label{fig:density}
 \end{figure}
 
-In addition to exploring how reconstruction quality varies with
-location, we also wondered whether there might be effects of electrode
-placements on reconstruction quality.  For example, are there
-particular implantation locations that yield especially high
-reconstruction accuracies at other locations throughout the brain? To gain insights into this questions, we computed the average reconstruction correlation for each patient, then computed the average patient reconstruction correlation for any patients who had electrodes within a 20 MNI unit diameter sphere centered on each voxel location. The resulting maps highlight the locations of implanted electrodes from patients whose
-reconstructions were especially accurate  (Fig.~\ref{fig:informap}A and B). We found that the most informative locations were consistent across datasets which lends support to the notion that different electrode location are more informative about activity across patients (Fig.~\ref{fig:informap}C); $r = 0.22, p < 10^{-10}$).  The locations in dark red might therefore be good candidate
-implantation targets for neurosurgeons and neurologists who wish to
-use SuperEEG to reconstruct full-brain electrophysiological signals.
-The above findings, that one can infer brain activity throughout a person's brain 
-using recordings from a limited number of locations from that person's brain in conjunction with recordings from other people's brains, have deep
-implications for the structure of brain data.  The first implication
-is that the correlational structure of different people's brain data
-is largely preserved across individuals. Despite recent evidence that different people have stable but reliably different resting state connectome~\cite{FinnEtal15}, our results suggest that the correlational structure of different people's brain data is preserved enough across individuals to provide meaningful information. 
+In neurosurgical applications where one wishes to infer full-brain
+activity patterns, can our framework yield insights into where the
+electrodes should be placed?  A basic assumption of our approach (and
+of most prior ECoG work) is that electrode recordings are most
+informative about the neural activity near the recording surface of
+the electrode.  But if we consider that activity patterns throughout
+the brain are meaningfully correlated, are there particular
+implantation locations that, if present in a patient's brain, yield
+especially high reconstruction accuracies throughout the rest of the
+brain?  For example, one might hypothesize that brain structures that
+are heavily interconnected with many other structures could be more
+informative about full-brain activity patterns than comparatively
+isolated structures.
+
+To gain insights into whether particular electrode locations might be
+especially informative, we first computed the average reconstruction
+accuracy across all of each patient's electrodes (using the
+across-patients cross validation test; black histograms in
+Fig.~\ref{fig:corrmap}A and C).  We labeled each patient's electrodes
+in each dataset with the average reconstruction accuracy for that
+patient.  In other words, we assigned every electrode from each
+patient the same value, reflecting how well the activity patterns at
+those electrodes were reconstructed on average.  Next, for each voxel
+in the 4~mm$^3$ MNI brain, we computed the average value across any
+electrode (from any patient) that came within 20 MNI units of that
+voxel's center.  Effectively, we computed an \textit{information
+  score} for each voxel, reflecting the average reconstruction
+accuracy across any patients with electrodes near each voxel-- where
+the averages were weighted to reflect patients who had more electrodes
+implanted near that location. This yielded a single map for each
+dataset, highlighting regions that are especially promising
+implantation targets in terms of providing full-brain activity
+information via SuperEEG (Fig.~\ref{fig:informap}A, B).  Despite task
+and patient differences across the two datasets, we nonetheless found
+that the maps of the most promising implantation targets derived from
+both datasets were similar (voxelwise correlation between information
+scores across the two datasets: $r = XXX, p = XXX$).  While the
+correspondence between the two maps was not perfect, our finding that
+there were some commonalities between the two maps lends support to
+the notion that different brain areas are differently informative
+about full-brain activity patterns.  Further, regions like XXX, XXX,
+and XXX that exhibited strong information scores in both datasets may
+be especially promising implantation targets.
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/informap}
-  \caption{\textbf{Most informative electrode locations.} \textbf{A. \& B. } The glass
-    brain maps displays the average reconstruction correlations (by patient, across
-    all electrodes) for patients with electrodes within a 20 MNI unit diameter sphere centered on
-    each location for dataset 1 and dataset 2. \textbf{C.} Correlation between z-transformed correlations by voxel for dataset 1 vs. dataset 2.}
+  \caption{\textbf{Most informative electrode locations.}
+    \textbf{A. Dataset 1 information score by voxel.} The voxel colors
+    reflect the weighted average reconstruction accuracy across all
+    electrodes from any patients with at least one electrode within 20
+    MNI units of the given voxel.  {B. Dataset 2 information score by
+      voxel.}  This panel is in the same format as Panel A.
+    \textbf{C. Correspondence in information scores by voxel across
+      Datasets 1 and 2.}  Same format as Figure~\ref{fig:density}C.}
   \label{fig:informap}
 \end{figure}
 
-
 \section*{Discussion}
-%DISCUSSION POINTS
-%recap main approach
-SuperEEG infers full-brain activity patterns by leveraging
-correlations in those patterns of brain activity within and across people.  Although
-the approach may, in principle, be used to infer brain activity
-\textit{anywhere} in the brain, the inferences perform slightly better for
-regions with dense electrode sampling across patients.  (Taken to the logical extreme, we could not hope to accurately recover activity patterns from brain areas where no recordings existed from any patient.)   As more data
-are included in the inference procedure, this suggests that reconstruction accuracy should improve.
+Are our brain's networks static or dynamic?  And to what extent are
+the network properties of our brains stable across people and tasks?
+One body of work suggests that our brain's \textit{functional}
+networks are dynamic~\citep[e.g., ][]{MannEtal18},
+person-specific~\citep[e.g., ][]{FinnEtal15}, and
+task-specific~\citep[e.g., ][]{Turk13}.  In contrast, although the
+gross anatomical structure of our brains changes meaningfully over the
+course of years as our brains develop, on the timescales of typical
+neuroimaging experiments (i.e., hours to days) our anatomical networks
+are largely stable~\citep[e.g., ][]{CaseEtal00}.  Further, many
+aspects of brain anatomy, including white matter structure, is largely
+preserved across people~\citep[e.g., ][]{TalaTour88, JahaEtal13,
+  MoriEtal08} There are several possible means of reconciling this
+apparent inconsistency between dynamic person- and task-specific
+functional networks versus stable anatomical networks.  For example,
+relatively small magnitude anatomical differences across people may be
+reflected in reliable functional connectivity differences.  Along
+these lines, one recent study found that diffusion tensor imaging
+(DTI) structural data is similar across people, but may be used to
+predict person-specific resting state functional connectivity
+data~\citep{BeckEtal18}.  Similarly, other work indicates that
+task-specific functional connectivity may be predicted by resting
+state functional connectivity data~\citep{ColeEtal16, TavoEtal16}.  Another
+(potentially complementary) possibility is that our functional
+networks are constrained by anatomy, but nevertheless exhibit
+(potentially rapid) task-dependent changes~\citep[e.g.,
+][]{SporBetz16}.
 
-%why does it work?  redundancy of brain
-A fundamental assumption of the SuperEEG algorithm is that the data
-covariance matrix is stable over time and across people.  This is a
-useful simplification.  However, a growing body of evidence from the
-fMRI community suggests that the data covariance matrix changes in
-meaningful ways over time (for example, the data covariance matrix
-changes from moment-to-moment during story listening, serving as a
-unique ``fingerprint'' for each moment of the story; further, these
-task-driven timepoint-specific covariance fingerprints appear to be
-largely preserved across people~\cite{SimoEtal16, MannEtal17}).  These
-findings indicate that the full-brain covariance matrix is not stable
-over time.  Other recent work has shown that people's resting state
-connectivity matrices may be used to uniquely identify individuals and
-predict fluid intelligence scores~\cite{FinnEtal15}.  This indicates
-that the full-brain covariance matrix is not stable across people.  If
-the fundamental stability assumptions that SuperEEG relies on are
-violated, how can the SuperEEG algorithm still accurately recover LFP
-data?  It is important to recognize that the fact that variability
-(over time or across people) is predictive (e.g., of cognitive states
-during story listening or fluid intelligence scores) does not
-necessarily mean that this variability is large in magnitude.  Rather,
-we have long known that brain structure is tightly preserved across
-individuals (and over time, at least on the timescale of typical
-clinical and experimental recording sessions), and any functional
-changes must occur within the framework of the underlying structural
-anatomy.  Nevertheless, one could imagine future improvements to the
-SuperEEG approach that leverage resting state fMRI or structural data
-[e.g., diffusion tensor imaging (DTI)] to estimate Bayesian priors over
-the correlation matrices inferred, in the current framing, using only
-ECoG data.  Further, relaxing the assumption that the covariance
-matrix is stable (over time and/or across people), and/or
-incorporating more detailed brain conductance models (e.g., informed
-by structural MRI scans) may improve the predictive performance of the
-approach.
+Here we have taken a model-based approach to studying whether high
+spatiotemporal resolution activity patterns throughout the human brain
+may be explained by a static connectome model that is shared across
+people and tasks.  Specifically, we trained a model to take in
+recordings from a subset of brain locations, and then predicted
+activity patterns during the same interval, but at \textit{other}
+locations that were held out from the model.  Our model, based on
+Gaussian process regression, was built on three general hypotheses
+about the nature of the correlational structure of neural activity
+(each of which we tested).  First, we hypothesized that functional
+correlations are stable over time and across tasks.  We found that,
+although aspects of the patients' functional correlations that were
+stable across tasks, we achieved better reconstruction accuracy when
+we trained the model on within-task data~\citep[we acknowledge that
+our general approach could potentially be extended to better model
+across-task changes, following][and others]{ColeEtal16, TavoEtal16}.
+Second, we hypothesized that some of the correlational structure of
+people's brain activity is similar across individuals.  Consistent
+with this hypothesis, our model explained the data best when we
+trained the correlation model using data from \textit{other}
+patients-- even when compared to a correlation model trained using the
+same patient's data.  Third, we resolved ambiguities in the data by
+hypothesizing that neural activity from nearby sources will tend to be
+similar, all else being equal.  This hypothesis was supported through
+our finding that all of the models we trained that incorporated this
+spatial smoothness assumption predicted held-out data well above chance.
 
-
-
-%This technique relies on recordings from many patients performing the
-%same basic cognitive task.  To what extent do these findings
-%generalize across studies?  For example, could one combine recordings
-%from several studies to improve our ability to reconstruct neural
-%activity?
-One potential limitation of the SuperEEG approach is that the above
-assumption of covariance stability across people may be violated even
-more if different patients are performing different cognitive tasks.
-To understand of the extent to which the current findings generalize across
-cognitive tasks, we replicated our initial findings using a dataset in which patients participated in two tasks, and limited the training data to either within task, across task, or using both tasks. Since we found the most accurate reconstructions using task-specific data, this would suggest building up new databases for estimating each task-specific covariance
-matrix.  Or, using a more sophisticated approach, one could create a
-hierarchical model whereby each task-specific covariance matrix was
-modeled as a perturbation of a ``global'' task-unspecific covariance
-matrix (which could in turn be informed by fMRI or DTI data).
-% Alternatively, if the covariance matrix is stable across tasks, this would
-% suggest that recordings from multiple studies could be combined to
-% improve the overall reconstruction accuracy.
-
-A second potential limitation of the SuperEEG approach is that it
-does not provide a natural means of estimating the precise timing of
-single-neuron action potentials.  Prior work has shown that gamma band
-and broadband activity in the LFP may be used to estimate the firing
-rates of neurons that underly the population contributing to the
-LFP~\cite{MannEtal09}.  Because SuperEEG reconstructs LFPs throughout
-the brain, one could in principle use gamma or broadband power in the
-reconstructed signals to estimate the corresponding firing rates
-(though not the timings of individual action potentials).
+One potential limitation of our approach is that it does not provide a
+natural means of estimating the precise timing of single-neuron action
+potentials.  Prior work has shown that gamma band and broadband
+activity in the LFP may be used to estimate the firing rates of
+neurons that underly the population contributing to the
+LFP~\cite{MillEtal08, MannEtal09, JacoEtal10, CronEtal11}.  Because
+SuperEEG reconstructs LFPs throughout the brain, one could in
+principle use gamma or broadband power in the reconstructed signals to
+estimate the corresponding firing rates (though not the timings of
+individual action potentials).
 
 Beyond providing a means of estimating ongoing activity throughout the
 brain using already implanted electrodes, our work also has
@@ -760,7 +825,7 @@ Electrodes are typically implanted to maximize coverage of suspected
 epileptogenic tissue.  However, our findings suggest that this approach
 could be further optimized.  Specifically, one could leverage not only
 the non-invasive recordings taken during an initial monitoring period
-(as is currently done), but also recordings collected from other
+(as is currently done routinely), but also recordings collected from other
 patients.  We could then ask: given everything we know about the other
 patients and from the scalp recordings of this new patient, where
 should we place a fixed number of electrodes to maximize our ability
@@ -769,7 +834,6 @@ from different locations are differently informative in terms of
 reconstructing the spatiotemporal patterns throughout the brain.
 This property might be leveraged in decisions about where to
 surgically implant electrodes in future patients.
-
 
 \section*{Concluding remarks}
 Over the past several decades, neuroscientists have begun to leverage
@@ -785,22 +849,35 @@ someday understanding, the full spatiotemporal structure of human
 neural activity.
 
 \section*{Code availability}
-We have released an open-source SuperEEG Python toolbox.  All of the code used in this manuscript is on GitHub, and the code may be shared using a GitHub account accessible to the reviewers upon request.
+We have published an open-source toolbox implementing the SuperEEG
+algorithm.  It may be downloaded \href{https://supereeg.readthedocs.io/en/latest/}{\underline{here}}.
 
 \section*{Data availability}
-The dataset analyzed in this study was generously shared by Michael J. Kahana.  A portion of the dataset may be downloaded \href{http://memory.psych.upenn.edu/Request_EEG_access?paper=SedeEtal03}{\underline{here}}.
+The dataset analyzed in this study was generously shared by Michael Kahana.  A portion of Dataset 1 may be downloaded
+\href{http://memory.psych.upenn.edu/Request_EEG_access?paper=SedeEtal03}{\underline{here}}.
+Dataset 2 may be downloaded
+\href{http://memory.psych.upenn.edu/Request_EEG_access?paper=EzzyEtal17}{\underline{here}}.
+
 \section*{Acknowledgements}
-We are grateful for useful discussions with Luke J. Chang and Matthijs van der Meer.  We are also grateful to Michael J. Kahana for generously sharing
-the ECoG dataset we analyzed in our paper, which was collected under
-NIMH grant MH55687 to MJK.  Our work was also supported in part by NSF EPSCoR Award Number 1632738.  The content is solely the responsibility of the authors and does not necessarily represent the official views of our supporting organizations.
+We are grateful for useful discussions with Luke J. Chang, Uri Hasson,
+Josh Jacobs, Michael Kahana, and Matthijs van der Meer.  We are also
+grateful to Michael Kahana for generously sharing the ECoG data we
+analyzed in our paper, which was collected under NIMH grant MH55687
+and DARPA RAM Cooperative Agreement N66001-14-2-4-032, both to MJK.
+Our work was also supported in part by NSF EPSCoR Award Number 1632738
+and by a sub-award of DARPA RAM Cooperative Agreement
+N66001-14-2-4-032 to JRM.  The content is solely the responsibility of
+the authors and does not necessarily represent the official views of
+our supporting organizations.
+
 \section*{Author Contributions}
 J.R.M conceived and initiated the project. L.L.W.O. and A.C.H. performed the analyses. J.R.M. and L.L.W.O. wrote the manuscript.
 
 \section*{Author Information}
-Reprints and permissions information is available at www.nature.com/reprints.  The authors declare no competing financial interests.  Readers are welcome to comment on the online version of the paper.  Publisher's note: Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.  Correspondence and requests for materials should be addressed to J.R.M.  (jeremy.r.manning@dartmouth.edu).
+Reprints and permissions information is available at www.nature.com/reprints.  The authors declare no competing financial interests.  Readers are welcome to comment on the online version of the paper.  Publisher's note: Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.  Correspondence and requests for materials should be addressed to J.R.M. (jeremy.r.manning@dartmouth.edu).
 
 \bibliography{CDL-bibliography/memlab.bib}
-\bibliographystyle{Science}
+\bibliographystyle{apa}
 
 \clearpage
 
