@@ -20,6 +20,7 @@ import matplotlib.ticker as mtick
 import matplotlib.cm as cm
 import seaborn as sns
 from scipy import stats
+import math
 
 ############## General functions #################
 
@@ -142,21 +143,24 @@ def plot_times_series(time_data_df, lower_bound, upper_bound, outfile = None):
     ax.legend(['Observed', 'Reconstructed'], fontsize=21)
     ax.set_xlabel("Time (s)", fontsize=21)
     ax.set_ylabel("Voltage (normalized)", fontsize=21)
-
-    xvals = ax.get_xticks()
-    #ax.set_xticklabels([np.round(x, 4) for x in xvals])
-
-    ax.set_xticklabels([np.round(x / 400, 4) for x in xvals])
-    for index, label in enumerate(ax.xaxis.get_ticklabels()):
-        if index % 2 == 0:
-            label.set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
     ax.tick_params(axis='x', labelsize=18)
     ax.tick_params(axis='y', labelsize=18)
+    xvals = ax.get_xticks()
+    print(xvals)
+    xvals = np.asarray([750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750])
+
+    #ax.set_yticklabels([int(np.round(x / 2, 1)) for x in yvals])
+    #ax.set_xticklabels([math.ceil(np.round(x / 250, 4)) for x in xvals])
+    ax.set_xticklabels([np.round(x / 250, 4) for x in xvals])
+
+    # for index, label in enumerate(ax.xaxis.get_ticklabels()):
+    #     if index == 0:
+    #         print(index)
+    #         label.set_visible(True)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
 
     plt.tight_layout()
-
     if not outfile is None:
         plt.savefig(outfile)
     else:
@@ -566,8 +570,8 @@ def plot_2d_corr_hist(df, outfile=None):
             horizontalalignment='left',
             verticalalignment='top',
             transform=ax.transAxes, fontsize=24)
-    ax.set_xlabel("Dataset 1 \n z-transformed correlations", fontsize=30)
-    ax.set_ylabel("Dataset 2 \n z-transformed correlations", fontsize=30)
+    ax.set_xlabel("Dataset 1 \n per-voxel information scores", fontsize=30)
+    ax.set_ylabel("Dataset 2 \n per-voxel information scores", fontsize=30)
     ax.tick_params(axis='x', labelsize=24)
     ax.tick_params(axis='y', labelsize=24)
     ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
