@@ -730,25 +730,28 @@ and patient differences across the two datasets, we nonetheless found
 that the maps of the most promising implantation targets derived from
 both datasets were similar (voxelwise correlation between information
 scores across the two datasets: $r = XXX, p = XXX$).  While the
-correspondence between the two maps was not perfect, our finding that there were
-some commonalities between the two maps lends support to the notion
-that different brain areas are differently informative about
-full-brain activity patterns.  Further, regions like XXX and XXX that
-exhibited strong information scores in both datasets may be especially
-promising implantation targets.
-
-\textbf{JRM STOPPED HERE}
+correspondence between the two maps was not perfect, our finding that
+there were some commonalities between the two maps lends support to
+the notion that different brain areas are differently informative
+about full-brain activity patterns.  Further, regions like XXX, XXX,
+and XXX that exhibited strong information scores in both datasets may
+be especially promising implantation targets.
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/informap}
-  \caption{\textbf{Most informative electrode locations.} \textbf{A. \& B. } The glass
-    brain maps displays the average reconstruction correlations (by patient, across
-    all electrodes) for patients with electrodes within a 20 MNI unit diameter sphere centered on
-    each location for dataset 1 and dataset 2. \textbf{C.} Correlation between z-transformed correlations by voxel for dataset 1 vs. dataset 2.}
+  \caption{\textbf{Most informative electrode locations.}
+    \textbf{A. Dataset 1 information score by voxel.} The voxel colors
+    reflect the weighted average reconstruction accuracy across all
+    electrodes from any patients with at least one electrode within 20
+    MNI units of the given voxel.  {B. Dataset 2 information score by
+      voxel.}  This panel is in the same format as Panel A.
+    \textbf{C. Correspondence in information scores by voxel across
+      Datasets 1 and 2.}  Same format as Figure~\ref{fig:density}C.}
   \label{fig:informap}
 \end{figure}
 
+\textbf{JRM STOPPED HERE}
 
 \section*{Discussion}
 %DISCUSSION POINTS
@@ -769,7 +772,7 @@ meaningful ways over time (for example, the data covariance matrix
 changes from moment-to-moment during story listening, serving as a
 unique ``fingerprint'' for each moment of the story; further, these
 task-driven timepoint-specific covariance fingerprints appear to be
-largely preserved across people~\cite{SimoEtal16, MannEtal17}).  These
+largely preserved across people~\cite{SimoEtal16, MannEtal18}).  These
 findings indicate that the full-brain covariance matrix is not stable
 over time.  Other recent work has shown that people's resting state
 connectivity matrices may be used to uniquely identify individuals and
@@ -872,7 +875,7 @@ J.R.M conceived and initiated the project. L.L.W.O. and A.C.H. performed the ana
 Reprints and permissions information is available at www.nature.com/reprints.  The authors declare no competing financial interests.  Readers are welcome to comment on the online version of the paper.  Publisher's note: Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.  Correspondence and requests for materials should be addressed to J.R.M.  (jeremy.r.manning@dartmouth.edu).
 
 \bibliography{CDL-bibliography/memlab.bib}
-\bibliographystyle{Science}
+\bibliographystyle{apa}
 
 \clearpage
 
