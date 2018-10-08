@@ -1,3 +1,98 @@
+% old discussion section
+
+%DISCUSSION POINTS
+%recap main approach
+SuperEEG infers full-brain activity patterns by leveraging
+correlations in those patterns of brain activity within and across people.  Although
+the approach may, in principle, be used to infer brain activity
+\textit{anywhere} in the brain, the inferences perform slightly better for
+regions with dense electrode sampling across patients.  (Taken to the logical extreme, we could not hope to accurately recover activity patterns from brain areas where no recordings existed from any patient.)   As more data
+are included in the inference procedure, this suggests that reconstruction accuracy should improve.
+
+%why does it work?  redundancy of brain
+A fundamental assumption of the SuperEEG algorithm is that the data
+covariance matrix is stable over time and across people.  This is a
+useful simplification.  However, a growing body of evidence from the
+fMRI community suggests that the data covariance matrix changes in
+meaningful ways over time (for example, the data covariance matrix
+changes from moment-to-moment during story listening, serving as a
+unique ``fingerprint'' for each moment of the story; further, these
+task-driven timepoint-specific covariance fingerprints appear to be
+largely preserved across people~\cite{SimoEtal16, MannEtal18}).  These
+findings indicate that the full-brain covariance matrix is not stable
+over time.  Other recent work has shown that people's resting state
+connectivity matrices may be used to uniquely identify individuals and
+predict fluid intelligence scores~\cite{FinnEtal15}.  This indicates
+that the full-brain covariance matrix is not stable across people.  If
+the fundamental stability assumptions that SuperEEG relies on are
+violated, how can the SuperEEG algorithm still accurately recover LFP
+data?  It is important to recognize that the fact that variability
+(over time or across people) is predictive (e.g., of cognitive states
+during story listening or fluid intelligence scores) does not
+necessarily mean that this variability is large in magnitude.  Rather,
+we have long known that brain structure is tightly preserved across
+individuals (and over time, at least on the timescale of typical
+clinical and experimental recording sessions), and any functional
+changes must occur within the framework of the underlying structural
+anatomy.  Nevertheless, one could imagine future improvements to the
+SuperEEG approach that leverage resting state fMRI or structural data
+[e.g., diffusion tensor imaging (DTI)] to estimate Bayesian priors over
+the correlation matrices inferred, in the current framing, using only
+ECoG data.  Further, relaxing the assumption that the covariance
+matrix is stable (over time and/or across people), and/or
+incorporating more detailed brain conductance models (e.g., informed
+by structural MRI scans) may improve the predictive performance of the
+approach.
+
+
+
+%This technique relies on recordings from many patients performing the
+%same basic cognitive task.  To what extent do these findings
+%generalize across studies?  For example, could one combine recordings
+%from several studies to improve our ability to reconstruct neural
+%activity?
+One potential limitation of the SuperEEG approach is that the above
+assumption of covariance stability across people may be violated even
+more if different patients are performing different cognitive tasks.
+To understand of the extent to which the current findings generalize across
+cognitive tasks, we replicated our initial findings using a dataset in which patients participated in two tasks, and limited the training data to either within task, across task, or using both tasks. Since we found the most accurate reconstructions using task-specific data, this would suggest building up new databases for estimating each task-specific covariance
+matrix.  Or, using a more sophisticated approach, one could create a
+hierarchical model whereby each task-specific covariance matrix was
+modeled as a perturbation of a ``global'' task-unspecific covariance
+matrix (which could in turn be informed by fMRI or DTI data).
+% Alternatively, if the covariance matrix is stable across tasks, this would
+% suggest that recordings from multiple studies could be combined to
+% improve the overall reconstruction accuracy.
+
+A second potential limitation of the SuperEEG approach is that it
+does not provide a natural means of estimating the precise timing of
+single-neuron action potentials.  Prior work has shown that gamma band
+and broadband activity in the LFP may be used to estimate the firing
+rates of neurons that underly the population contributing to the
+LFP~\cite{MannEtal09}.  Because SuperEEG reconstructs LFPs throughout
+the brain, one could in principle use gamma or broadband power in the
+reconstructed signals to estimate the corresponding firing rates
+(though not the timings of individual action potentials).
+
+Beyond providing a means of estimating ongoing activity throughout the
+brain using already implanted electrodes, our work also has
+implications for where to place the electrodes in the first place.
+Electrodes are typically implanted to maximize coverage of suspected
+epileptogenic tissue.  However, our findings suggest that this approach
+could be further optimized.  Specifically, one could leverage not only
+the non-invasive recordings taken during an initial monitoring period
+(as is currently done), but also recordings collected from other
+patients.  We could then ask: given everything we know about the other
+patients and from the scalp recordings of this new patient, where
+should we place a fixed number of electrodes to maximize our ability
+to map seizure foci?  As shown in Figure~\ref{fig:informap}, recordings
+from different locations are differently informative in terms of
+reconstructing the spatiotemporal patterns throughout the brain.
+This property might be leveraged in decisions about where to
+surgically implant electrodes in future patients.
+
+%%%%
+
 \section*{Introduction}
 % JRM thoughts:
 % - Tie in stats from supplemental analyses.  Fig S4: total number of
