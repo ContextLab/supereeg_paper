@@ -14,12 +14,10 @@
 \textheight 21cm
 \footskip 1.0cm
 
-
-\newcommand{\taskrecon}{S1}
-\newcommand{\perexpcorrmaps}{S2}
-\newcommand{\perexptaskrecon}{S3}
-\newcommand{\perexptaskreconseparated}{S4}
-\newcommand{\suppstats}{S5}
+\newcommand{\perexpcorrmaps}{S1}
+\newcommand{\perexptaskrecon}{S2}
+\newcommand{\perexptaskreconseparated}{S3}
+\newcommand{\suppstats}{S4}
 
 % Include your paper's title here
 
@@ -421,24 +419,13 @@ Figure~\ref{fig:recon}A displays the observed LFP from the red
 electrode in Figure~\ref{fig:methods}A (red), and its associated
 reconstruction (blue), during a 5~s time window during one of the
 example patient's six recording sessions.  The two traces match
-closely ($r = XXX, p = XXX$).
-%Where the traces do not align, the predicted
-%trace tends to be rounded towards zero, reflecting the zero-mean prior
-%implicit in Equation~\ref{eqn:reconstruction} (paired $t$-test
-%comparing absolute values of actual versus predicted voltages:
-%$t(XXX) = XXX, p = XXX$).
-Figure~\ref{fig:recon}B displays a
+closely ($r = XXX, p = XXX$).  Figure~\ref{fig:recon}B displays a
 two-dimensional histogram of the actual versus reconstructed voltages
-for the entire 14.2 total hours of recordings from the example electrode
-(correlation: $r = XXX, p = XXX$).
-%Like in the shorter example trace
-%shown in panel A, the reconstructed voltages throughout the full
-%recording tended to be smaller in magnitude than the original
-%recording ($t(XXX) = XXX, p = XXX$).
-This example confirms that the SuperEEG algorithm recovers the
-recordings from this single electrode well.  Next, we used this
-general approach to quantify the algorithm's performance across the
-full dataset.
+for the entire 14.2 total hours of recordings from the example
+electrode (correlation: $r = XXX, p = XXX$).  This example confirms
+that the SuperEEG algorithm recovers the recordings from this single
+electrode well.  Next, we used this general approach to quantify the
+algorithm's performance across the full dataset.
 
 %sample trace & reconstruction, several frames of activity snapshot?
 \begin{figure}
