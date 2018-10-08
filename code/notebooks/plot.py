@@ -138,7 +138,7 @@ def plot_times_series(time_data_df, lower_bound, upper_bound, outfile = None):
     fig, ax = plt.subplots()
     fig.set_size_inches(10, 8)
     sns.set_style("white")
-    time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['actual'].plot(ax=ax, color='k', lw=1, fontsize=21)
+    time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['actual'].plot(ax=ax, color='b', lw=1, fontsize=21)
     time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['predicted'].plot(ax=ax, color='r', lw=1)
     ax.legend(['Observed', 'Reconstructed'], fontsize=21)
     ax.set_xlabel("Time (s)", fontsize=21)
@@ -149,14 +149,8 @@ def plot_times_series(time_data_df, lower_bound, upper_bound, outfile = None):
     print(xvals)
     xvals = np.asarray([750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750])
 
-    #ax.set_yticklabels([int(np.round(x / 2, 1)) for x in yvals])
-    #ax.set_xticklabels([math.ceil(np.round(x / 250, 4)) for x in xvals])
     ax.set_xticklabels([np.round(x / 250, 4) for x in xvals])
 
-    # for index, label in enumerate(ax.xaxis.get_ticklabels()):
-    #     if index == 0:
-    #         print(index)
-    #         label.set_visible(True)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
 
