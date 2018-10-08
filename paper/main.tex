@@ -1,33 +1,12 @@
-% Use only LaTeX2e, calling the article.cls class and 12-point type.
-
 \documentclass[11pt]{article}
-
-% Users of the {thebibliography} environment or BibTeX should use the
-% scicite.sty package, downloadable from *Science* at
-% www.sciencemag.org/about/authors/prep/TeX_help/ .
-% This package should properly format in-text
-% reference calls and reference-list numbers.
-
-%\usepackage{scicite}
 \usepackage[numbers, square, sort, compress]{natbib}
-
-% Use times if you have the font installed; otherwise, comment out the
-% following line.
-
-\usepackage{times}
+\usepackage{newpxtext,newpxmath}
+\usepackage[T1]{fontenc}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage[left]{lineno}
 \linenumbers
-% The preamble here sets up a lot of new/revised commands and
-% environments.  It's annoying, but please do *not* try to strip these
-% out into a separate .sty file (which could lead to the loss of some
-% information when we convert the file to other formats).  Instead, keep
-% them in the preamble of your main LaTeX source file.
-
-
-% The following parameters seem to provide a reasonable page setup.
 
 \topmargin 0.0cm
 \oddsidemargin 0.2cm
@@ -36,69 +15,29 @@
 \footskip 1.0cm
 
 
-
-% If your reference list includes text notes as well as references,
-% include the following line; otherwise, comment it out.
-
-\renewcommand\refname{References and Notes}
-
-% The following lines set up an environment for the last note in the
-% reference list, which commonly includes acknowledgments of funding,
-% help, etc.  It's intended for users of BibTeX or the {thebibliography}
-% environment.  Users who are hand-coding their references at the end
-% using a list environment such as {enumerate} can simply add another
-% item at the end, and it will be numbered automatically.
-
-\newcounter{lastnote}
-\newenvironment{scilastnote}{%
-\setcounter{lastnote}{\value{enumiv}}%
-\addtocounter{lastnote}{+1}%
-\begin{list}
-{\arabic{lastnote}.}
-{\setlength{\leftmargin}{.22in}}
-{\setlength{\labelsep}{.5em}}}
-{\end{list}}
-
 \newcommand{\taskrecon}{S1}
 \newcommand{\perexpcorrmaps}{S2}
 \newcommand{\perexptaskrecon}{S3}
 \newcommand{\perexptaskreconseparated}{S4}
+\newcommand{\suppstats}{S5}
 
 % Include your paper's title here
 
 \title{Towards human SuperEEG} 
-
-
-% Place the author information here.  Please hand-code the contact
-% information and notecalls; do *not* use \footnote commands.  Let the
-% author contact information appear immediately below the author names
-% as shown.  We would also prefer that you don't change the type-size
-% settings shown here.
-
-\author
-{Lucy L. W. Owen$^{1}$, Andrew C. Heusser$^{1, 2}$, and Jeremy R. Manning$^{1\ast}$\\\\
+\author{
+  Lucy L. W. Owen$^{1}$,
+  Andrew C. Heusser$^{1, 2}$, and
+  Jeremy R. Manning$^{1\ast}$\\\\
 $^{1}$Department of Psychological and Brain Sciences, Dartmouth College,\\
 Hanover, NH 03755, USA\\
 $^{2}$Akili Interactive,\\
 Boston, MA 02110, USA}
 
-% Include the date command, but leave its argument blank.
-
 \date{}
-
-
-
-%%%%%%%%%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%%%%%
-
 
 \begin{document} 
 
-% Double-space the manuscript.
-
 \baselineskip24pt
-
-% Make the title.
-
 \maketitle 
 
 \begin{abstract}
@@ -115,10 +54,10 @@ Boston, MA 02110, USA}
   that (all else being equal) neural activity at nearby locations will
   tend to be similar.  One can then ask, for an arbitrary individual's
   brain: given recordings from a limited set of locations in that
-  individual's brain, along with the observed spatial correlations in
-  other people's recordings, what would recordings most likely have
-  looked like at \textit{other} locations in that individual's
-  brain?\\\\
+  individual's brain, along with the observed spatial correlations
+  learned from other people's recordings, how much can be inferred
+  about ongoing activity at \textit{other} locations in that
+  individual's brain?\\\\
   \footnotesize{\textbf{Keywords: Electrocorticography (ECoG),
       intracranial electroencephalography (iEEG), local field
       potential (LFP), epilepsy, maximum likelihood estimation,
@@ -138,7 +77,7 @@ approach (due to requiring work with neurosurgical patients) is to
 record from electrodes implanted directly onto the cortical surface
 (electrocorticography; ECoG) or into deep brain structures
 (intracranial EEG; iEEG).  However, these intracranial approaches also
-require compromise: the high temporal and spatial resolutions of
+require compromise: the high spatiotemporal resolutions of
 intracranial recordings comes at the cost of substantially reduced
 brain coverage, since safety considerations limit the number of
 electrodes one may implant in a given patient's brain.  Further, the
@@ -168,7 +107,7 @@ obtaining adequate signal quality often requires averaging the
 measured responses over tens to hundreds of responses or trials
 (e.g., see review by~\cite{HillEtal05}).
 
-Another approach to obtaining high spatial and temporal resolution
+Another approach to obtaining high spatiotemporal resolution
 neural data has been to collect fMRI and EEG data simultaneously.
 Simultaneous fMRI-EEG has the potential to balance the high spatial
 resolution of fMRI with the high temporal resolution of scalp EEG,
@@ -177,7 +116,7 @@ however, the signal quality of both recordings suffers substantially
 when the two techniques are applied simultaneously (e.g., see review
 by~\cite{HustEtal12}).  In addition, the experimental designs that are
 ideally suited to each technique individually are somewhat at odds.
-For example, fMRI experiments typically lock stimulus presentation
+For example, fMRI experiments often lock stimulus presentation
 events to the regularly spaced image acquisition time (TR), which
 maximizes the number of post-stimulus samples.  By contrast, EEG
 experiments typically employ jittered stimulus presentation times to
@@ -216,29 +155,31 @@ collected dataset comprising multi-session intracranial recordings.
 Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
 patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
-  MannEtal12}.  Each recording session lasted from XXX--XXX hours, and
-includes data recorded roughly from when the patients woke up each
-morning, to before they went to sleep at the end of each day.  In
-addition to typical bed-ridden hospital patient activities (e.g.,
-lying in bed, reading, watching television, using personal electronic
-devices, listening to music, visiting with family and friends, etc.),
-the patients also performed a variety of experimental cognitive tasks
-throughout their day (primarily list-learning memory tasks).  For the
-purposes of the Dataset 1 analyses presented here, we aggregated all
-data across each recording session, ignoring the particular activities
-or tasks the patients were performing at any given moment.  We used
-Dataset 1 to develop and debug our main SuperEEG approach, and to
-examine the extent to which SuperEEG might be able to generate
-task-general predictions.  Dataset 2 comprised multi-session
-recordings from XXX electrodes implanted in the brains of XXX epilepsy
-patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17,
-  LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  Whereas
-Dataset 1 included recordings taken during a wide variety of
-behaviors, Dataset 2 included recordings taken as each patient
-performed each of two memory tasks: a random word list free recall
-task and a categorized word list free recall task.  We used Dataset 2
-to further examine the ability of SuperEEG to generalize its
-predictions within versus across tasks.
+  MannEtal12}.  Each recording session lasted from XXX--XXX hours
+(Fig.~\suppstats A), and includes data recorded roughly from when the
+patients woke up each morning, to before they went to sleep at the end
+of each day.  In addition to typical bed-ridden hospital patient
+activities (e.g., lying in bed, reading, watching television, using
+personal electronic devices, listening to music, visiting with family
+and friends, etc.), the patients also performed a variety of
+experimental cognitive tasks throughout their day (primarily
+list-learning memory tasks).  For the purposes of the Dataset 1
+analyses presented here, we aggregated all data across each recording
+session, ignoring the particular activities or tasks the patients were
+performing at any given moment.  We used Dataset 1 to develop our main
+SuperEEG approach, and to examine the extent to which SuperEEG might
+be able to generate task-general predictions.  Dataset 2 comprised
+multi-session recordings from XXX electrodes implanted in the brains
+of XXX epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
+  KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18,
+  KuceEtal18}.  Each recording session lasted from XXX--XXX hours
+(Fig.~\suppstats B).  Whereas Dataset 1 included recordings taken during a
+wide variety of behaviors, Dataset 2 included recordings taken as each
+patient performed each of two memory tasks: a random word list free
+recall task and a categorized word list free recall task.  We used
+Dataset 2 to further examine the ability of SuperEEG to generalize its
+predictions within versus across tasks.  Figure~\suppstats~provides
+additional details on both datasets.
 
 \begin{figure}
   \centering
@@ -291,7 +232,7 @@ patient's recording sessions.  We also excluded any patients with
 fewer than 2 electrodes that passed this criteria, as the SuperEEG
 algorithm requires measuring correlations between 2 or more electrodes
 from each patient.  For Dataset 1, this yielded clean recordings from
-4168 electrodes implanted throughout the brains of 67 patients
+XXX electrodes implanted throughout the brains of XXX patients
 (Fig.~\ref{fig:methods}A); for Dataset 2, this yielded clean
 recordings from 2975 electrodes from 24 patients.  Each individual
 patient contributes electrodes from a limited set of brain locations,
@@ -332,18 +273,18 @@ although this could in theory be optimized, e.g., using cross
 validation or a formal model~\citep[e.g.,][]{MannEtal18}.
 
 A second mechanism whereby a given region $x$ can contribute to the
-recording at $\eta$ is through anatomical connections between
-structures near $x$ and $\eta$.  We use spatial correlations in the
-data to estimate these anatomical connections~\citep{BeckEtal18}.  Let
-$\bar{R}$ be the set of locations at which we wish to estimate local
-field potentials, and let $R_{s}$ be set of locations at which we
-observe local field potentials from patient $s$ (excluding the
-electrodes that did not pass the kurtosis test described above). In
-the analyses below we define $\bar{R} = \cup_{s=1}^S R_s$.  We can
-calculate the expected inter-electrode correlation matrix for patient
-$s$, where $C_{s,k}(i,j)$ is the correlation between the time series
-of voltages for electrodes $i$ and $j$ from subject $s$ during session
-$k$, using:
+recording at $\eta$ is through (direct or indirect) anatomical
+connections between structures near $x$ and $\eta$.  We use temporal
+correlations in the data to estimate these anatomical
+connections~\citep{BeckEtal18}.  Let $\bar{R}$ be the set of locations
+at which we wish to estimate local field potentials, and let
+$R_{s} \subseteq \bar{R}$ be set of locations at which we observe local
+field potentials from patient $s$ (excluding the electrodes that did
+not pass the kurtosis test described above). In the analyses below we
+define $\bar{R} = \cup_{s=1}^S R_s$.  We can calculate the expected
+inter-electrode correlation matrix for patient $s$, where
+$C_{s,k}(i,j)$ is the correlation between the time series of voltages
+for electrodes $i$ and $j$ from subject $s$ during session $k$, using:
 
 \begin{align}
   \bar{C}_{s} &=
@@ -376,10 +317,10 @@ $\bar{R}$ ($\hat{C}_s$; Fig.~\ref{fig:methods}C) using:
 \end{align}
 After estimating the numerator ($\hat{N}_{s}$) and denominator
 ($\hat{D}_{s}$) placeholders for each $\hat{C}_{s}$, we aggregate these
-estimates across patients to obtain a single expected full-brain
+estimates across the $S$ patients to obtain a single expected full-brain
 correlation matrix ($\hat{K}$; Fig.~\ref{fig:methods}D):
 \begin{align}
- \hat{K} = \mathrm{r} \left(  \frac{\sum  \hat{N}_{s}}{\sum \hat{D}_{s}}\right).\label{eqn:corrmat}
+ \hat{K} = \mathrm{r} \left(  \frac{\sum_{s=1}^S  \hat{N}_{s}}{\sum_{s=1}^S \hat{D}_{s}}\right).\label{eqn:corrmat}
 \end{align}
 Intuitively, the numerators capture the general structures of the
 patient-specific estimates of full-brain correlations, and the
@@ -397,7 +338,7 @@ everywhere in $\bar{R}$, given observations at only a subset of
 locations in $\bar{R}$ (Fig.~\ref{fig:methods}E).
 
 Let $\alpha_s$ be the set of indices of patient $s$'s electrode locations in
-$\bar{R}$, and let $\beta_s$ be the set of indices of all other
+$\bar{R}$ (i.e., the locations in $R_s$), and let $\beta_s$ be the set of indices of all other
 locations in $\bar{R}$. In other words, $\beta_s$ reflects the locations
 in $\bar{R}$ where we did not observe a recording for patient $s$
 (these are the recording locations we will want to fill in using SuperEEG).
@@ -414,7 +355,7 @@ $\hat{K}_{\alpha_s, \alpha_s}$ represents the correlations between the
 observed recordings (at the locations in $\alpha_s$).
 
 Let $Y_{s,k,\alpha_s}$ be the number-of-timepoints ($T$) by
-length($\alpha_s$) matrix of (observed) voltages from the electrodes in
+$\left|\alpha_s\right|$ matrix of (observed) voltages from the electrodes in
 $\alpha_s$ during session $k$ from patient $s$. Then we can estimate the
 voltage from patient $s$'s $k^{th}$ session at the locations in
 $\beta_s$ using~\cite{Rasm06}:
@@ -423,13 +364,13 @@ $\beta_s$ using~\cite{Rasm06}:
 \hat{Y}_{s,k,\beta_s} &= ((\hat{K}_{\beta_s,\alpha_s}\cdot\hat{K}_{\alpha_s,\alpha_s}^{-1})\cdot Y_{s,k,\alpha_s}^\mathrm{T})^\mathrm{T}.\label{eqn:reconstruction}
 \end{align}
 This equation is the foundation of the SuperEEG algorithm.  Whereas we
-observe recordings only at the locations in $\alpha_s$,
+observe recordings only at the locations indexed by $\alpha_s$,
 Equation~\ref{eqn:reconstruction} allows us to estimate the recordings
-at all locations in $\beta_s$, which we can define \textit{a priori}
+at all locations indexed by $\beta_s$, which we can define \textit{a priori}
 to include any locations we wish, throughout the brain.  This yields
 estimates of the time-varying voltages at \textit{every} location in
 $\bar{R}$, provided that we define $\bar{R}$ in advance to include the
-union of all of the locations in $\alpha_s$ and all of the locations
+union of all of the locations in $R_s$ and all of the locations
 at which we wish to estimate recordings (i.e., a timeseries of
 voltages).
 
@@ -440,7 +381,7 @@ rather than attempting to recover absolute voltages. (This property
 reflects the fact that $\hat{K}_{\beta_s, \alpha_s}$ and
 $\hat{K}_{\alpha_s, \alpha_s}$ are correlation matrices rather than
 covariance matrices.)  Also, note that
-Equation~\ref{eqn:reconstruction} directly requires computing a $T$ by $T$
+Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
 large (e.g., for the patient highlighted in Fig.~\ref{fig:recon}, $T =
 20458799$). However, because Equation~\ref{eqn:reconstruction} is time
@@ -466,8 +407,8 @@ drove the reconstructions via Equation~\ref{eqn:reconstruction}
 (otherwise the analysis would be circular).  For that held-out
 patient, for each of their electrodes in turn, we used
 Equation~\ref{eqn:reconstruction} to reconstruct activity at the
-held-out electrode location, using the correlation matrix trained on
-all other patients' data at $\hat{K}$, and using activity recorded
+held-out electrode location, using the correlation matrix learned from
+all other patients' data as $\hat{K}$, and using activity recorded
 from the other electrodes from the held-out patient as
 $Y_{s, k, \alpha_s}$.  We then asked: how closely did each of the
 SuperEEG-estimated recordings at those electrodes match the observed
@@ -494,9 +435,10 @@ for the entire 14.2 total hours of recordings from the example electrode
 %shown in panel A, the reconstructed voltages throughout the full
 %recording tended to be smaller in magnitude than the original
 %recording ($t(XXX) = XXX, p = XXX$).
-This example confirms that the SuperEEG algorithm recovers the recordings
-from this single electrode well.  Next, we quantify the algorithm's
-performance across the full dataset.
+This example confirms that the SuperEEG algorithm recovers the
+recordings from this single electrode well.  Next, we used this
+general approach to quantify the algorithm's performance across the
+full dataset.
 
 %sample trace & reconstruction, several frames of activity snapshot?
 \begin{figure}
@@ -517,7 +459,7 @@ performance across the full dataset.
   \label{fig:recon}
 \end{figure}
 
-For each held-out electrode, from each held-out patient in turn, we we
+For each held-out electrode, from each held-out patient in turn, we
 computed the average correlation (across recording sessions) between
 the SuperEEG-reconstructed voltage traces and the observed voltage
 traces from that electrode.  For this analysis we set $\bar{R}$ to be
@@ -535,19 +477,19 @@ guessing.
 
 As a stricter benchmark, we compared the quality of these
 across-participant reconstructions (i.e., computed using a correlation
-model derived from other patients' data) to reconstructions generated
+model learned from other patients' data) to reconstructions generated
 using a correlation model trained using the in-patient's data.  In
 other words, for this within-patient benchmark analysis we estimated
 $\hat{C}_{s}$ (Eqn.~\ref{eqn:subj_corrmat}) for each patient in turn,
 using recordings from all of that patient's electrodes except at the
 location we were reconstructing.  These within-patient reconstructions
 serve as an estimate of how well data from all of the other electrodes
-from a single patient may be used to estimate held-out data.  This
-allows us to ask how much information about the activity at a given
-electrode might be inferred through (a) volume conductance or other
-sources of ``leakage'' from activity patterns measured from the
-patient's other electrodes and (b) across-electrode correlations
-learned from that single patient.  As shown in
+from that single patient may be used to estimate held-out data from
+the same patient.  This allows us to ask how much information about
+the activity at a given electrode might be inferred through (a) volume
+conductance or other sources of ``leakage'' from activity patterns
+measured from the patient's other electrodes and (b) across-electrode
+correlations learned from that single patient.  As shown in
 Figure~\ref{fig:corrmap}A (gray histogram), the distribution of
 within-patient correlations was centered well above zero (mean: XXX;
 $t$-test comparing mean of distribution of $z$-transformed
@@ -562,18 +504,18 @@ each of these analyses on a second independent dataset and found
 similar results (Fig.~\ref{fig:corrmap}B, D; within versus across
 reconstruction accuracy: $t(23) = 6.93, p < 10^{-5}$). We also
 replicated this result separately for each of the two experiments from
-Dataset 2 (Fig.~\perexpcorrmaps).  This overall finding,
-that when reconstructing held-out data from a given patient
-correlation models derived from \textit{other} patient's data yield
-higher reconstruction accuracy than correlation models derived from
-that patient, has two important implications.  First, it implies that
+Dataset 2 (Fig.~\perexpcorrmaps).  This overall finding, that
+reconstructions of held-out data using correlation models learned from
+\textit{other} patient's data yield higher reconstruction accuracy
+than correlation models learned from the patient whose data is being
+reconstructed, has two important implications.  First, it implies that
 distant electrodes provide additional predictive power to the data
 reconstructions beyond the information contained solely in nearby
 electrodes.  (This follows from the fact that each patient's
 electrodes are implanted in a unique set of locations, so for any
 given electrode the closest electrodes in the full dataset are likely
 to come from the same patient.)  Second, it implies that the spatial
-correlations derived from the SuperEEG algorithm are, to some extent,
+correlations learned using the SuperEEG algorithm are, to some extent,
 similar across people.
 
 %correlations by brain area, distribution of correlations
@@ -584,24 +526,27 @@ similar across people.
       ECoG datasets.}  \textbf{A. Distributions of correlations
       between observed versus reconstructed activity by electrode, for
       Dataset 1.}  The across-patient distribution (black) reflects
-    reconstruction performance using a correlation model trained on
-    all but one patient, and then applied to the held-out patient's
-    data.  The within-patient distribution (gray) reflects performance using
-    a correlation model trained on the same patient who contributed
-    the to-be-reconstructed electrode.  \textbf{B. Distributions of
-      correlations for Dataset 2.}  This panel is in the same format
-    as Panel A, but reflects results obtained from Dataset 2.
-    \textbf{C.--D.  Reconstruction performance by location.} Each dot
-    reflects the location of a single implanted electrode from Dataset
-    1 (Panel C) or Dataset 2 (Panel D).  The dot colors denote the
-    average across-session correlation, using the across-patient
-    correlation model, between the observed and
-    reconstructed activity at the given electrode location.}
+    reconstruction accuracy (correlation) using a correlation model
+    learned from all but one patient's data, and then applied to that
+    held-out patient's data.  The within-patient distribution (gray)
+    reflects performance using a correlation model learned from the same
+    patient who contributed the to-be-reconstructed electrode.
+    \textbf{B. Distributions of correlations for Dataset 2.}  This
+    panel is in the same format as Panel A, but reflects results
+    obtained from Dataset 2.  The histograms aggregate data across
+    both Dataset 2 experiments; for results broken down by experiment
+    see Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction
+      performance by location.} Each dot reflects the location of a
+    single implanted electrode from Dataset 1 (Panel C) or Dataset 2
+    (Panel D).  The dot colors denote the average across-session
+    correlation, using the across-patient correlation model, between
+    the observed and reconstructed activity at the given electrode
+    location.}
   \label{fig:corrmap}
 \end{figure}
 
 The recordings we analyzed from Dataset 1 comprised data collected as
-the patients performed a variety of (essentially uncontrolled) tasks
+the patients performed a variety of (largely idiosyncratic) tasks
 throughout each day's recording session.  That we observed reliable
 reconstruction accuracy across patients suggests that the spatial
 correlations derived from the SuperEEG algorithm are, to some extent,
@@ -610,15 +555,15 @@ Dataset 2.  In Dataset 2, the recordings were limited to times when
 each patient was participating in each of two experiments (Experiment
 1, a random-word list free recall task, and Experiment 2, a
 categorized list free recall task).  We wondered whether a correlation
-model trained using data only from one experiment might yield good
-predictions for data from the other experiment.  Further, we wondered
+model learned from data from one experiment might yield good
+predictions of data from the other experiment.  Further, we wondered
 about the extent to which it might be beneficial or harmful to combine
 data across tasks.
 
 To test the task-specificity of the SuperEEG-derived correlation
-models, we repeated our within- and across-patient cross validation
+models, we repeated the above within- and across-patient cross validation
 procedures separately for Experiment 1 and Experiment 2 data from
-Dataset 2.  We then compared the reconstruction accuracies of held-out
+Dataset 2.  We then compared the reconstruction accuracies for held-out
 electrodes, for models trained within versus across the two
 experiments, or combining across both experiments
 (Fig.~\perexptaskrecon).  In every case we found that across-patient
@@ -628,9 +573,9 @@ contributing the given electrode ($t$s$(XXX) > XXX, p$s$ < XXX$).  All
 reconstruction accuracies also reliably exceeded chance performance
 ($t$s$(XXX) > XXX, p$s$ < XXX$).  Average reconstruction accuracy was
 highest for the across-patient models limited to data from the same
-experiment (mean accuracy: $0.55$), next-highest for the
+experiment (mean accuracy: $0.55$); next-highest for the
 across-patient models that combined data across both experiments (mean
-accuracy: $0.50$), and lowest for models trained across task (mean
+accuracy: $0.50$); and lowest for models trained across task (mean
 accuracy: $0.37$).  This result also held for each of the Dataset 2
 experiments individually (Fig.~\perexptaskreconseparated).  Taken
 together, these results indicate that there are reliable commonalities
@@ -644,33 +589,34 @@ variety of tasks (e.g., Dataset 1, or combining across the two Dataset
 
 Although both datasets we examined provide good full-brain coverage
 (when considering data from every patient; e.g.\
-Fig.~\ref{fig:corrmap}B, D), electrodes are not placed uniformly
+Fig.~\ref{fig:corrmap}C, D), electrodes are not placed uniformly
 throughout the brain.  For example, electrodes are more likely to be
 implanted in regions like the medial temporal lobe (MTL), and are
 rarely implanted in occipital cortex (Fig.~\ref{fig:density}A, B).
 Separately for each dataset, for each voxel in the 4~mm$^3$ voxel
-MNI152 brain, we computed the proportion of electrodes contained
-within a 20 MNI unit radius sphere centered on that voxel.  We defined
-the \textit{density} at that location as this proportion.  Across
-Datasets 1 and 2, the electrode placement densities were similar
-(correlation by voxel: $r = 0.57, p < 10^{-10}$).  We wondered whether
-regions with good covererage might be associated with better
-reconstruction accuracy (e.g. Fig.~\ref{fig:corrmap}B, D indicate that
-many electrodes in the MTL have relatively high reconstruction
-accuracy, and occipital electrodes tend to have relatively low
-reconstruction accuracy).  To test whether this held more generally
-across the entire brain, for each dataset we computed the electrode
-placement density for each electrode from each patient (using the
-proportion of \textit{other} patients' electrodes within 20 MNI units
-of the given electrode).  We then correlated these density values with
-the across-patient reconstruction accuracies for each electrode.
-Contrary to our expectation, rather than positive correlations, we
-found weak (but reliable) negative correlations between reconstruction
-accuracy and density for both datasets (Dataset 1: $r = XXX, p = XXX$;
-Dataset 2: $r = -0.16, p < 10^{-10}$).  This indicates that the
-reconstruction accuracies we observed are not driven solely by
-sampling density, but rather may also reflect higher order properties
-of neural dynamics such as functional correlations between distant
+MNI152 brain, we computed the proportion of electrodes in the dataset
+that were contained within a 20 MNI unit radius sphere centered on
+that voxel.  We defined the \textit{density} at that location as this
+proportion.  Across Datasets 1 and 2, the electrode placement
+densities were similar (correlation by voxel:
+$r = XXX, p = XXX$).  We wondered whether regions with good
+covererage might be associated with better reconstruction accuracy
+(e.g. Fig.~\ref{fig:corrmap}C, D indicate that many electrodes in the
+MTL have relatively high reconstruction accuracy, and occipital
+electrodes tend to have relatively low reconstruction accuracy).  To
+test whether this held more generally across the entire brain, for
+each dataset we computed the electrode placement density for each
+electrode from each patient (using the proportion of \textit{other}
+patients' electrodes within 20 MNI units of the given electrode).  We
+then correlated these density values with the across-patient
+reconstruction accuracies for each electrode.  Contrary to our
+expectation, rather than positive correlations, we found weak (but
+reliable) negative correlations between reconstruction accuracy and
+density for both datasets (Dataset 1: $r = XXX, p = XXX$; Dataset 2:
+$r = -0.16, p < 10^{-10}$).  This indicates that the reconstruction
+accuracies we observed are not driven solely by sampling density, but
+rather may also reflect higher order properties of neural dynamics
+such as functional correlations between distant
 voxels~\citep{BetzEtal17b}.
 
 \begin{figure}
@@ -711,9 +657,9 @@ To gain insights into whether particular electrode locations might be
 especially informative, we first computed the average reconstruction
 accuracy across all of each patient's electrodes (using the
 across-patients cross validation test; black histograms in
-Fig.~\ref{fig:corrmap}A and C).  We labeled each patient's electrodes
+Fig.~\ref{fig:corrmap}A and B).  We labeled each patient's electrodes
 in each dataset with the average reconstruction accuracy for that
-patient.  In other words, we assigned every electrode from each
+patient.  In other words, we assigned every electrode from each given
 patient the same value, reflecting how well the activity patterns at
 those electrodes were reconstructed on average.  Next, for each voxel
 in the 4~mm$^3$ MNI brain, we computed the average value across any
@@ -723,7 +669,7 @@ voxel's center.  Effectively, we computed an \textit{information
 accuracy across any patients with electrodes near each voxel-- where
 the averages were weighted to reflect patients who had more electrodes
 implanted near that location. This yielded a single map for each
-dataset, highlighting regions that are especially promising
+dataset, highlighting regions that are potentially promising
 implantation targets in terms of providing full-brain activity
 information via SuperEEG (Fig.~\ref{fig:informap}A, B).  Despite task
 and patient differences across the two datasets, we nonetheless found
@@ -744,7 +690,7 @@ be especially promising implantation targets.
     \textbf{A. Dataset 1 information score by voxel.} The voxel colors
     reflect the weighted average reconstruction accuracy across all
     electrodes from any patients with at least one electrode within 20
-    MNI units of the given voxel.  {B. Dataset 2 information score by
+    MNI units of the given voxel.  \textbf{B. Dataset 2 information score by
       voxel.}  This panel is in the same format as Panel A.
     \textbf{C. Correspondence in information scores by voxel across
       Datasets 1 and 2.}  Same format as Figure~\ref{fig:density}C.}
@@ -800,7 +746,7 @@ Second, we hypothesized that some of the correlational structure of
 people's brain activity is similar across individuals.  Consistent
 with this hypothesis, our model explained the data best when we
 trained the correlation model using data from \textit{other}
-patients-- even when compared to a correlation model trained using the
+patients-- even when compared to a correlation model trained on the
 same patient's data.  Third, we resolved ambiguities in the data by
 hypothesizing that neural activity from nearby sources will tend to be
 similar, all else being equal.  This hypothesis was supported through
@@ -822,17 +768,18 @@ Beyond providing a means of estimating ongoing activity throughout the
 brain using already implanted electrodes, our work also has
 implications for where to place the electrodes in the first place.
 Electrodes are typically implanted to maximize coverage of suspected
-epileptogenic tissue.  However, our findings suggest that this approach
-could be further optimized.  Specifically, one could leverage not only
-the non-invasive recordings taken during an initial monitoring period
-(as is currently done routinely), but also recordings collected from other
-patients.  We could then ask: given everything we know about the other
-patients and from the scalp recordings of this new patient, where
-should we place a fixed number of electrodes to maximize our ability
-to map seizure foci?  As shown in Figure~\ref{fig:informap}, recordings
-from different locations are differently informative in terms of
-reconstructing the spatiotemporal patterns throughout the brain.
-This property might be leveraged in decisions about where to
+epileptogenic tissue.  However, our findings suggest that this
+approach could be further optimized.  Specifically, one could leverage
+not only the non-invasive recordings taken during an initial
+monitoring period (as is currently done routinely), but also
+recordings collected from other patients.  We could then ask: given
+what we learn from other patients' data (and potentially from the
+scalp EEG recordings of this new patient), where should we place a
+fixed number of electrodes to maximize our ability to map seizure
+foci?  As shown in Figure~\ref{fig:informap}, recordings from
+different locations are differently informative in terms of
+reconstructing the spatiotemporal activity patterns throughout the
+brain.  This property might be leveraged in decisions about where to
 surgically implant electrodes in future patients.
 
 \section*{Concluding remarks}
@@ -843,7 +790,7 @@ our thoughts, actions, and physiological processes.  Whereas
 traditional beamforming techniques rely on geometric
 source-localization of signals measured at the scalp, here we propose
 an alternative approach that leverages the rich correlational
-structure of a large dataset of human intracranial recordings.  In
+structure of two large datasets of human intracranial recordings.  In
 doing so, we are one step closer to observing, and perhaps
 someday understanding, the full spatiotemporal structure of human
 neural activity.
