@@ -724,12 +724,13 @@ def plot_hist_by_patient(dataframe, X, bins=20, title=None, outfile=None):
 def plot_contour(dataframe, X, Y, title=None, outfile=None):
 
     sns.set_style("white")
-    g = (sns.jointplot(x=X, y=Y,data=dataframe, kind="kde", color='k',
-                       height=8).set_axis_labels(X, 'Correlation', fontsize=24))
+
+    g = (sns.jointplot(x=X, y=Y,data=dataframe, kind="reg", color='k',
+                       height=8).set_axis_labels(X, 'z-transformed correlation', fontsize=24))
     ax = g.ax_joint
     ax.tick_params(axis='x', labelsize=18)
     ax.tick_params(axis='y', labelsize=18)
-    #ax.set_ylim(-1, 1)
+    ax.set_ylim(0, 1.5)
     #ax = plt.gca()
     for index, label in enumerate(ax.xaxis.get_ticklabels()):
         if index % 2 != 0:
@@ -737,13 +738,13 @@ def plot_contour(dataframe, X, Y, title=None, outfile=None):
     for index, label in enumerate(ax.yaxis.get_ticklabels()):
         if index % 2 == 0:
             label.set_visible(False)
-    left, width = .55, .5
+    left, width = .35, .5
     bottom, height = .05, .5
     rstat = stats.pearsonr(dataframe[X], dataframe[Y])
-    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)),
+    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + ', p = '+ str(np.round(rstat[1],2)),
             horizontalalignment='left',
             verticalalignment='bottom',
-            transform=ax.transAxes, fontsize=18)
+            transform=ax.transAxes, fontsize=24)
     print(rstat)
     plt.tight_layout()
     if outfile:
