@@ -265,10 +265,15 @@ choosing $\lambda$ for the analyses presented here, we sought to
 maximize spatial resolution (which implies a small value of $\lambda$)
 while also maximizing the algorithm's ability to generalize to any
 location throughout the brain, including those without dense electrode
-coverage (which implies a large value of $\lambda$). Using our prior
-work as a guide~\citep{MannEtal14b, MannEtal18}, we set $\lambda = 20$,
-although this could in theory be optimized, e.g., using cross
-validation or a formal model~\citep[e.g.,][]{MannEtal18}.
+coverage (which implies a large value of $\lambda$).  Here we set
+$\lambda = 20$, guided in part by our prior work~\citep{MannEtal14b,
+  MannEtal18}, and in part by examining the brain coverage with
+non-zero weights achieved by placing RBFs at each electrode location
+in Dataset 1 and taking the sum (across all electrodes) at each voxel
+in a 4~mm$^3$ MNI brain.  (We then held $\lambda$ fixed for our
+analyses of Dataset 2.)  We note that this value could in theory be
+further optimized, e.g., using cross validation or a formal
+model~\citep[e.g.,][]{MannEtal18}.
 
 A second mechanism whereby a given region $x$ can contribute to the
 recording at $\eta$ is through (direct or indirect) anatomical
