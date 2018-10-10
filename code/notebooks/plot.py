@@ -587,6 +587,7 @@ def plot_2d_corr_hist(df, outfile=None):
     ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
 
     plt.tight_layout()
+    print(rstat)
     if not outfile is None:
         plt.savefig(outfile)
     else:
