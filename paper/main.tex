@@ -387,7 +387,7 @@ covariance matrices.)  Also, note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
 large (e.g., for the patient highlighted in Fig.~\ref{fig:recon}, $T =
-20458799$). However, because Equation~\ref{eqn:reconstruction} is time
+12786750$). However, because Equation~\ref{eqn:reconstruction} is time
 invariant, we may compute $Y_{s,k,\beta_s}$ in a piecewise
 manner by filling in $Y_{s,k,\beta_s}$ one row at a time (using the
 corresponding samples from $Y_{s, k, \alpha_s}$).
@@ -421,8 +421,8 @@ $\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$?).
 To illustrate our approach, we first examine an individual held-out
 raw LFP trace and its associated SuperEEG-derived reconstruction.
 Figure~\ref{fig:recon}A displays the observed LFP from the red
-electrode in Figure~\ref{fig:methods}A (red), and its associated
-reconstruction (blue), during a 5~s time window during one of the
+electrode in Figure~\ref{fig:methods}A (blue), and its associated
+reconstruction (red), during a 5~s time window during one of the
 example patient's six recording sessions.  The two traces match
 closely ($r = 0.869, p < 10^{-10}$).  Figure~\ref{fig:recon}B displays a
 two-dimensional histogram of the actual versus reconstructed voltages
@@ -438,9 +438,9 @@ algorithm's performance across the full dataset.
   \includegraphics[width=\textwidth]{figs/recon}
   \caption{\textbf{Observed and reconstructed LFP from a single
       electrode.} \textbf{A. Example LFP.}  A 5~s recording from the
-    red electrode in Figure~\ref{fig:methods}A is displayed in red,
+    red electrode in Figure~\ref{fig:methods}A is displayed in blue,
     and the reconstructed LFP during the same time window is shown in
-    blue.  \textbf{B. Observed versus reconstructed LFP over
+    red.  \textbf{B. Observed versus reconstructed LFP over
       14.2~hours.}  The two-dimensional histogram reflects the
     relation between distributions of observed versus reconstructed
     voltages from one patient, across the 14.2 hours of recorded data
@@ -703,9 +703,9 @@ gross anatomical structure of our brains changes meaningfully over the
 course of years as our brains develop, on the timescales of typical
 neuroimaging experiments (i.e., hours to days) our anatomical networks
 are largely stable~\citep[e.g., ][]{CaseEtal00}.  Further, many
-aspects of brain anatomy, including white matter structure, is largely
+aspects of brain anatomy, including white matter structure, are largely
 preserved across people~\citep[e.g., ][]{TalaTour88, JahaEtal13,
-  MoriEtal08} There are several possible means of reconciling this
+  MoriEtal08}. There are several possible means of reconciling this
 apparent inconsistency between dynamic person- and task-specific
 functional networks versus stable anatomical networks.  For example,
 relatively small magnitude anatomical differences across people may be
