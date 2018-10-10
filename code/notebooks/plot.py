@@ -520,8 +520,10 @@ def most_informative_locs_plot(df, vox_size=5, width=10, outfile=None):
 
     most_info = np.array([])
 
+    z_df = df.copy(deep=True)
+    z_df['Correlation'] = r2z(z_df['Correlation'])
     for l in sub_locs:
-        most_info = np.append(most_info, df['Correlation'][point_tree.query_ball_point(l, width)].mean())
+        most_info = np.append(most_info, z_df['Correlation'][point_tree.query_ball_point(l, width)].mean())
 
     bo_nii = se.Brain(data=np.atleast_2d(z2r(most_info)), locs=sub_locs)
     nii_bo = se.helpers._brain_to_nifti(bo_nii, sub_nii)
@@ -543,10 +545,13 @@ def most_informative_locs(df, vox_size=5, width=10):
 
     most_info = np.array([])
 
+    z_df = df.copy(deep=True)
+    z_df['Correlation'] = r2z(z_df['Correlation'])
     for l in sub_locs:
-        most_info = np.append(most_info, df['Correlation'][point_tree.query_ball_point(l, width)].mean())
 
-    return most_info
+        most_info = np.append(most_info, z_df['Correlation'][point_tree.query_ball_point(l, width)].mean())
+
+    return z2r(most_info)
 
 def plot_2d_corr_hist(df, outfile=None):
 
@@ -557,7 +562,7 @@ def plot_2d_corr_hist(df, outfile=None):
     g = (sns.jointplot('RAM', 'PyFR', df, kind="kde", color='k', height=8).set_axis_labels('RAM', 'PyFR', fontsize=30))
     ax = g.ax_joint
 
-    left, width = .05, .5
+    left, width = .35, .5
     bottom, height = .1, .5
     rstat = stats.pearsonr(df['RAM'], df['PyFR'])
     ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
@@ -595,7 +600,9 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     ax.set_xticklabels(['Within', 'Across','All'])
     ax.set_xlabel('Experiment', fontsize=30)
 
-    yposlist_df = df.groupby(['Experiment', 'Subject'])['Correlation'].mean()
+    z_df = df.copy(deep=True)
+    z_df['Correlation'] = r2z(z_df['Correlation'])
+    yposlist_df = z2r(z_df.groupby(['Experiment', 'Subject'])['Correlation'].mean())
     yposlist = yposlist_df.reindex(["w", "a", "all"], level='Experiment').tolist()
     xposlist = range(3)
 
