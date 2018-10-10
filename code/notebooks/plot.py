@@ -263,6 +263,16 @@ def normalizeRows(M):
 def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
 
     grouped_results = df.groupby('Subject')[Y, X].mean()
+    one_sided_t_across = stats.ttest_1samp(grouped_results[Y],  0)
+    one_sided_t_within = stats.ttest_1samp(grouped_results[X],  0)
+
+    print('one sided t test for across: ')
+    print(one_sided_t_across)
+
+
+    print('one sided t test for within: ')
+    print(one_sided_t_within)
+
     t_stat_group = stats.ttest_rel(grouped_results[Y],grouped_results[X])
 
     fig = plt.gcf()
@@ -343,6 +353,7 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
     if outfile:
         plt.savefig(outfile)
 
+    print('t test: ')
     print(t_stat_group)
 
 def interp_corr_old(locs, corrs, width=10, vox_size=10, outfile=None):

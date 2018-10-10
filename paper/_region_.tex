@@ -156,7 +156,7 @@ collected dataset comprising multi-session intracranial recordings.
 Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
 patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
-  MannEtal12}.  Each recording session lasted from XXX--XXX hours
+  MannEtal12}.  Each recording session lasted from 0.3--14.2 hours
 (Fig.~\suppstats A), and includes data recorded roughly from when the
 patients woke up each morning, to before they went to sleep at the end
 of each day.  In addition to typical bed-ridden hospital patient
@@ -170,10 +170,10 @@ session, ignoring the particular activities or tasks the patients were
 performing at any given moment.  We used Dataset 1 to develop our main
 SuperEEG approach, and to examine the extent to which SuperEEG might
 be able to generate task-general predictions.  Dataset 2 comprised
-multi-session recordings from XXX electrodes implanted in the brains
-of XXX epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
+multi-session recordings from 3159 electrodes implanted in the brains
+of 24 epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
   KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18,
-  KuceEtal18}.  Each recording session lasted from XXX--XXX hours
+  KuceEtal18}.  Each recording session lasted from .4--6.6 hours
 (Fig.~\suppstats B).  Whereas Dataset 1 included recordings taken during a
 wide variety of behaviors, Dataset 2 included recordings taken as each
 patient performed each of two memory tasks: a random word list free
@@ -233,9 +233,9 @@ patient's recording sessions.  We also excluded any patients with
 fewer than 2 electrodes that passed this criteria, as the SuperEEG
 algorithm requires measuring correlations between 2 or more electrodes
 from each patient.  For Dataset 1, this yielded clean recordings from
-XXX electrodes implanted throughout the brains of XXX patients
+4168 electrodes implanted throughout the brains of 67 patients
 (Fig.~\ref{fig:methods}A); for Dataset 2, this yielded clean
-recordings from 2975 electrodes from 24 patients.  Each individual
+recordings from 3159 electrodes from 24 patients.  Each individual
 patient contributes electrodes from a limited set of brain locations,
 which we localized in a common space~\citep[MNI152;][]{GrabEtal06}; an
 example Dataset 1 patient's 54 electrodes that passed the predefined
@@ -268,10 +268,15 @@ choosing $\lambda$ for the analyses presented here, we sought to
 maximize spatial resolution (which implies a small value of $\lambda$)
 while also maximizing the algorithm's ability to generalize to any
 location throughout the brain, including those without dense electrode
-coverage (which implies a large value of $\lambda$). Using our prior
-work as a guide~\citep{MannEtal14b, MannEtal18}, we set $\lambda = 20$,
-although this could in theory be optimized, e.g., using cross
-validation or a formal model~\citep[e.g.,][]{MannEtal18}.
+coverage (which implies a large value of $\lambda$).  Here we set
+$\lambda = 20$, guided in part by our prior work~\citep{MannEtal14b,
+  MannEtal18}, and in part by examining the brain coverage with
+non-zero weights achieved by placing RBFs at each electrode location
+in Dataset 1 and taking the sum (across all electrodes) at each voxel
+in a 4~mm$^3$ MNI brain.  (We then held $\lambda$ fixed for our
+analyses of Dataset 2.)  We note that this value could in theory be
+further optimized, e.g., using cross validation or a formal
+model~\citep[e.g.,][]{MannEtal18}.
 
 A second mechanism whereby a given region $x$ can contribute to the
 recording at $\eta$ is through (direct or indirect) anatomical
@@ -416,16 +421,16 @@ SuperEEG-estimated recordings at those electrodes match the observed
 recordings from those electrodes (i.e., how closely did the estimated
 $\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$?).
 
-To illustrate our approach, we first examine and individual held-out
+To illustrate our approach, we first examine an individual held-out
 raw LFP trace and its associated SuperEEG-derived reconstruction.
 Figure~\ref{fig:recon}A displays the observed LFP from the red
 electrode in Figure~\ref{fig:methods}A (red), and its associated
 reconstruction (blue), during a 5~s time window during one of the
 example patient's six recording sessions.  The two traces match
-closely ($r = XXX, p = XXX$).  Figure~\ref{fig:recon}B displays a
+closely ($r = 0.869, p = 10\textsuperscript{-10]$).  Figure~\ref{fig:recon}B displays a
 two-dimensional histogram of the actual versus reconstructed voltages
 for the entire 14.2 total hours of recordings from the example
-electrode (correlation: $r = XXX, p = XXX$).  This example confirms
+electrode (correlation: $r = 0.909, p = 10\textsuperscript{-10}$).  This example confirms
 that the SuperEEG algorithm recovers the recordings from this single
 electrode well.  Next, we used this general approach to quantify the
 algorithm's performance across the full dataset.
@@ -842,4 +847,4 @@ Reprints and permissions information is available at www.nature.com/reprints.  T
 
 
 
-\message{ !name(main.tex) !offset(-845) }
+\message{ !name(main.tex) !offset(-850) }
