@@ -135,25 +135,23 @@ def plot_times_series(time_data_df, lower_bound, upper_bound, outfile = None):
     results : plotted timeseries
          If outfile in arguments, the plot is saved.  Otherwise, it the plot is shown.
     """
+
+    data = time_data_df.loc[(time_data_df['time'] >= lower_bound) & (time_data_df['time'] < upper_bound)]
     fig, ax = plt.subplots()
     fig.set_size_inches(10, 8)
     sns.set_style("white")
-    time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['actual'].plot(ax=ax, color='b', lw=1, fontsize=21)
-    time_data_df[(time_data_df['time'] > lower_bound) & (time_data_df['time'] < upper_bound)]['predicted'].plot(ax=ax, color='r', lw=1)
-    ax.legend(['Observed', 'Reconstructed'], fontsize=21)
-    ax.set_xlabel("Time (s)", fontsize=21)
-    ax.set_ylabel("Voltage (normalized)", fontsize=21)
-    ax.tick_params(axis='x', labelsize=18)
-    ax.tick_params(axis='y', labelsize=18)
-    xvals = ax.get_xticks()
-    print(xvals)
-    xvals = np.asarray([750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750])
 
-    ax.set_xticklabels([np.round(x / 250, 4) for x in xvals])
+    plt.plot(data['time'], data['predicted'], 'r')
+    plt.plot(data['time'], data['actual'], 'b')
+    plt.legend(['Reconstructed','Observed'], fontsize=21)
+    plt.gca().set_xticks(np.linspace(lower_bound, upper_bound, np.round(upper_bound-lower_bound)+1))
+    plt.xlabel('Time (s)', fontsize=21)
+    plt.ylabel('Voltage (normalized)', fontsize=21)
+    plt.gca().tick_params(axis='x', labelsize=18)
+    plt.gca().tick_params(axis='y', labelsize=18)
 
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
-
     plt.tight_layout()
     if not outfile is None:
         plt.savefig(outfile)
@@ -356,7 +354,7 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
     print('t test: ')
     print(t_stat_group)
 
-def interp_corr_old(locs, corrs, width=10, vox_size=10, outfile=None):
+def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None):
     nii = se.load('std', vox_size=vox_size)
     full_locs = nii.get_locs().values
     W = np.exp(_log_rbf(full_locs, locs, width=width))
@@ -371,55 +369,8 @@ def interp_corr_old(locs, corrs, width=10, vox_size=10, outfile=None):
     else:
         plt.show()
 
-def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None):
-    nii = se.load('std', vox_size=vox_size)
-    full_locs = nii.get_locs().values
-    W = np.exp(_log_rbf(full_locs, locs, width=width))
-    interp_corrs = z2r(np.divide(np.dot(r2z(corrs), W.T), np.sum(W, axis=1)))
-    bo_nii = se.Brain(data=interp_corrs, locs=full_locs)
-    nii_bo = _brain_to_nifti(bo_nii, nii)
-    ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=1, vmin=0, display_mode='lyrz')
-    if not outfile is None:
-        plt.savefig(outfile)
-    else:
-        plt.show()
-
 
 ############ Density ########################
-
-def plot_density(df, X, Y, outfile = None):
-    fig = plt.gcf()
-    fig.set_size_inches(18.5, 10.5)
-    sns.set_style("white")
-    mybins =np.linspace(0, .02, 200)
-    g = sns.JointGrid(X, Y, df, xlim=[0,.02],ylim=[-1,1])
-    g.ax_marg_x.hist(df[X], bins=mybins, color = 'k', alpha = .3)
-    g.ax_marg_y.hist(df[Y], bins=np.arange(-1, 1, .01), orientation='horizontal', color = 'k', alpha = .3)
-    #g.ax_marg_x.set_xscale('log')
-    g.ax_marg_x.set_xscale('linear')
-    g.ax_marg_y.set_yscale('linear')
-    g.plot_joint(plt.scatter, color='black', edgecolor='black', alpha = .6)
-    ax = g.ax_joint
-    left, width = .05, .5
-    bottom, height = .1, .5
-    rstat = stats.pearsonr(df[X], df[Y])
-    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
-            horizontalalignment='left',
-            verticalalignment='top',
-            transform=ax.transAxes, fontsize=18)
-    ax.set_xlabel("Density", fontsize=21)
-    ax.set_ylabel("Correlation", fontsize=21)
-    ax.tick_params(axis='x', labelsize=18)
-    ax.tick_params(axis='y', labelsize=18)
-    ax.set_xscale('linear')
-    ax.set_yscale('linear')
-
-    plt.tight_layout()
-
-    if not outfile is None:
-        plt.savefig(outfile)
-    else:
-        plt.show()
 
 
 def density_within_r(locs, r):
@@ -485,6 +436,35 @@ def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None):
         plt.show()
 
 
+def plot_2d_hist(df, outfile=None):
+    fig = plt.gcf()
+    fig.set_size_inches(18.5, 18.5)
+    sns.set_style("white")
+    g = (sns.jointplot('RAM', 'PyFR', df, xlim=[-.005,.025],ylim=[-.005,.025], kind="kde", color='k', height=8).set_axis_labels('RAM', 'PyFR', fontsize=30))
+    ax = g.ax_joint
+
+    left, width = .35, .5
+    bottom, height = .1, .5
+    rstat = stats.pearsonr(df['RAM'], df['PyFR'])
+    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)) + '   p < '+ str(10**-10),
+            horizontalalignment='left',
+            verticalalignment='top',
+            transform=ax.transAxes, fontsize=24)
+    ax.set_xlabel("Dataset 1 \n density by voxel", fontsize=30)
+    ax.set_ylabel("Dataset 2 \n density by voxel", fontsize=30)
+    ax.tick_params(axis='x', labelsize=24)
+    ax.tick_params(axis='y', labelsize=24)
+    ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
+    ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
+    plt.tight_layout()
+    print(rstat)
+
+    if not outfile is None:
+        plt.savefig(outfile)
+    else:
+        plt.show()
+
+
 def interp_density(locs, density, width=10, vox_size=10, outfile=None):
     nii = se.load('std', vox_size=vox_size)
     full_locs = nii.get_locs().values
@@ -499,24 +479,6 @@ def interp_density(locs, density, width=10, vox_size=10, outfile=None):
     else:
         plt.show()
 
-
-def density(n_by_3_Locs, nearest_n, tau=.2):
-    """
-        Calculates the density of the nearest n neighbors
-        Parameters
-        ----------
-        n_by_3_Locs : ndarray
-            Array of electrode locations - one for each row
-        nearest_n : int
-            Number of nearest neighbors to consider in density calculation
-        Returns
-        ----------
-        results : ndarray
-            Denisity for each electrode location
-        """
-    nbrs = NearestNeighbors(n_neighbors=nearest_n, algorithm='ball_tree').fit(n_by_3_Locs)
-    distances, indices = nbrs.kneighbors(n_by_3_Locs)
-    return np.exp(-tau*(distances.sum(axis=1) / (np.shape(distances)[1] - 1)))
 
 ######### Best locs ##############
 def most_informative_locs_plot(df, vox_size=5, width=10, outfile=None):
@@ -564,6 +526,8 @@ def most_informative_locs(df, vox_size=5, width=10):
 
     return z2r(most_info)
 
+
+
 def plot_2d_corr_hist(df, outfile=None):
 
     fig = plt.gcf()
@@ -595,6 +559,31 @@ def plot_2d_corr_hist(df, outfile=None):
 
 
 ######### Supplemental ###########
+
+def p_level(p):
+    if .05 <= p <.1:
+        return('+')
+    if .01 <= p < .05:
+        return('*')
+    if .001 <= p < .01:
+        return('**')
+    if .0001 <= p < .001:
+        return('***')
+    if .00001 <= p < .0001:
+        return('d')
+    if .000001 <= p < .00001:
+        return('dd')
+    if p < .000001:
+        return('ddd')
+
+def long_form_df(full_df, df_col):
+
+    long_form = pd.DataFrame()
+    long_form['Correlation'] = full_df[df_col]
+    long_form['Subject'] = df_col.split('_')[1]
+    long_form['Experiment'] = df_col.split('_')[2]
+
+    return long_form
 
 
 def plot_split_violin(df, legend=True, yticks=True, outfile=None):
@@ -672,73 +661,6 @@ def plot_split_violin(df, legend=True, yticks=True, outfile=None):
     if outfile:
         plt.savefig(outfile)
 
-
-def plot_column(dataframe, X, Y, title=None, outfile=None):
-
-    mpl.rcParams['axes.facecolor'] = 'white'
-    fig, ax = plt.subplots()
-    fig.set_size_inches(10, 8)
-    ax.scatter(dataframe[X], dataframe[Y], color='k', alpha=.1)
-    ax.set_title(title, fontsize=30)
-    ax.set_ylabel('Correlation', fontsize=30)
-    ax.set_xlabel(X, fontsize=30)
-    ax.tick_params(axis='x', length=0, labelsize=18)
-    ax.tick_params(axis='y', which='both', length=0, labelsize=18)
-    for index, label in enumerate(ax.xaxis.get_ticklabels()):
-        if index % 2 != 0:
-            label.set_visible(False)
-    for index, label in enumerate(ax.yaxis.get_ticklabels()):
-        if index % 2 != 0:
-            label.set_visible(False)
-    left, width = .75, .5
-    bottom, height = .05, .5
-    rstat = stats.pearsonr(dataframe[X], dataframe[Y])
-    ax.text(left, bottom, 'r = ' + str(np.round(rstat[0],2)),
-            horizontalalignment='left',
-            verticalalignment='bottom',
-            transform=ax.transAxes)
-    print(rstat)
-    if outfile:
-        plt.savefig(outfile)
-
-def plot_corr_hist(dataframe, X, title=None, outfile=None):
-    mpl.rcParams['axes.facecolor'] = 'white'
-    df_corrs = pd.DataFrame()
-    df_corrs[X] = dataframe[X].values
-    n_count = len(df_corrs)
-    bin_values = np.arange(start=-1, stop=1, step=.025)
-    ax = df_corrs.plot(kind='hist', bins=bin_values, color='k', title = title, legend = False)
-    vals = ax.get_yticks()
-    ax.set_yticklabels([np.round(x/n_count,3) for x in vals])
-    ax.set_ylabel('Proportion of electrodes')
-    ax.set_xlabel(X)
-    ax.set_xlim(-1, 1)
-    plt.text(1,10, 'mean = '+ str(np.round(z2r(r2z(dataframe[X]).mean()),3)))
-    if outfile:
-        plt.savefig(outfile)
-
-def plot_hist_by_patient(dataframe, X, bins=20, title=None, outfile=None):
-    mpl.rcParams['axes.facecolor'] = 'white'
-    df = pd.DataFrame()
-    df[X] = dataframe[X].values
-    n_count = len(df)
-    fig, ax = plt.subplots()
-    fig.set_size_inches(10, 8)
-    df.plot(kind='hist',histtype='stepfilled', bins=bins, color='k', legend = False, fontsize=30, ax=ax)
-    ax.set_title(X, fontsize=30)
-    ax.set_ylabel('# Patients', fontsize=30)
-    ax.set_xlabel(X, fontsize=30)
-    ax.tick_params(axis='x', length=0, labelsize=18)
-    ax.tick_params(axis='y', which='both', length=0, labelsize=18)
-    for index, label in enumerate(ax.xaxis.get_ticklabels()):
-        if index % 2 != 0:
-            label.set_visible(False)
-    for index, label in enumerate(ax.yaxis.get_ticklabels()):
-        if index % 2 != 0:
-            label.set_visible(False)
-    print('mean: ' + str(np.round(df[X].mean(),3)))
-    if outfile:
-        plt.savefig(outfile)
 
 def plot_contour(dataframe, X, Y, title=None, outfile=None):
 
