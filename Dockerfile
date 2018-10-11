@@ -34,10 +34,8 @@ RUN conda update setuptools
 # install jupyter lab
 RUN conda install -c conda-forge jupyterlab
 
-# Install packages needed
-RUN pip install umap-learn == 0.3.4\
-
-RUN pip install --upgrade \
+# need to install older version of umap, version 0.3.5 is buggy
+RUN pip install --upgrade https://github.com/lmcinnes/umap/archive/0.3.0.tar.gz \
 supereeg \
 numpy \
 scipy \
@@ -47,8 +45,7 @@ numba \
 pykalman
 
 RUN pip install --upgrade --ignore-installed \
-seaborn \
-hypertools
+seaborn
 
 # add some useful directories as mirrors of directors in the same location on your computer
 ADD data /data
