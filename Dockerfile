@@ -35,6 +35,7 @@ RUN conda update setuptools
 RUN conda install -c conda-forge jupyterlab
 
 # Install packages needed
+RUN pip install umap-learn == 0.3.4\
 
 RUN pip install --upgrade \
 supereeg \
