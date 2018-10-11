@@ -22,7 +22,7 @@
 
 % Include your paper's title here
 
-\title{Towards human SuperEEG} 
+\title{A Gaussian process model of human electrocorticographic data} 
 \author{
   Lucy L. W. Owen$^{1}$,
   Andrew C. Heusser$^{1, 2}$, and
@@ -40,13 +40,7 @@ Boston, MA 02110, USA}
 \maketitle 
 
 \begin{abstract}
-  Human \textit{SuperEEG}\footnote{The term ``SuperEEG'' was coined by
-    Robert J. Sawyer in his popular science fiction novel \textit{The
-      Terminal Experiment}~\cite{Sawy95}} entails measuring ongoing
-  neural activity throughout the entire living brain with perfect
-  precision and arbitrarily high spatiotemporal resolution.  Although
-  true SuperEEG is impossible using existing methods, here we present
-  a model-based method for \textit{inferring} full-brain neural
+  We present a model-based method for inferring full-brain neural
   activity at millimeter-scale spatial resolutions and
   millisecond-scale temporal resolutions using standard human
   intracranial recordings.  Our approach assumes that different
@@ -56,8 +50,12 @@ Boston, MA 02110, USA}
   a limited set of locations in that individual's brain, along with
   the observed spatial correlations learned from other people's
   recordings, how much can be inferred about ongoing activity at
-  \textit{other} locations in that
-  individual's brain?\\\\
+  \textit{other} locations throughout that
+  individual's brain?  We show that our approach generalizes across
+  people and tasks, thereby providing a person- and task-general means
+  of inferring high spatiotemporal resolution full-brain neural
+  dynamics from standard low-density intracranial recordings.
+  \\\\
   \footnotesize{\textbf{Keywords: Electrocorticography (ECoG),
       intracranial electroencephalography (iEEG), local field
       potential (LFP), epilepsy, maximum likelihood estimation,
@@ -132,19 +130,24 @@ can we infer about the activity exhibited by the rest of a person's
 brain, given what we learn from the limited intracranial recordings we
 have from their brain and additional recordings taken from
 \textit{other} people's brains?  Here we develop an approach, which we
-call \textit{SuperEEG}, based on Gaussian process
-regression~\cite{Rasm06}.  SuperEEG entails using data from multiple
-people to estimate activity patterns at arbitrary locations in each
-person's brain (i.e., independent of their electrode placements).  We
-test our SuperEEG approach using two large datasets of intracranial
-recordings~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
-  MannEtal12, EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17,
-  LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  We show
-that the SuperEEG algorithm recovers signals well from electrodes that
-were held out of the training dataset.  We also examine the factors
-that influence how accurately activity may be estimated (recovered),
-which may have implications for electrode design and
-placement in neurosurgical applications.
+call \textit{SuperEEG}\textit{SuperEEG}\footnote{The term ``SuperEEG''
+  was coined by Robert J. Sawyer in his popular science fiction novel
+  \textit{The Terminal Experiment}~\cite{Sawy95}.  SuperEEG is a
+  fictional technology that measures ongoing neural activity
+  throughout the entire living human brain with perfect precision and
+  at arbitrarily high spatiotemporal resolution.}, based on Gaussian
+process regression~\cite{Rasm06}.  SuperEEG entails using data from
+multiple people to estimate activity patterns at arbitrary locations
+in each person's brain (i.e., independent of their electrode
+placements).  We test our SuperEEG approach using two large datasets
+of intracranial recordings~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b,
+  MannEtal11, MannEtal12, EzzyEtal17, HoraEtal17, KragEtal17,
+  KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18,
+  KuceEtal18}.  We show that the SuperEEG algorithm recovers signals
+well from electrodes that were held out of the training dataset.  We
+also examine the factors that influence how accurately activity may be
+estimated (recovered), which may have implications for electrode
+design and placement in neurosurgical applications.
 
 \section*{Approach}
 The SuperEEG approach to inferring high temporal resolution full-brain
