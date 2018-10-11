@@ -90,11 +90,23 @@ of those statistical tests.}
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_3}
-\caption{\textbf{Reconstruction quality for each experiment.} \textbf{A. \& C.  Distributions
-      of correlation coefficients.}  Across all electrodes from all
-    patients in the labeled experiment from dataset 2, the panel displays the distribution of correlations between the observed and reconstructed LFP data using models trained on data from all other patients (Across, in black) and all other electrodes from the same patient (Within, in gray). 
-    \textbf{B. \& D. Correlation maps.}  The glass brain maps display the
-    average correlation between the observed LFP data and the across-subjects model reconstructed data by location, for each labeled experiment.}
+\caption{\textbf{Reconstruction quality across all electrodes in two
+      Dataset 2 experiments.}  \textbf{A. Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      Experiment 1.}  Same format as Figure~3A and B, but reflects data shown
+    in Figure~\ref{fig:supplemental_2}A (rightmost violin plot).
+ \textbf{B. Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      Experiment 2.}  Same format as Figure~3A and B, but reflects
+    data shown in Figure~\ref{fig:supplemental_2}B (rightmost violin
+    plot).  \textbf{C.--D.  Reconstruction
+      performance by location.} Each dot reflects the location of a
+    single implanted electrode from Dataset 2, Experiment 1 (Panel C)
+    or Dataset 2, Experiment 2 (Panel D).  The dot colors denote the
+    average within-experiment (across-session)
+    correlation, using the across-patient correlation model, between
+    the observed and reconstructed activity at the given electrode
+    location.}
 \label{fig:supplemental_3}
 \end{figure}
 
@@ -102,16 +114,18 @@ of those statistical tests.}
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_4}
-\caption{\textbf{Reconstruction accuracy predicted by data
-    features for each dataset.} \textbf{A.--F.  Features from Dataset
-    1.}  Features include: (\textbf{A.}) number of electrodes,
-  (\textbf{B.}) proportion thresholded, (\textbf{C.}), total recording
-  time, (\textbf{D.}) number thresholded, (\textbf{E.}) number of
-  sessions, and (\textbf{F.}) average session length.  The histograms
-  report the distributions of the z-transformed correlation
-  coefficients and the associated data feature.
-  \textbf{G.--L. Features from Dataset 2.}  Analogous format to Panels
-  A--F.}
+\caption{\textbf{Reconstruction accuracy versus within-subject data
+    features for two ECoG datasets.} \textbf{A.--F.  Features from
+    Dataset 1.}  Features include: (\textbf{A.}) total number of
+  electrodes implanted in each patient's brain, (\textbf{B.})
+  per-patient number of electrodes that were filtered out due to
+  having an average kurtosis greater than 10, (\textbf{C.})
+  per-patient proportion of electrodes that were filtered out due to
+  having an average kurtosis greater than 10, (\textbf{D.})
+  per-patient number of recording sessions, (\textbf{E.}) per-patient
+  total recording time (h), and (\textbf{F.}) per-patient average
+  session length (h).  \textbf{G.--L. Features from Dataset 2.}
+  Analogous format to Panels A--F.}
 \label{fig:supplemental_4}
 \end{figure}
 
@@ -119,10 +133,11 @@ of those statistical tests.}
 \begin{figure}[ptb]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_5}
-\caption{\textbf{ Top 10\% most informative voxels.}
- Voxels in yellow indicate the intersections between
-    the top 10\% most informative voxels in each brain map from Figure
-    5, indicated by the white contours.}
+\caption{\textbf{Most informative electrode locations.}  This map
+  shows the region outlined in white from Figure~5 in greater detail.
+Across Datasets 1 and 2, electrodes in these locations were identified as yielding the (10\%)
+best reconstruction accuracies at \textit{other} locations throughout
+the brain.}
 \label{fig:supplemental_5}
 \end{figure}
 
