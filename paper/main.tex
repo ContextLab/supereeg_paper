@@ -43,19 +43,20 @@ Boston, MA 02110, USA}
   Human \textit{SuperEEG}\footnote{The term ``SuperEEG'' was coined by
     Robert J. Sawyer in his popular science fiction novel \textit{The
       Terminal Experiment}~\cite{Sawy95}} entails measuring ongoing
-  neural activity with perfect precision and at arbitrarily high
-  spatiotemporal resolution.  Although true SuperEEG is impossible
-  using existing methods, here we present a model-based method for
-  \textit{inferring} neural activity at millimeter-scale spatial
-  resolutions and millisecond-scale temporal resolutions using
-  standard human intracranial recordings.  Our approach assumes that
-  different people's brains exhibit similar spatial correlations, and
-  that (all else being equal) neural activity at nearby locations will
-  tend to be similar.  One can then ask, for an arbitrary individual's
-  brain: given recordings from a limited set of locations in that
-  individual's brain, along with the observed spatial correlations
-  learned from other people's recordings, how much can be inferred
-  about ongoing activity at \textit{other} locations in that
+  neural activity throughout the entire living brain with perfect
+  precision and arbitrarily high spatiotemporal resolution.  Although
+  true SuperEEG is impossible using existing methods, here we present
+  a model-based method for \textit{inferring} full-brain neural
+  activity at millimeter-scale spatial resolutions and
+  millisecond-scale temporal resolutions using standard human
+  intracranial recordings.  Our approach assumes that different
+  people's brains exhibit similar spatial correlations, and that
+  activity and correlation patterns are spatially smooth.  One can
+  then ask, for an arbitrary individual's brain: given recordings from
+  a limited set of locations in that individual's brain, along with
+  the observed spatial correlations learned from other people's
+  recordings, how much can be inferred about ongoing activity at
+  \textit{other} locations in that
   individual's brain?\\\\
   \footnotesize{\textbf{Keywords: Electrocorticography (ECoG),
       intracranial electroencephalography (iEEG), local field
@@ -76,7 +77,7 @@ approach (due to requiring work with neurosurgical patients) is to
 record from electrodes implanted directly onto the cortical surface
 (electrocorticography; ECoG) or into deep brain structures
 (intracranial EEG; iEEG).  However, these intracranial approaches also
-require compromise: the high spatiotemporal resolutions of
+require compromise: the high spatiotemporal resolution of
 intracranial recordings comes at the cost of substantially reduced
 brain coverage, since safety considerations limit the number of
 electrodes one may implant in a given patient's brain.  Further, the
@@ -135,14 +136,14 @@ call \textit{SuperEEG}, based on Gaussian process
 regression~\cite{Rasm06}.  SuperEEG entails using data from multiple
 people to estimate activity patterns at arbitrary locations in each
 person's brain (i.e., independent of their electrode placements).  We
-test SuperEEG approach using two large datasets of intracranial
+test our SuperEEG approach using two large datasets of intracranial
 recordings~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
   MannEtal12, EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17,
   LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  We show
 that the SuperEEG algorithm recovers signals well from electrodes that
 were held out of the training dataset.  We also examine the factors
 that influence how accurately activity may be estimated (recovered),
-which may have important implications for electrode design and
+which may have implications for electrode design and
 placement in neurosurgical applications.
 
 \section*{Approach}
@@ -154,27 +155,35 @@ collected dataset comprising multi-session intracranial recordings.
 Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
 patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
-  MannEtal12}.  Each recording session lasted from {0.2}--{3.0}
-(total recording time: {0.3}--14.2 hours; Fig.~\suppstats A), and includes data from a list-learning memory experiment
-for up to one hour varying by patient with additional buffer time in
-which the patients performed typical bed-ridden hospital
-activities.  For the purposes of the Dataset 1
-analyses presented here, we aggregated all data across each recording
-session, ignoring the particular activities or tasks the patients were
-performing at any given moment.  We used Dataset 1 to develop our main
-SuperEEG approach, and to examine the extent to which SuperEEG might
-be able to generate task-general predictions.  Dataset 2 comprised
-multi-session recordings from 4436 electrodes implanted in the brains
-of 40 epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
-  KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18,
-  KuceEtal18}.  Each recording session lasted from {0.4}--2.2 hours
-(total recording time: {0.4}--6.6 hours; Fig.~\suppstats B).  Whereas Dataset 1 included recordings taken during a
-wide variety of behaviors, Dataset 2 included recordings taken as each
-patient performed each of two memory tasks: a random word list free
-recall task and a categorized word list free recall task.  We used
-Dataset 2 to further examine the ability of SuperEEG to generalize its
+  MannEtal12}.  Each recording session lasted from 0.2--3~h (total
+recording time: 0.3--14.2~h; Fig.~\suppstats A).  During each
+recording session, the patients participated in a free recall list
+learning task, which lasted for up to approximately 1~h.  In addition,
+the recordings included ``buffer'' time (the length varied by patient)
+before and after each experimental session, during which the patients
+went about their regular hospital activities (confined to their
+hospital room, and primarily in bed).  These additional activities
+included interactions with medical staff and family, watching
+television, reading, and other similar activities.  For the purposes
+of the Dataset 1 analyses presented here, we aggregated all data
+across each recording session, including recordings taken during the
+main experimental task as well as during non-experimental time.  We
+used Dataset 1 to develop our main SuperEEG approach, and to examine
+the extent to which SuperEEG might be able to generate task-general
+predictions.  Dataset 2 comprised multi-session recordings from 4436
+electrodes implanted in the brains of 40 epilepsy
+patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17,
+  LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  Each
+recording session lasted from 0.4--2.2~h (total recording time:
+0.4--6.6~h; Fig.~\suppstats B).  Whereas Dataset 1 included recordings
+taken as the patients participated in a variety of activities, Dataset
+2 included recordings taken as each patient performed each of two
+specific experimental memory tasks: a random word list free recall
+task (Experiment 1) and a categorized word list free recall task
+(Experiment 2).  We used Dataset 2
+to further examine the ability of SuperEEG to generalize its
 predictions within versus across tasks.  Figure~\suppstats~provides
-additional details on both datasets.
+additional information about both datasets.
 
 \begin{figure}
   \centering
