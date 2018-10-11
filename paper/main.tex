@@ -18,6 +18,7 @@
 \newcommand{\perexptaskrecon}{S2}
 \newcommand{\perexptaskreconseparated}{S3}
 \newcommand{\suppstats}{S4}
+\newcommand{\intersectmap}{S5}
 
 % Include your paper's title here
 
@@ -153,25 +154,21 @@ collected dataset comprising multi-session intracranial recordings.
 Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
 patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
-  MannEtal12}.  Each recording session lasted from 0.3--14.2 hours
-(Fig.~\suppstats A), and includes data recorded roughly from when the
-patients woke up each morning, to before they went to sleep at the end
-of each day.  In addition to typical bed-ridden hospital patient
-activities (e.g., lying in bed, reading, watching television, using
-personal electronic devices, listening to music, visiting with family
-and friends, etc.), the patients also performed a variety of
-experimental cognitive tasks throughout their day (primarily
-list-learning memory tasks).  For the purposes of the Dataset 1
+  MannEtal12}.  Each recording session lasted from {0.2}--{3.0}
+(total recording time: {0.3}--14.2 hours; Fig.~\suppstats A), and includes data from a list-learning memory experiment
+for up to one hour varying by patient with additional buffer time in
+which the patients performed typical bed-ridden hospital
+activities.  For the purposes of the Dataset 1
 analyses presented here, we aggregated all data across each recording
 session, ignoring the particular activities or tasks the patients were
 performing at any given moment.  We used Dataset 1 to develop our main
 SuperEEG approach, and to examine the extent to which SuperEEG might
 be able to generate task-general predictions.  Dataset 2 comprised
-multi-session recordings from 3159 electrodes implanted in the brains
-of 24 epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
+multi-session recordings from 4436 electrodes implanted in the brains
+of 40 epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
   KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18,
-  KuceEtal18}.  Each recording session lasted from .4--6.6 hours
-(Fig.~\suppstats B).  Whereas Dataset 1 included recordings taken during a
+  KuceEtal18}.  Each recording session lasted from {0.4}--2.2 hours
+(total recording time: {0.4}--6.6 hours; Fig.~\suppstats B).  Whereas Dataset 1 included recordings taken during a
 wide variety of behaviors, Dataset 2 included recordings taken as each
 patient performed each of two memory tasks: a random word list free
 recall task and a categorized word list free recall task.  We used
@@ -424,10 +421,10 @@ Figure~\ref{fig:recon}A displays the observed LFP from the red
 electrode in Figure~\ref{fig:methods}A (blue), and its associated
 reconstruction (red), during a 5~s time window during one of the
 example patient's six recording sessions.  The two traces match
-closely ($r = 0.869, p < 10^{-10}$).  Figure~\ref{fig:recon}B displays a
+closely ($r = 0.86, p < 10^{-10}$).  Figure~\ref{fig:recon}B displays a
 two-dimensional histogram of the actual versus reconstructed voltages
 for the entire 14.2 total hours of recordings from the example
-electrode (correlation: $r = 0.909, p < 10^{-10}$).  This example confirms
+electrode (correlation: $r = 0.91, p < 10^{-10}$).  This example confirms
 that the SuperEEG algorithm recovers the recordings from this single
 electrode well.  Next, we used this general approach to quantify the
 algorithm's performance across the full dataset.
@@ -462,8 +459,8 @@ recover the recording at that location by incorporating data across
 patients (black histogram in Fig.~\ref{fig:corrmap}A, map in
 Fig.~\ref{fig:corrmap}C).  The observed distribution of correlations
 was centered well above zero (mean: 0.52; $t$-test comparing mean of
-distribution of $z$-transformed per-electrode correlation coefficients
-to 0: $t(66) = 25.08, p < 10^{-30}$), indicating that the SuperEEG algorithm
+distribution of $z$-transformed average patient correlation coefficients
+to 0: $t(66) = 25.08, p < 10^{-10}$), indicating that the SuperEEG algorithm
 recovers held-out activity patterns substantially better than random
 guessing.
 
@@ -485,7 +482,7 @@ correlations learned from that single patient.  As shown in
 Figure~\ref{fig:corrmap}A (gray histogram), the distribution of
 within-patient correlations was centered well above zero (mean: 0.32;
 $t$-test comparing mean of distribution of $z$-transformed
-per-electrode correlation coefficients to 0: $t(66) = 15.16, p < 10^{-20}$).
+average patient correlation coefficients to 0: $t(66) = 15.16, p < 10^{-10}$).
 However, the across-patient correlations were substantially higher
 ($t$-test comparing average $z$-transformed within versus across
 patient electrode correlations: $t(66) = 9.62, p < 10^{-10}$).  This is an
@@ -667,12 +664,13 @@ information via SuperEEG (Fig.~\ref{fig:informap}A, B).  Despite task
 and patient differences across the two datasets, we nonetheless found
 that the maps of the most promising implantation targets derived from
 both datasets were similar (voxelwise correlation between information
-scores across the two datasets: $r = 0.23, p < 10^{-10}$).  While the
+scores across the two datasets: $r = 0.03, p < 10^{-10}$).  While the
 correspondence between the two maps was not perfect, our finding that
 there were some commonalities between the two maps lends support to
 the notion that different brain areas are differently informative
-about full-brain activity patterns.  Further, regions like the right post
-central gyrus, right supramarginal gyrus,
+about full-brain activity patterns.  Further, we found the
+intersection of the top 10\% of the most informative voxels between
+the two datasets (Fig.~\intersectmap) and found gray matter regions like the right postcentral gyrus, right supramarginal gyrus,
 and the right nucleus accumbens that exhibited strong information scores in both datasets may
 be especially promising implantation targets.
 
@@ -685,7 +683,7 @@ be especially promising implantation targets.
     electrodes from any patients with at least one electrode within 20
     MNI units of the given voxel.  \textbf{B. Dataset 2 information
       score by voxel.}  This panel is in the same format as Panel A.
-    In Panels A and B the contours indicate the intersections between
+    In both panels the contours indicate the intersections between
     the top 10\% most informative voxels in each map.
     \textbf{C. Correspondence in information scores by voxel across
       Datasets 1 and 2.}  Same format as Figure~\ref{fig:density}C.}
@@ -792,7 +790,10 @@ neural activity.
 
 \section*{Code availability}
 We have published an open-source toolbox implementing the SuperEEG
-algorithm.  It may be downloaded \href{https://supereeg.readthedocs.io/en/latest/}{\underline{here}}.
+algorithm.  It may be downloaded
+\href{https://supereeg.readthedocs.io/en/latest/}{\underline{here}}. Additionally,
+we have provided notebooks for all analyses and figures reported
+here.  
 
 \section*{Data availability}
 The dataset analyzed in this study was generously shared by Michael Kahana.  A portion of Dataset 1 may be downloaded

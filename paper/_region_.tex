@@ -156,24 +156,22 @@ collected dataset comprising multi-session intracranial recordings.
 Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
 patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
-  MannEtal12}.  Each recording session lasted from 0.3--14.2 hours
-(Fig.~\suppstats A), and includes data recorded roughly from when the
-patients woke up each morning, to before they went to sleep at the end
-of each day.  In addition to typical bed-ridden hospital patient
+  MannEtal12}.  Each recording session lasted from {0.3}--14.2 hours
+(Fig.~\suppstats A), and includes data from a list-learning memory experiment
+for up to one hour varying by patient with additional buffer time in
+which the patients performed typical bed-ridden hospital
 activities (e.g., lying in bed, reading, watching television, using
 personal electronic devices, listening to music, visiting with family
-and friends, etc.), the patients also performed a variety of
-experimental cognitive tasks throughout their day (primarily
-list-learning memory tasks).  For the purposes of the Dataset 1
+and friends, etc.).  For the purposes of the Dataset 1
 analyses presented here, we aggregated all data across each recording
 session, ignoring the particular activities or tasks the patients were
 performing at any given moment.  We used Dataset 1 to develop our main
 SuperEEG approach, and to examine the extent to which SuperEEG might
 be able to generate task-general predictions.  Dataset 2 comprised
-multi-session recordings from 3159 electrodes implanted in the brains
-of 24 epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
+multi-session recordings from 4436 electrodes implanted in the brains
+of 40 epilepsy patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17,
   KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18,
-  KuceEtal18}.  Each recording session lasted from .4--6.6 hours
+  KuceEtal18}.  Each recording session lasted from {0.4}--6.6 hours
 (Fig.~\suppstats B).  Whereas Dataset 1 included recordings taken during a
 wide variety of behaviors, Dataset 2 included recordings taken as each
 patient performed each of two memory tasks: a random word list free
@@ -390,7 +388,7 @@ covariance matrices.)  Also, note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
 large (e.g., for the patient highlighted in Fig.~\ref{fig:recon}, $T =
-20458799$). However, because Equation~\ref{eqn:reconstruction} is time
+12786750$). However, because Equation~\ref{eqn:reconstruction} is time
 invariant, we may compute $Y_{s,k,\beta_s}$ in a piecewise
 manner by filling in $Y_{s,k,\beta_s}$ one row at a time (using the
 corresponding samples from $Y_{s, k, \alpha_s}$).
@@ -424,13 +422,13 @@ $\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$?).
 To illustrate our approach, we first examine an individual held-out
 raw LFP trace and its associated SuperEEG-derived reconstruction.
 Figure~\ref{fig:recon}A displays the observed LFP from the red
-electrode in Figure~\ref{fig:methods}A (red), and its associated
-reconstruction (blue), during a 5~s time window during one of the
+electrode in Figure~\ref{fig:methods}A (blue), and its associated
+reconstruction (red), during a 5~s time window during one of the
 example patient's six recording sessions.  The two traces match
-closely ($r = 0.869, p = 10\textsuperscript{-10]$).  Figure~\ref{fig:recon}B displays a
+closely ($r = 0.869, p < 10^{-10}$).  Figure~\ref{fig:recon}B displays a
 two-dimensional histogram of the actual versus reconstructed voltages
 for the entire 14.2 total hours of recordings from the example
-electrode (correlation: $r = 0.909, p = 10\textsuperscript{-10}$).  This example confirms
+electrode (correlation: $r = 0.909, p < 10^{-10}$).  This example confirms
 that the SuperEEG algorithm recovers the recordings from this single
 electrode well.  Next, we used this general approach to quantify the
 algorithm's performance across the full dataset.
@@ -441,9 +439,9 @@ algorithm's performance across the full dataset.
   \includegraphics[width=\textwidth]{figs/recon}
   \caption{\textbf{Observed and reconstructed LFP from a single
       electrode.} \textbf{A. Example LFP.}  A 5~s recording from the
-    red electrode in Figure~\ref{fig:methods}A is displayed in red,
+    red electrode in Figure~\ref{fig:methods}A is displayed in blue,
     and the reconstructed LFP during the same time window is shown in
-    blue.  \textbf{B. Observed versus reconstructed LFP over
+    red.  \textbf{B. Observed versus reconstructed LFP over
       14.2~hours.}  The two-dimensional histogram reflects the
     relation between distributions of observed versus reconstructed
     voltages from one patient, across the 14.2 hours of recorded data
@@ -464,9 +462,9 @@ in $\bar{R}$, reflecting how well the SuperEEG algorithm was able to
 recover the recording at that location by incorporating data across
 patients (black histogram in Fig.~\ref{fig:corrmap}A, map in
 Fig.~\ref{fig:corrmap}C).  The observed distribution of correlations
-was centered well above zero (mean: XXX; $t$-test comparing mean of
+was centered well above zero (mean: 0.52; $t$-test comparing mean of
 distribution of $z$-transformed per-electrode correlation coefficients
-to 0: $t(XXX) = XXX, p = XXX$), indicating that the SuperEEG algorithm
+to 0: $t(66) = 25.08, p < 10^{-30}$), indicating that the SuperEEG algorithm
 recovers held-out activity patterns substantially better than random
 guessing.
 
@@ -486,12 +484,12 @@ conductance or other sources of ``leakage'' from activity patterns
 measured from the patient's other electrodes and (b) across-electrode
 correlations learned from that single patient.  As shown in
 Figure~\ref{fig:corrmap}A (gray histogram), the distribution of
-within-patient correlations was centered well above zero (mean: XXX;
+within-patient correlations was centered well above zero (mean: 0.32;
 $t$-test comparing mean of distribution of $z$-transformed
-per-electrode correlation coefficients to 0: $t(XXX) = XXX, p = XXX$).
+per-electrode correlation coefficients to 0: $t(66) = 15.16, p < 10^{-20}$).
 However, the across-patient correlations were substantially higher
 ($t$-test comparing average $z$-transformed within versus across
-patient electrode correlations: $t(XXX) = XXX, p = XXX$).  This is an
+patient electrode correlations: $t(66) = 9.62, p < 10^{-10}$).  This is an
 especially conservative test, given that the across-patient SuperEEG
 reconstructions exclude (from the correlation matrix estimates) all
 data from the patient whose data is being reconstructed.  We repeated
@@ -564,14 +562,14 @@ experiments, or combining across both experiments
 (Fig.~\perexptaskrecon).  In every case we found that across-patient
 models trained using data from all other patients out-performed
 within-patient models trained on data only from the subject
-contributing the given electrode ($t$s$(XXX) > XXX, p$s$ < XXX$).  All
+contributing the given electrode ($t$s$(24) > 6.50, p$s$ < 10^{-5}$).  All
 reconstruction accuracies also reliably exceeded chance performance
-($t$s$(XXX) > XXX, p$s$ < XXX$).  Average reconstruction accuracy was
+($t$s$(24) > 8.00, p$s$ < 10^{-8}$).  Average reconstruction accuracy was
 highest for the across-patient models limited to data from the same
-experiment (mean accuracy: $0.55$); next-highest for the
+experiment (mean accuracy: $0.68$); next-highest for the
 across-patient models that combined data across both experiments (mean
-accuracy: $0.50$); and lowest for models trained across task (mean
-accuracy: $0.37$).  This result also held for each of the Dataset 2
+accuracy: $0.61$); and lowest for models trained across task (mean
+accuracy: $0.47$).  This result also held for each of the Dataset 2
 experiments individually (Fig.~\perexptaskreconseparated).  Taken
 together, these results indicate that there are reliable commonalities
 in the spatial correlations of full-brain activity across tasks, but
@@ -594,7 +592,7 @@ that were contained within a 20 MNI unit radius sphere centered on
 that voxel.  We defined the \textit{density} at that location as this
 proportion.  Across Datasets 1 and 2, the electrode placement
 densities were similar (correlation by voxel:
-$r = XXX, p = XXX$).  We wondered whether regions with good
+$r = 0.56, p < 10^{-10}$).  We wondered whether regions with good
 covererage might be associated with better reconstruction accuracy
 (e.g. Fig.~\ref{fig:corrmap}C, D indicate that many electrodes in the
 MTL have relatively high reconstruction accuracy, and occipital
@@ -607,8 +605,8 @@ then correlated these density values with the across-patient
 reconstruction accuracies for each electrode.  Contrary to our
 expectation, rather than positive correlations, we found weak (but
 reliable) negative correlations between reconstruction accuracy and
-density for both datasets (Dataset 1: $r = XXX, p = XXX$; Dataset 2:
-$r = -0.16, p < 10^{-10}$).  This indicates that the reconstruction
+density for both datasets (Dataset 1: $r = -0.07, p < 10^{-5}$; Dataset 2:
+$r = -0.18, p < 10^{-10}$).  This indicates that the reconstruction
 accuracies we observed are not driven solely by sampling density, but
 rather may also reflect higher order properties of neural dynamics
 such as functional correlations between distant
@@ -670,12 +668,13 @@ information via SuperEEG (Fig.~\ref{fig:informap}A, B).  Despite task
 and patient differences across the two datasets, we nonetheless found
 that the maps of the most promising implantation targets derived from
 both datasets were similar (voxelwise correlation between information
-scores across the two datasets: $r = XXX, p = XXX$).  While the
+scores across the two datasets: $r = 0.23, p < 10^{-10}$).  While the
 correspondence between the two maps was not perfect, our finding that
 there were some commonalities between the two maps lends support to
 the notion that different brain areas are differently informative
-about full-brain activity patterns.  Further, regions like XXX, XXX,
-and XXX that exhibited strong information scores in both datasets may
+about full-brain activity patterns.  Further, regions like the right post
+central gyrus, right supramarginal gyrus,
+and the right nucleus accumbens that exhibited strong information scores in both datasets may
 be especially promising implantation targets.
 
 \begin{figure}
@@ -705,9 +704,9 @@ gross anatomical structure of our brains changes meaningfully over the
 course of years as our brains develop, on the timescales of typical
 neuroimaging experiments (i.e., hours to days) our anatomical networks
 are largely stable~\citep[e.g., ][]{CaseEtal00}.  Further, many
-aspects of brain anatomy, including white matter structure, is largely
+aspects of brain anatomy, including white matter structure, are largely
 preserved across people~\citep[e.g., ][]{TalaTour88, JahaEtal13,
-  MoriEtal08} There are several possible means of reconciling this
+  MoriEtal08}. There are several possible means of reconciling this
 apparent inconsistency between dynamic person- and task-specific
 functional networks versus stable anatomical networks.  For example,
 relatively small magnitude anatomical differences across people may be
@@ -847,4 +846,4 @@ Reprints and permissions information is available at www.nature.com/reprints.  T
 
 
 
-\message{ !name(main.tex) !offset(-850) }
+\message{ !name(main.tex) !offset(-849) }
