@@ -12,7 +12,7 @@
 
 \newcommand{\argmax}{\mathop{\mathrm{argmax}}\limits}
 
-\title{\textit{Supplemental Figures for}: A Gaussian process model of human electrocorticographic data} 
+\title{\textit{Supplemental figures for}: A Gaussian process model of human electrocorticographic data} 
 \author{
   Lucy L. W. Owen$^{1}$,
   Andrew C. Heusser$^{1, 2}$, and
@@ -42,26 +42,28 @@ Boston, MA 02110, USA}
 \begin{figure}[b!]
 \centering
 \includegraphics[width=0.6\textwidth]{figs/supplemental_1}
-\caption{\textbf{Reconstruction quality for datasets 1 and 2.}
+\caption{\textbf{Reconstruction quality for Datasets 1 and 2.}
   \textbf{A. Distributions of correlations between observed versus
-    reconstructed activity by electrode, for Dataset 1.} The split violin
-  plot reflects the same data as Figure~3A, presented here for
-  comparison.  The ``\textbf{B. Distributions of correlation between
+    reconstructed activity by electrode, for Dataset 1.} The split
+  violin plot reflects the same data as Figure~3A, presented here for
+  comparison.  \textbf{B. Distributions of correlation between
     observed versus reconstructed activity by electrode, for Dataset
-    1.}  The right-most split violin plot (``All'') reflects the same data as Figure~3B,
-  presented here for comparison.  The ``Within'' plot reflects the
-  same analyses, but limited to models that were trained and tested on
-  the same Dataset 2 experiments.  The ``Across'' plot reflects the
-  same analyses, but limited to models that were trained and tested on
-  \textit{different} Dataset 2 experiments.  All plots: the dark gray
-  distributions denote across-subject correlations (model trained on
-  all but one patient and tested on the held-out patient), and the
-  light gray distributions denote within-subject correlations (model
-  trained on all but one electrode from one patient, and tested on the
-  held-out electrode).  The horizontal bars denote $t$-tests between
-  the corresponding distributions, and the white numbers reflect the
-  distribution means.  The symbols denote the corresponding $p$-values
-of those statistical tests.}
+    2.}  The right-most split violin plot (``All'') reflects the same
+  data as Figure~3B, presented here for comparison.  The ``Within''
+  plot reflects the same analyses, but limited to models that were
+  trained and tested on only one of the Dataset 2 experiments at a
+  time.  The ``Across'' plot reflects the same analyses, but limited
+  to models that were trained and tested on \textit{different} Dataset
+  2 experiments.  All plots: the dark gray distributions denote
+  across-subject correlations (model trained on all but one patient
+  and tested on the held-out patient), and the medium gray
+  distributions denote within-subject correlations (model trained on
+  all but one electrode from one patient, and tested on the held-out
+  electrode).  The horizontal bars denote $t$-tests between the
+  corresponding distributions (after $z$-transforming the
+  correlations), and the white numbers reflect the distribution means.
+  The symbols denote the corresponding $p$-values of those statistical
+  tests.}
 \label{fig:supplemental_1}
 \end{figure}
 
@@ -135,9 +137,10 @@ of those statistical tests.}
 \includegraphics[width=\textwidth]{figs/supplemental_5}
 \caption{\textbf{Most informative electrode locations.}  This map
   shows the region outlined in white from Figure~5 in greater detail.
-Across Datasets 1 and 2, electrodes in these locations were identified as yielding the (10\%)
-best reconstruction accuracies at \textit{other} locations throughout
-the brain.}
+  Across Datasets 1 and 2, electrodes in these locations were
+  identified as yielding the (10\%) best reconstruction accuracies at
+  \textit{other} locations throughout the brain.  The $x$-coordinates
+  in each panel denote the positions of the sagittal slices in MNI space.}
 \label{fig:supplemental_5}
 \end{figure}
 
