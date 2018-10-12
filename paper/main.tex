@@ -130,7 +130,7 @@ can we infer about the activity exhibited by the rest of a person's
 brain, given what we learn from the limited intracranial recordings we
 have from their brain and additional recordings taken from
 \textit{other} people's brains?  Here we develop an approach, which we
-call \textit{SuperEEG}\textit{SuperEEG}\footnote{The term ``SuperEEG''
+call \textit{SuperEEG}\footnote{The term ``SuperEEG''
   was coined by Robert J. Sawyer in his popular science fiction novel
   \textit{The Terminal Experiment}~\cite{Sawy95}.  SuperEEG is a
   fictional technology that measures ongoing neural activity
@@ -159,7 +159,7 @@ Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
 patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
   MannEtal12}.  Each recording session lasted from 0.2--3~h (total
-recording time: 0.3--14.2~h; Fig.~\suppstats A).  During each
+recording time: 0.3--14.2~h; Fig.~\suppstats E).  During each
 recording session, the patients participated in a free recall list
 learning task, which lasted for up to approximately 1~h.  In addition,
 the recordings included ``buffer'' time (the length varied by patient)
@@ -178,7 +178,7 @@ electrodes implanted in the brains of 40 epilepsy
 patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17,
   LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  Each
 recording session lasted from 0.4--2.2~h (total recording time:
-0.4--6.6~h; Fig.~\suppstats B).  Whereas Dataset 1 included recordings
+0.4--6.6~h; Fig.~\suppstats K).  Whereas Dataset 1 included recordings
 taken as the patients participated in a variety of activities, Dataset
 2 included recordings taken as each patient performed each of two
 specific experimental memory tasks: a random word list free recall
@@ -244,8 +244,8 @@ from each patient.  For Dataset 1, this yielded clean recordings from
 recordings from 3159 electrodes from 24 patients.  Each individual
 patient contributes electrodes from a limited set of brain locations,
 which we localized in a common space~\citep[MNI152;][]{GrabEtal06}; an
-example Dataset 1 patient's 54 electrodes that passed the predefined
-kurtosis test are highlighted in black and red.
+example Dataset 1 patient's 54 electrodes that passed the above
+kurtosis threshold test are highlighted in black and red.
 
 The recording from a given electrode is maximally informative about
 the activity of the neural tissue immediately surrounding its
@@ -361,10 +361,10 @@ We can sub-divide $\hat{K}$ as follows:
 \hat{K}_{\alpha_s,\alpha_s} &= \hat{K}(\alpha_s,\alpha_s)\label{eqn:Kaa}.
 \end{align}
 Here $\hat{K}_{\beta_s, \alpha_s}$ represents the correlations between
-the ``unknown'' activity at the locations in $\beta_s$ and the
-observed activity at the locations in $\alpha_s$, and
+the ``unknown'' activity at the locations indexed by $\beta_s$ and the
+observed activity at the locations indexed by $\alpha_s$, and
 $\hat{K}_{\alpha_s, \alpha_s}$ represents the correlations between the
-observed recordings (at the locations in $\alpha_s$).
+observed recordings (at the locations indexed by $\alpha_s$).
 
 Let $Y_{s,k,\alpha_s}$ be the number-of-timepoints ($T$) by
 $\left|\alpha_s\right|$ matrix of (observed) voltages from the electrodes in
@@ -392,7 +392,7 @@ algorithm recovers voltages in standard deviation ($z$-scored) units
 rather than attempting to recover absolute voltages. (This property
 reflects the fact that $\hat{K}_{\beta_s, \alpha_s}$ and
 $\hat{K}_{\alpha_s, \alpha_s}$ are correlation matrices rather than
-covariance matrices.)  Also, note that
+covariance matrices.)  Also, we note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
 large (e.g., for the patient highlighted in Fig.~\ref{fig:recon}, $T =
