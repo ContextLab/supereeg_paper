@@ -1,6 +1,8 @@
 # A Gaussian process model of human electrocorticographic data
 
-This repository contains data and code used to produce the paper "[_A Gaussian process model of human electrocorticographic data_](https://www.biorxiv.org/content/early/2018/10/12/121020)" by Lucy L. W. Owen, Andrew C. Heusser, and Jeremy R. Manning. The repository is organized as follows:
+This repository contains data and code used to produce our "SuperEEG" paper, by Lucy L. W. Owen, Andrew C. Heusser, and Jeremy R. Manning, entitled "[_A Gaussian process model of human electrocorticographic data_](https://www.biorxiv.org/content/early/2018/10/12/121020)." If you are looking to apply SuperEEG to your own ECoG data, you may also be interested in our [SuperEEG Python Toolbox](https://supereeg.readthedocs.io/en/latest/).
+
+This repository is organized as follows:
 
 ```
 root
