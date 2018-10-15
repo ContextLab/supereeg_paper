@@ -10,8 +10,8 @@ root
     └── scripts : python scripts used to perform pyfr analyses on a cluster
     └── notebooks : jupyter notebooks for paper analyses and paper figures
 └── data : processed data
-    ├── pyfr : compiled reconstruction accuracy from pyfr analyses
-    └── ram : compiled reconstruction accuracy from ram analyses
+    ├── pyfr : compiled reconstruction accuracy from pyfr ("Dataset 1") analyses
+    └── ram : compiled reconstruction accuracy from ram ("Dataset 2") analyses
 └── paper : all latex and pdf files to generate paper
     └── figs : all final pdfs
 ```
