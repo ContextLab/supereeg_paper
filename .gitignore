@@ -111,3 +111,8 @@ ENV/
 *.synctex.gz
 
 *.#*
+
+paper/main.pdf
+paper/*.prv*
+paper/*.synctex*
+paper/_region_.tex
