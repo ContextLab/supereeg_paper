@@ -86,7 +86,7 @@ than research, needs.
 An increasingly popular approach is to improve the effective spatial
 resolution of MEG or scalp EEG data by using a geometric approach
 called \textit{beamforming} to solve the biomagnetic or bioelectrical
-inverse problem~\cite{Sarv87}.  This approach entails using detailed
+inverse problem~\citep{Sarv87}.  This approach entails using detailed
 brain conductance models (often informed by high spatial resolution
 anatomical MRI images) along with the known sensor placements
 (localized precisely in 3D space) to reconstruct brain signals
@@ -97,13 +97,13 @@ has infinitely many solutions.  Researchers have made traction towards
 constraining the solution space by assuming that signal-generating
 sources are localized on a regularly spaced grid spanning the brain
 and that individual sources are small relative to their distances to
-the sensors~\cite{Snyd91, BailEtal01, HillEtal05}.  The second, and in
+the sensors~\citep{Snyd91, BailEtal01, HillEtal05}.  The second, and in
 some ways much more serious, obstacle is that the magnetic fields
 produced by external (noise) sources are substantially stronger than
 those produced by the neuronal changes being sought (i.e., at deep
 structures, as measured by sensors at the scalp).  This means that
 obtaining adequate signal quality often requires averaging the
-measured responses over tens to hundreds of responses or trials~\citep[e.g., see review by][]{HillEtal05}).
+measured responses over tens to hundreds of responses or trials~\citep[e.g., see review by][]{HillEtal05}.
 
 Another approach to obtaining high spatiotemporal resolution
 neural data has been to collect fMRI and EEG data simultaneously.
@@ -111,8 +111,7 @@ Simultaneous fMRI-EEG has the potential to balance the high spatial
 resolution of fMRI with the high temporal resolution of scalp EEG,
 thereby, in theory, providing the best of both worlds.  In practice,
 however, the signal quality of both recordings suffers substantially
-when the two techniques are applied simultaneously (e.g., see review
-by~\cite{HustEtal12}).  In addition, the experimental designs that are
+when the two techniques are applied simultaneously~\citep[e.g., see review by][]{HustEtal12}.  In addition, the experimental designs that are
 ideally suited to each technique individually are somewhat at odds.
 For example, fMRI experiments often lock stimulus presentation
 events to the regularly spaced image acquisition time (TR), which
@@ -136,11 +135,11 @@ call \textit{SuperEEG}\footnote{The term ``SuperEEG''
   fictional technology that measures ongoing neural activity
   throughout the entire living human brain with perfect precision and
   at arbitrarily high spatiotemporal resolution.}, based on Gaussian
-process regression~\cite{Rasm06}.  SuperEEG entails using data from
+process regression~\citep{Rasm06}.  SuperEEG entails using data from
 multiple people to estimate activity patterns at arbitrary locations
 in each person's brain (i.e., independent of their electrode
 placements).  We test our SuperEEG approach using two large datasets
-of intracranial recordings~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b,
+of intracranial recordings~\citep{SedeEtal03, SedeEtal07a, SedeEtal07b,
   MannEtal11, MannEtal12, EzzyEtal17, HoraEtal17, KragEtal17,
   KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18,
   KuceEtal18}.  We show that the SuperEEG algorithm recovers signals
@@ -157,7 +156,7 @@ Figure~\ref{fig:methods}. We describe (in this section) and evaluate
 collected dataset comprising multi-session intracranial recordings.
 Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
-patients~\cite{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
+patients~\citep{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
   MannEtal12}.  Each recording session lasted from 0.2--3~h (total
 recording time: 0.3--14.2~h; Fig.~\suppstats E).  During each
 recording session, the patients participated in a free recall list
@@ -771,7 +770,7 @@ natural means of estimating the precise timing of single-neuron action
 potentials.  Prior work has shown that gamma band and broadband
 activity in the LFP may be used to estimate the firing rates of
 neurons that underly the population contributing to the
-LFP~\cite{MillEtal08, MannEtal09, JacoEtal10b, CronEtal11}.  Because
+LFP~\citep{MillEtal08, MannEtal09, JacoEtal10b, CronEtal11}.  Because
 SuperEEG reconstructs LFPs throughout the brain, one could in
 principle use gamma or broadband power in the reconstructed signals to
 estimate the corresponding firing rates (though not the timings of
