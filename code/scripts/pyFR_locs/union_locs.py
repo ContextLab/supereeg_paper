@@ -34,27 +34,29 @@ def electrode_search(fname, threshold=10):
         locs = pd.DataFrame(locs, columns=['x', 'y', 'z'])
         return locs[~thresh_bool]
 
-union_locs = []
-model_data = []
+freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
 
-brain_data = glob.glob(os.path.join(data_dir, '*.bo'))
-for i in brain_data:
-    try:
-        locs = electrode_search(i)
-        if not locs.empty:
-            if union_locs == []:
-                print(os.path.basename(i))
-                union_locs = locs.as_matrix()
-                model_data.append(os.path.basename(i))
-            else:
-                union_locs = np.vstack((union_locs, locs.as_matrix()))
-                model_data.append(os.path.basename(i))
-    except:
-        pass
+for freq in freqnames:
+    union_locs = []
+    model_data = []
 
-locations, l_indices = _unique(union_locs)
+    brain_data = glob.glob(os.path.join(data_dir, '*' + freq + '.bo'))
+    for i in brain_data:
+        try:
+            locs = electrode_search(i)
+            if not locs.empty:
+                if union_locs == []:
+                    print(os.path.basename(i))
+                    union_locs = locs.as_matrix()
+                    model_data.append(os.path.basename(i))
+                else:
+                    union_locs = np.vstack((union_locs, locs.as_matrix()))
+                    model_data.append(os.path.basename(i))
+        except:
+            pass
 
-results = os.path.join(results_dir, 'locs.npz')
-#results = os.path.join('/scratch/lucy.owen/supereeg/', 'locs.npz')
+    locations, l_indices = _unique(union_locs)
 
-np.savez(results, locs = locations, subjs = model_data)
+    results = os.path.join(results_dir, freq + '_locs.npz')
+
+    np.savez(results, locs = locations, subjs = model_data)
