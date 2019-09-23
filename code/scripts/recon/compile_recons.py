@@ -131,38 +131,64 @@ def density(n_by_3_Locs, nearest_n):
     return np.exp(-(distances.sum(axis=1) / (np.shape(distances)[1] - 1)))
 
 
-files = glob.glob(os.path.join(dir, '*.npz'))
-
-all_corrs_across = pd.DataFrame()
-
-for i in files:
-
-    compile_temp = compile_corrs(config['datadir'], i)
-    if all_corrs_across.empty:
-        all_corrs_across = compile_temp
-    else:
-        all_corrs_across = all_corrs_across.append(compile_temp)
-        all_corrs_across.to_csv(os.path.join(dir, 'all_corrs_across.csv'))
-
-# all_corrs_across['Density'] = density(all_corrs_across['R'].tolist(), 3)
-
-all_corrs_across.to_csv(os.path.join(dir, 'all_corrs_across.csv'))
 
 
+def compile_corrs_new(corr_path):
+    """
+        Compiles correlation values - as well as other subject/electrode specific paramters - creates the compiled pandas dataframe used for figures
 
-recon_data = glob.glob(os.path.join(dir, 'within/*within.npz'))
-all_corrs = pd.DataFrame()
+        Parameters
+        ----------
+        path_to_npz_data : string
+            Path to npz files - I know this isn't a great way to do this :/
 
-for i in recon_data:
-    corr_data = np.load(i, mmap_mode='r')
-    tempsub = os.path.basename(i)[:-4]
+        corr_path : npz file
+            npz file containing correlation values (loop outside - for each electrode)
+
+        Returns
+        ----------
+        results : dataframe
+            compiled dataframe with: Subject, electrode, correlation, samples, and sample rate
+
+        """
+    def parse_path_name(path_name):
+        f_name = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[0]
+        electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[-1]
+        return f_name, electrode
+
+    ### parse path is necessary for the wacky naming system
+    f_name, electrode = parse_path_name(corr_path)
+    corr_data = np.load(corr_path, mmap_mode='r')
+    tempR = np.round(corr_data['coord'], 2)
     tempmeancorr = z2r(np.mean(r2z(corr_data['corrs'])))
-    tempR = corr_data['coord']
-    temp_pd = pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [tempsub]})
-    if all_corrs.empty:
-        all_corrs = temp_pd
-    else:
-        all_corrs = all_corrs.append(temp_pd)
 
-all_corrs_within = os.path.join(dir, 'all_corrs_within.csv')
-all_corrs.to_csv(all_corrs_within)
+
+    return pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [f_name], 'Electrode': [electrode]})
+
+
+
+freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
+
+for freq in freqnames:
+    within_files = glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*within.npz'))
+    across_files= list(set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', "*"))) -
+                       set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', "*within.npz"))))
+    all_corrs_across = pd.DataFrame()
+    for i in across_files:
+
+        compile_temp = compile_corrs_new(i)
+        if all_corrs_across.empty:
+            all_corrs_across = compile_temp
+        else:
+            all_corrs_across = all_corrs_across.append(compile_temp)
+    all_corrs_across.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', freq + '_across.csv'))
+    all_corrs_within = pd.DataFrame()
+    for i in within_files:
+        compile_temp = compile_corrs_new(i)
+        if all_corrs_within.empty:
+            all_corrs_within = compile_temp
+        else:
+            all_corrs_within = all_corrs_within.append(compile_temp)
+    all_corrs_within.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', freq + '_within.csv'))
+
+
