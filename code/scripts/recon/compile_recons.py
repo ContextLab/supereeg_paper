@@ -152,8 +152,16 @@ def compile_corrs_new(corr_path):
 
         """
     def parse_path_name(path_name):
-        f_name = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[0]
-        electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[-1]
+
+        if os.path.basename(path_name).count('_')  == 5:
+
+            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[0]
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[-1]
+
+        elif os.path.basename(path_name).count('_')  == 6:
+            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_",6)[0]
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",6)[-2]
+
         return f_name, electrode
 
     ### parse path is necessary for the wacky naming system
