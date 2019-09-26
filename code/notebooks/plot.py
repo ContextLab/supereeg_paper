@@ -508,8 +508,8 @@ def most_informative_locs_plot(df, vox_size=5, width=10, outfile=None):
 
 def most_informative_locs(df, vox_size=5, width=10):
 
-    locs = compile_df_locs(df['R'])
-
+    #locs = compile_df_locs(df['R'])
+    locs = df['R']
     sub_nii = se.load('std', vox_size=vox_size)
     sub_locs = sub_nii.get_locs().values
 
