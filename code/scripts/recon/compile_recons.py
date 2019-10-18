@@ -178,9 +178,11 @@ def compile_corrs_new(corr_path):
 freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
 
 for freq in freqnames:
-    within_files = glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*within.npz'))
-    across_files= list(set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', "*"))) -
-                       set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', "*within.npz"))))
+    within_files = glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*' + freq + '*_within.npz'))
+    across_files= list(set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*' + freq + '*.npz'))) -
+                       set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*' + freq + '*_within.npz'))) -
+                       set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq + '_recon',
+                                                  '*' + freq + '*_ORPHAN.npz'))))
     all_corrs_across = pd.DataFrame()
     for i in across_files:
 

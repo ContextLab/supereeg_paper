@@ -111,7 +111,7 @@ ENV/
 *.synctex.gz
 
 *.#*
-
+data/niis
 paper/main.pdf
 paper/*.prv*
 paper/*.synctex*
