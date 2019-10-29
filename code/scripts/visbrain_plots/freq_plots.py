@@ -3,7 +3,7 @@ import supereeg as se
 import os
 from visbrain.objects import BrainObj, SceneObj, SourceObj
 
-cmap = "Spectral_r"
+cmap = "Spectral"
 
 nii_bo_dir = '../../../data/niis'
 
@@ -74,25 +74,26 @@ s_obj_7 = SourceObj('iEEG', xyz7, data=data7, cmap=cmap)
 s_obj_7.color_sources(data=data7)
 
 
-s_obj_all = s_obj_1 + s_obj_2 + s_obj_3 + s_obj_4+ s_obj_5 + s_obj_6 + s_obj_7
+#s_obj_all = s_obj_1 + s_obj_2 + s_obj_3 + s_obj_4+ s_obj_5 + s_obj_6 + s_obj_7
 
+s_obj_all = s_obj_7 + s_obj_6 + s_obj_5 + s_obj_4+ s_obj_3 + s_obj_2 + s_obj_1
 #s_obj_all = s_obj_1
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
-b_obj_proj_left.project_sources(s_obj_all, clim=(0, 4), cmap=cmap)
+b_obj_proj_left.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_left, row=0, col=0, rotate='left', use_this_cam=True)
 
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
-b_obj_proj_left.project_sources(s_obj_all, clim=(0, 4), cmap=cmap)
+b_obj_proj_left.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_left, row=0, col=1, rotate='right', use_this_cam=True)
 
 b_obj_proj_right = BrainObj(template_brain, hemisphere='right', translucent=False)
-b_obj_proj_right.project_sources(s_obj_all, clim=(0, 4), cmap=cmap)
+b_obj_proj_right.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_right, row=0, col=2, rotate='left', use_this_cam=True)
 
 b_obj_proj_right = BrainObj(template_brain, hemisphere='right', translucent=False)
-b_obj_proj_right.project_sources(s_obj_all, clim=(0, 4), cmap=cmap)
+b_obj_proj_right.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_right, row=0, col=3, rotate='right', use_this_cam=True)
 
 #sc.screenshot(os.path.join(fig_dir, f'{c}_largest_abs.png'), transparent=True)

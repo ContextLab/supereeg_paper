@@ -788,6 +788,7 @@ def plot_split_barplot_colors(df, X, Y, H, x_order, hue_order, left_colors, righ
 
     """
     
+    sns.set(style="white")
 
     fig, axes = plt.subplots(1, len(x_order), figsize=(30, 16), sharey='all')
 

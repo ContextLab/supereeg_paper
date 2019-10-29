@@ -153,14 +153,14 @@ def compile_corrs_new(corr_path):
         """
     def parse_path_name(path_name):
 
-        if os.path.basename(path_name).count('_')  == 5:
+        underscore_count = os.path.basename(path_name).count('_')
+        if os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[-1] == 'within':
+            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[0]
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[-2]
+        else:
+            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[0]
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[-1]
 
-            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[0]
-            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",5)[-1]
-
-        elif os.path.basename(path_name).count('_')  == 6:
-            f_name = os.path.splitext(os.path.basename(path_name))[0].split("_",6)[0]
-            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_",6)[-2]
 
         return f_name, electrode
 
@@ -175,30 +175,33 @@ def compile_corrs_new(corr_path):
 
 
 
-freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
+#freqnames = ['raw', 'delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
 
-for freq in freqnames:
-    within_files = glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*' + freq + '*_within.npz'))
-    across_files= list(set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*' + freq + '*.npz'))) -
-                       set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq+'_recon', '*' + freq + '*_within.npz'))) -
-                       set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64/results', freq + '_recon',
-                                                  '*' + freq + '*_ORPHAN.npz'))))
-    all_corrs_across = pd.DataFrame()
-    for i in across_files:
+freqnames = ['raw']
 
-        compile_temp = compile_corrs_new(i)
-        if all_corrs_across.empty:
-            all_corrs_across = compile_temp
-        else:
-            all_corrs_across = all_corrs_across.append(compile_temp)
-    all_corrs_across.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', freq + '_across.csv'))
-    all_corrs_within = pd.DataFrame()
-    for i in within_files:
-        compile_temp = compile_corrs_new(i)
-        if all_corrs_within.empty:
-            all_corrs_within = compile_temp
-        else:
-            all_corrs_within = all_corrs_within.append(compile_temp)
-    all_corrs_within.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', freq + '_within.csv'))
+for r in ['ram', 'pyfr']:
+
+    for freq in freqnames:
+
+        within_files = glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64', r+ '_results', freq+'_recon', '*_within.npz'))
+        across_files= list(set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64', r+ '_results', freq+'_recon', '*.npz'))) -
+                           set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64', r+ '_results', freq+'_recon', '*_within.npz'))))
+        all_corrs_across = pd.DataFrame()
+        for i in across_files:
+
+            compile_temp = compile_corrs_new(i)
+            if all_corrs_across.empty:
+                all_corrs_across = compile_temp
+            else:
+                all_corrs_across = all_corrs_across.append(compile_temp)
+        all_corrs_across.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', r+ '_results', freq + '_across.csv'))
+        all_corrs_within = pd.DataFrame()
+        for i in within_files:
+            compile_temp = compile_corrs_new(i)
+            if all_corrs_within.empty:
+                all_corrs_within = compile_temp
+            else:
+                all_corrs_within = all_corrs_within.append(compile_temp)
+        all_corrs_within.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', r+ '_results', freq + '_within.csv'))
 
 
