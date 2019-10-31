@@ -54,7 +54,7 @@ template_brain = 'B3'
 
 sc = SceneObj(bgcolor='white', size=(1000, 1000))
 
-CBAR_STATE = dict(cbtxtsz=12, clim=[0, 6], txtsz=10., width=.1, cbtxtsh=3.,
+CBAR_STATE = dict(cbtxtsz=12, clim=[0, 7], txtsz=10., width=.1, cbtxtsh=3.,
                   rect=(-.3, -2., 1., 4.))
 KW = dict(title_size=14., zoom=1)
 
@@ -80,22 +80,22 @@ s_obj_all = s_obj_7 + s_obj_6 + s_obj_5 + s_obj_4+ s_obj_3 + s_obj_2 + s_obj_1
 #s_obj_all = s_obj_1
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
-b_obj_proj_left.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
+b_obj_proj_left.project_sources(s_obj_all, clim=(1, 7), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_left, row=0, col=0, rotate='left', use_this_cam=True)
 
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
-b_obj_proj_left.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
+b_obj_proj_left.project_sources(s_obj_all, clim=(1, 7), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_left, row=0, col=1, rotate='right', use_this_cam=True)
 
 b_obj_proj_right = BrainObj(template_brain, hemisphere='right', translucent=False)
-b_obj_proj_right.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
+b_obj_proj_right.project_sources(s_obj_all, clim=(1, 7), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_right, row=0, col=2, rotate='left', use_this_cam=True)
 
 b_obj_proj_right = BrainObj(template_brain, hemisphere='right', translucent=False)
-b_obj_proj_right.project_sources(s_obj_all, clim=(0, 9), cmap=cmap)
+b_obj_proj_right.project_sources(s_obj_all, clim=(1, 7), cmap=cmap)
 sc.add_to_subplot(b_obj_proj_right, row=0, col=3, rotate='right', use_this_cam=True)
 
-#sc.screenshot(os.path.join(fig_dir, f'{c}_largest_abs.png'), transparent=True)
+sc.screenshot(os.path.join('/Users/lucyowen/Desktop/freqs_plots', 'all_r.png'), transparent=True)
 
-sc.record_animation(os.path.join('/Users/lucyowen/Desktop','freqs.gif'), n_pic=40)
+#sc.record_animation(os.path.join('/Users/lucyowen/Desktop','freqs.gif'), n_pic=40)

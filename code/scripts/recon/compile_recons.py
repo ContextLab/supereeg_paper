@@ -9,17 +9,15 @@ import numpy as np
 import supereeg as se
 
 ### for cluster:
-model_template = sys.argv[1]
 
-radius = sys.argv[2]
+r = sys.argv[1]
 
-dir = os.path.join(config['resultsdir'], model_template+ '_' + radius)
-
-#dir = os.path.join(results_dir, sys.argv[3])
-
-
-### locally
-#dir = sys.argv[1]
+if r == 'pyfr':
+    bo_path = '/dartfs/rc/lab/D/DBIC/CDL/f003f64/ogbo'
+elif r == 'ram':
+    bo_path = '/dartfs/rc/lab/D/DBIC/CDL/f002s72/RAM_analysis/bos'
+else:
+    print('no dataset match')
 
 
 
@@ -173,35 +171,76 @@ def compile_corrs_new(corr_path):
 
     return pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [f_name], 'Electrode': [electrode]})
 
+def compile_corrs_by_freq(bo_path, corr_path, freq):
+    """
+        Compiles correlation values - as well as other subject/electrode specific paramters - creates the compiled pandas dataframe used for figures
 
+        Parameters
+        ----------
+        path_to_npz_data : string
+            Path to npz files - I know this isn't a great way to do this :/
 
-#freqnames = ['raw', 'delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
+        corr_path : npz file
+            npz file containing correlation values (loop outside - for each electrode)
 
-freqnames = ['raw']
+        Returns
+        ----------
+        results : dataframe
+            compiled dataframe with: Subject, electrode, correlation, samples, and sample rate
 
-for r in ['ram', 'pyfr']:
+            """
+    def parse_path_name(path_name):
+        underscore_count = os.path.basename(path_name).count('_')
+        if os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[-1] == 'within':
+            f_name = os.path.basename(path_name)[0:os.path.basename(path_name).find('_' + freq)]
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[-2]
+        else:
+            f_name = os.path.basename(path_name)[0:os.path.basename(path_name).find('_' + freq)]
+            electrode = os.path.splitext(os.path.basename(path_name))[0].split("_", underscore_count)[-1]
+        return f_name, electrode
 
-    for freq in freqnames:
+    f_name, electrode = parse_path_name(corr_path)
+    corr_data = np.load(corr_path, mmap_mode='r')
+    tempR = np.round(corr_data['coord'], 2)
+    tempmeancorr = z2r(np.mean(r2z(corr_data['corrs'])))
+    tempsamplerate = np.mean(se.load(os.path.join(bo_path, f_name + '.bo'), field='sample_rate'))
+    tempsamples = se.load(os.path.join(bo_path, f_name + '.bo'), field='sessions').shape[0]
+    kurt_vals = se.load(os.path.join(bo_path, f_name + '.bo'), field='kurtosis')
+    thresh_bool = kurt_vals > 10
+    tempelecs = sum(~thresh_bool)
+    tempsessions = se.load(os.path.join(bo_path, f_name + '.bo'), field='sessions').max()
+    tempthresholded = sum(thresh_bool)
 
-        within_files = glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64', r+ '_results', freq+'_recon', '*_within.npz'))
-        across_files= list(set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64', r+ '_results', freq+'_recon', '*.npz'))) -
-                           set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f003f64', r+ '_results', freq+'_recon', '*_within.npz'))))
-        all_corrs_across = pd.DataFrame()
-        for i in across_files:
+    return pd.DataFrame({'R': [tempR], 'Correlation': [tempmeancorr], 'Subject': [f_name], 'Electrode': [electrode],
+                         'Sample rate' : [tempsamplerate], 'Samples': [tempsamples], 'Total Electrodes': [tempelecs],
+                         'Sessions': [tempsessions], 'Number thresholded': [tempthresholded]})
 
-            compile_temp = compile_corrs_new(i)
-            if all_corrs_across.empty:
-                all_corrs_across = compile_temp
-            else:
-                all_corrs_across = all_corrs_across.append(compile_temp)
-        all_corrs_across.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', r+ '_results', freq + '_across.csv'))
-        all_corrs_within = pd.DataFrame()
-        for i in within_files:
-            compile_temp = compile_corrs_new(i)
-            if all_corrs_within.empty:
-                all_corrs_within = compile_temp
-            else:
-                all_corrs_within = all_corrs_within.append(compile_temp)
-        all_corrs_within.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/freq_plots', r+ '_results', freq + '_within.csv'))
+freqnames = ['raw', 'delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
+
+#freqnames = ['raw']
+
+# for r in ['ram', 'pyfr']:
+
+for freq in freqnames:
+    within_files = glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/supereeg_revision/', r+ '_results', freq+'_recon', '*_within.npz'))
+    across_files= list(set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/supereeg_revision/', r+ '_results', freq+'_recon', '*.npz'))) -
+                       set(glob.glob(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/supereeg_revision/', r+ '_results', freq+'_recon', '*_within.npz'))))
+    all_corrs_across = pd.DataFrame()
+    for i in across_files:
+
+        compile_temp = compile_corrs_by_freq(bo_path, i, freq)
+        if all_corrs_across.empty:
+            all_corrs_across = compile_temp
+        else:
+            all_corrs_across = all_corrs_across.append(compile_temp)
+    all_corrs_across.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/supereeg_revision/results', r+ '_results', freq + '_across.csv'))
+    all_corrs_within = pd.DataFrame()
+    for i in within_files:
+        compile_temp = compile_corrs_by_freq(bo_path, i, freq)
+        if all_corrs_within.empty:
+            all_corrs_within = compile_temp
+        else:
+            all_corrs_within = all_corrs_within.append(compile_temp)
+    all_corrs_within.to_csv(os.path.join('/dartfs/rc/lab/D/DBIC/CDL/f002s72/supereeg_revision/results', r+ '_results', freq + '_within.csv'))
 
 
