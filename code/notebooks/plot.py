@@ -419,7 +419,7 @@ def density_by_voxel(locs, r=20, vox_size=4):
 
     return density_locs
 
-def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None):
+def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None, save_nii=None):
 
     sub_nii = se.load('std', vox_size=4)
     sub_locs = sub_nii.get_locs().values
@@ -433,6 +433,10 @@ def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None):
     bo_nii = se.Brain(data=np.atleast_2d(density_locs), locs=sub_locs)
     nii_bo = se.helpers._brain_to_nifti(bo_nii, sub_nii)
     ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=.1, vmin=0, display_mode='lyrz')
+    
+    if save_nii:
+        nii_bo.save(save_nii)
+        
     if not outfile is None:
         plt.savefig(outfile)
     else:
