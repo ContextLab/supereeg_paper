@@ -20,7 +20,7 @@ CBAR_STATE = dict(cbtxtsz=20, txtsz=20., txtcolor='black', width=.1, cbtxtsh=3.,
                   rect=(-.3, -2., 1., 4.))
 KW = dict(title_size=14., zoom=2)
 
-my_images = nib.load('/Users/lucyowen/repos/supereeg_paper/data/niis/alpha_pyfr_90th.nii')
+my_images = nib.load('/Users/lucyowen/repos/supereeg_paper/data/niis/pyfr_corrmap.nii')
 
 stat_img2 = my_images
 
@@ -51,33 +51,30 @@ texturerr = texturerr.ravel()
 texturerl = texturerl.ravel()
 
 b_obj_proj_ll.add_activation(texturell, hemisphere='left',
-                     cmap='hot',
+                     cmap='hot_r',
                      vmin=0,
                      vmax=1,
-                     clim=(0, 1),
-                     hide_under=0)
+                     clim=(0, 1))
 
 b_obj_proj_lr.add_activation(texturelr, hemisphere='left',
-                     cmap='hot',
+                     cmap='hot_r',
                      vmin=0,
                      vmax=1,
-                     clim=(0, 1),
-                     hide_under=0)
+                     clim=(0, 1))
 
 b_obj_proj_rr.add_activation(texturerr, hemisphere='right',
-                     cmap='hot',
+                     cmap='hot_r',
                      vmin=0,
                      vmax=1,
-                     clim=(0, 1),
-                     hide_under=0)
+                     clim=(0, 1))
 b_obj_proj_rl.add_activation(texturerl, hemisphere='right',
-                     cmap='hot',
+                     cmap='hot_r',
                      vmin=0,
                      vmax=1,
                      clim=(0, 1),
                      hide_under=0)
 
-cb_proj = ColorbarObj(b_obj_proj_ll,
+cb_proj = ColorbarObj(b_obj_proj_rl,
                       cblabel='Correlation',
                       cmap='hot_r',
                       vmin = 0,
@@ -85,13 +82,13 @@ cb_proj = ColorbarObj(b_obj_proj_ll,
                       **CBAR_STATE)
 
 
-sc2.add_to_subplot(b_obj_proj_ll, row=0, col=0, rotate='left', use_this_cam=True)
+sc2.add_to_subplot(b_obj_proj_ll, row=0, col=0, rotate='left')
 
-sc2.add_to_subplot(b_obj_proj_lr, row=0, col=1, rotate='right', use_this_cam=True)
+sc2.add_to_subplot(b_obj_proj_lr, row=0, col=1, rotate='right')
 
-sc2.add_to_subplot(b_obj_proj_rl, row=0, col=2, rotate='left', use_this_cam=True)
+sc2.add_to_subplot(b_obj_proj_rl, row=0, col=2, rotate='left')
 
-sc2.add_to_subplot(b_obj_proj_rr, row=0, col=3, rotate='right', use_this_cam=True)
+sc2.add_to_subplot(b_obj_proj_rr, row=0, col=3, rotate='right')
 
 sc2.add_to_subplot(cb_proj, row=0, col=4, width_max=100)
 

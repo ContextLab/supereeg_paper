@@ -354,7 +354,7 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
     print('t test: ')
     print(t_stat_group)
 
-def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None):
+def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None, save_nii=None):
     nii = se.load('std', vox_size=vox_size)
     full_locs = nii.get_locs().values
     W = np.exp(_log_rbf(full_locs, locs, width=width))
@@ -364,6 +364,9 @@ def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None):
     ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=1, vmin=0)
     #ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=1, vmin=0, display_mode='lyrz')
 
+    if save_nii:
+        nii_bo.save(save_nii)
+        
     if not outfile is None:
         plt.savefig(outfile)
     else:
