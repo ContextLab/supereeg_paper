@@ -314,20 +314,23 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
             transform=ax.transAxes, fontsize=40)
 
     if legend:
-        leg = ax.legend(['Within', 'Across'], fontsize=50, loc='upper left')
+        leg = ax.legend(['Across', 'Within'], fontsize=50, loc='upper left')
         LH = leg.legendHandles
-        LH[1].set_color('k')
+        LH[0].set_color('k')
+        LH[0].set_alpha(1)
+        LH[1].set_color('lightgray')
         LH[1].set_alpha(1)
 
     ylim = ax.get_ylim()[1]
     m1, n1 = [z2r(df[X]).mean(), z2r(df[Y]).mean()], [ylim, ylim]
     plt.plot(m1, n1, marker = '|', mew=4, markersize=20, color='k', linewidth=4)
     a1 = (z2r(df[X]).mean() + z2r(df[Y]).mean()) /2
-    ax.plot(a1, ylim + .1, marker = '*', markersize=20, color='k')
+    #ax.plot(a1, ylim + .1, marker = '*', markersize=20, color='k')
     ax.tick_params(axis='x', labelsize=40)
     ax.tick_params(axis='y', labelsize=40)
     ax.set_ylabel('Proportion \n of electrodes', fontsize=50)
-
+    
+    ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.2f'))
     ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
     ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=9))
 
