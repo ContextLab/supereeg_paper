@@ -19,8 +19,6 @@ cmap = "hot_r"
 nii_bo_dir = '../../../data/niis/density'
 fig_dir = '../../../paper/figs/source/density'
 
-sc = SceneObj(bgcolor='white', size=(1000, 500))
-
 # Colorbar default arguments
 CBAR_STATE = dict(cbtxtsz=20, txtsz=20., txtcolor='white', width=.1, cbtxtsh=3.,
                   rect=(-.3, -2., 1., 4.))
@@ -31,6 +29,8 @@ template_brain = 'B3'
 nii_list = glob.glob(os.path.join(nii_bo_dir, '*.nii'))
 
 for n in nii_list:
+
+    sc = SceneObj(bgcolor='white', size=(1000, 500))
 
     nii = nib.load(n)
 
@@ -98,8 +98,8 @@ for n in nii_list:
 
     sc.add_to_subplot(b_obj_proj_rr, row=0, col=3, rotate='right')
 
-    sc.add_to_subplot(cb_proj, row=0, col=4, width_max=100)
+    #sc.add_to_subplot(cb_proj, row=0, col=4, width_max=100)
 
-    sc.preview()
+    #sc.preview()
 
     sc.screenshot(os.path.join(fig_dir, fname + '.png'), transparent=True)

@@ -816,7 +816,8 @@ def plot_split_barplot_colors(df, X, Y, H, x_order, hue_order, left_colors, righ
                     palette={hue_order[0]: left_colors[e], hue_order[1]: right_colors[e]}, ax=axes[e])
 
         axes[e].legend().set_visible(False)
-        axes[e].tick_params(axis='x', labelsize=40)
+        axes[e].tick_params(axis='x', labelsize=50)
+        axes[e].tick_params(axis='y', labelsize=50)
         if latex_x: 
             axes[e].set_xticklabels([latex_x[e]])
         else:
@@ -842,8 +843,8 @@ def plot_split_barplot_colors(df, X, Y, H, x_order, hue_order, left_colors, righ
 
         plt.yticks(locs, map(lambda y: "%.1f" % y, locs + offset))
 
-    axes[0].tick_params(axis='y', which='both', length=0, labelsize=24)
-    axes[0].set_ylabel(Y, fontsize=40)
+    axes[0].tick_params(axis='y', which='both', length=0, labelsize=50)
+    axes[0].set_ylabel(Y, fontsize=50)
     axes[0].set(ylim=(-.05, 1.2))
     plt.tight_layout()
 

@@ -5,20 +5,10 @@ from visbrain.objects import BrainObj, SceneObj, SourceObj
 
 cmap = "Spectral"
 
-nii_bo_dir = '../../../data/niis'
+nii_bo_dir = '../../../data/niis/freq'
 
-# fig_dir = '../figs'
-#
-# bo_dir = os.path.join(neurosynth_dir, 'bos')
-#
-# n_f_dir = os.path.join(neurosynth_dir, 'figs')
-# if not os.path.exists(n_f_dir):
-#     os.mkdir(n_f_dir)
+fig_dir = '../../../paper/figs/source/freq'
 
-#freqs = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
-#freqs = ['delta', 'theta', 'alpha', 'beta']
-
-#for f in freqs:
 
 
 b1 = se.load(os.path.join(nii_bo_dir, 'delta_best.bo'))
@@ -96,6 +86,4 @@ b_obj_proj_right = BrainObj(template_brain, hemisphere='right', translucent=Fals
 b_obj_proj_right.project_sources(s_obj_all, clim=(1, 7), cmap='spec_spliced')
 sc.add_to_subplot(b_obj_proj_right, row=0, col=3, rotate='right', use_this_cam=True)
 
-sc.screenshot(os.path.join('/Users/lucyowen/Desktop/freqs_plots', 'all_r.png'), transparent=True)
-
-#sc.record_animation(os.path.join('/Users/lucyowen/Desktop','freqs.gif'), n_pic=40)
+sc.screenshot(os.path.join(fig_dir, 'freq_intersection.png'), transparent=True)
