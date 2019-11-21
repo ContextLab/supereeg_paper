@@ -3,7 +3,7 @@ import supereeg as se
 import os
 from visbrain.objects import BrainObj, SceneObj, SourceObj
 
-cmap = "Spectral"
+cmap = "viridis_spliced"
 
 nii_bo_dir = '../../../data/niis/freq'
 
@@ -70,20 +70,20 @@ s_obj_all = s_obj_7 + s_obj_6 + s_obj_5 + s_obj_4+ s_obj_3 + s_obj_2 + s_obj_1
 #s_obj_all = s_obj_1
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
-b_obj_proj_left.project_sources(s_obj_all, clim=(1, 7), cmap='spec_spliced')
+b_obj_proj_left.project_sources(s_obj_all, clim=(1, 7), cmap='viridis_spliced')
 sc.add_to_subplot(b_obj_proj_left, row=0, col=0, rotate='left', use_this_cam=True)
 
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
-b_obj_proj_left.project_sources(s_obj_all, clim=(1, 7), cmap='spec_spliced')
-sc.add_to_subplot(b_obj_proj_left, row=0, col=1, rotate='right', use_this_cam=True)
+b_obj_proj_left.project_sources(s_obj_all, clim=(1, 7), cmap='viridis_spliced')
+sc.add_to_subplot(b_obj_proj_left, row=1, col=0, rotate='right', use_this_cam=True)
 
 b_obj_proj_right = BrainObj(template_brain, hemisphere='right', translucent=False)
-b_obj_proj_right.project_sources(s_obj_all, clim=(1, 7), cmap='spec_spliced')
-sc.add_to_subplot(b_obj_proj_right, row=0, col=2, rotate='left', use_this_cam=True)
+b_obj_proj_right.project_sources(s_obj_all, clim=(1, 7), cmap='viridis_spliced')
+sc.add_to_subplot(b_obj_proj_right, row=1, col=1, rotate='left', use_this_cam=True)
 
 b_obj_proj_right = BrainObj(template_brain, hemisphere='right', translucent=False)
-b_obj_proj_right.project_sources(s_obj_all, clim=(1, 7), cmap='spec_spliced')
-sc.add_to_subplot(b_obj_proj_right, row=0, col=3, rotate='right', use_this_cam=True)
+b_obj_proj_right.project_sources(s_obj_all, clim=(1, 7), cmap='viridis_spliced')
+sc.add_to_subplot(b_obj_proj_right, row=0, col=1, rotate='right', use_this_cam=True)
 
 sc.screenshot(os.path.join(fig_dir, 'freq_intersection.png'), transparent=True)
