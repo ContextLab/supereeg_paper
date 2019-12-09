@@ -800,7 +800,7 @@ def plot_split_barplot_colors(df, X, Y, H, x_order, hue_order, left_colors, righ
     
     sns.set(style="white")
 
-    fig, axes = plt.subplots(1, len(x_order), figsize=(20, 10), sharey='all')
+    fig, axes = plt.subplots(1, len(x_order), figsize=(13, 8), sharey='all')
 
 
     for e, freq in enumerate(x_order):
@@ -810,7 +810,7 @@ def plot_split_barplot_colors(df, X, Y, H, x_order, hue_order, left_colors, righ
         #offset = long_form_freq['Correlation'].min()
         offset = -.2
         df_temp['Correlation'] = df_temp['Correlation'] - offset
-        sns.barplot(x=X, y=Y, hue=H, data=df_temp, linewidth=4.5, facecolor=(1, 1, 1, 0), 
+        sns.barplot(x=X, y=Y, hue=H, data=df_temp, linewidth=6, alpha=1, facecolor=(1, 1, 1, 0), 
                     errcolor=left_colors[e], edgecolor=left_colors[e], palette={hue_order[0]: left_colors[e], hue_order[1]: right_colors[e]}, ax=axes[e])
         sns.stripplot(x=X, y=Y, hue=H, data=df_temp, jitter=.4, split=True, alpha=.15,
                     palette={hue_order[0]: left_colors[e], hue_order[1]: right_colors[e]}, ax=axes[e])

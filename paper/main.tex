@@ -442,9 +442,9 @@ in $\bar{R}$, reflecting how well the SuperEEG algorithm was able to
 recover the recording at that location by incorporating data across
 patients (black histogram in Fig.~\ref{fig:corrmap}A, map in
 Fig.~\ref{fig:corrmap}C).  The observed distribution of correlations
-was centered well above zero (mean: 0.52; $t$-test comparing mean of
+was centered well above zero (mean: 0.51; $t$-test comparing mean of
 distribution of $z$-transformed average patient correlation coefficients
-to 0: $t(66) = 25.08, p < 10^{-10}$), indicating that the SuperEEG algorithm
+to 0: $t(66) = 23.55, p < 10^{-10}$), indicating that the SuperEEG algorithm
 recovers held-out activity patterns substantially better than random
 guessing.
 
@@ -469,14 +469,14 @@ $t$-test comparing mean of distribution of $z$-transformed average
 patient correlation coefficients to 0: $t(66) = 15.16, p < 10^{-10}$).
 However, the across-patient correlations were substantially higher
 ($t$-test comparing average $z$-transformed within versus across
-patient electrode correlations: $t(66) = 9.62, p < 10^{-10}$).  This
+patient electrode correlations: $t(66) = 9.17, p < 10^{-10}$).  This
 is an especially conservative test, given that the across-patient
 SuperEEG reconstructions exclude (from the correlation matrix
 estimates) all data from the patient whose data is being
 reconstructed.  We repeated each of these analyses on a second
 independent dataset and found similar results
 (Fig.~\ref{fig:corrmap}B, D; within versus across reconstruction
-accuracy: $t(23) = 6.93, p < 10^{-5}$). We also replicated this result
+accuracy: $t(77) = 11.25, p < 10^{-10}$). We also replicated this result
 separately for each of the two experiments from Dataset 2
 (Fig.~\perexpcorrmaps).  This overall finding, that reconstructions of
 held-out data using correlation models learned from \textit{other}
@@ -510,12 +510,10 @@ across people.
     obtained from Dataset 2.  The histograms aggregate data across
     both Dataset 2 experiments; for results broken down by experiment
     see Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction
-      performance by location.} Each dot reflects the location of a
-    single implanted electrode from Dataset 1 (Panel C) or Dataset 2
-    (Panel D).  The dot colors denote the average across-session
+      performance by location.} The colors denote the average across-session
     correlation, using the across-patient correlation model, between
     the observed and reconstructed activity at the given electrode
-    location.}
+    location projected to the cortical surface.}
   \label{fig:corrmap}
 \end{figure}
 
@@ -526,16 +524,17 @@ reconstruction accuracy across patients suggests that the spatial
 correlations derived from the SuperEEG algorithm are, to some extent,
 similar across tasks.  We tested this finding more directly using
 Dataset 2.  In Dataset 2, the recordings were limited to times when
-each patient was participating in each of two experiments (Experiment
-1, a random-word list free recall task, and Experiment 2, a
-categorized list free recall task).  We wondered whether a correlation
+each patient was participating in one of two experiments.  Experiment
+1 is a random-word list free recall task; Experiment 2 is a
+categorized list free recall task (24 patients particpated in both).  We wondered whether a correlation
 model learned from data from one experiment might yield good
 predictions of data from the other experiment.  Further, we wondered
 about the extent to which it might be beneficial or harmful to combine
 data across tasks.
 
 To test the task-specificity of the SuperEEG-derived correlation
-models, we repeated the above within- and across-patient cross validation
+models, we restricted the dataset to the 24 patients that participated
+in both experiments and repeated the above within- and across-patient cross validation
 procedures separately for Experiment 1 and Experiment 2 data from
 Dataset 2.  We then compared the reconstruction accuracies for held-out
 electrodes, for models trained within versus across the two
@@ -573,7 +572,7 @@ that were contained within a 20 MNI unit radius sphere centered on
 that voxel.  We defined the \textit{density} at that location as this
 proportion.  Across Datasets 1 and 2, the electrode placement
 densities were similar (correlation by voxel:
-$r = 0.56, p < 10^{-10}$).  We wondered whether regions with good
+$r = 0.6, p < 10^{-10}$).  We wondered whether regions with good
 covererage might be associated with better reconstruction accuracy
 (e.g. Fig.~\ref{fig:corrmap}C, D indicate that many electrodes in the
 MTL have relatively high reconstruction accuracy, and occipital
@@ -583,11 +582,11 @@ each dataset we computed the electrode placement density for each
 electrode from each patient (using the proportion of \textit{other}
 patients' electrodes within 20 MNI units of the given electrode).  We
 then correlated these density values with the across-patient
-reconstruction accuracies for each electrode.  We found no reliable
-correlations between reconstruction accuracy and density for either
-dataset (Dataset 1: $r = 0.09, p = 0.44$; Dataset 2:
+reconstruction accuracies for each electrode.  We found a negative
+correlation between reconstruction accuracy and density for Dataset 1,
+but was unreliable for Dataset 2 (Dataset 1: $r = -0.21, p = 0.05$; Dataset 2:
 $r = -0.30, p = 0.15$).  This indicates that the reconstruction
-accuracies we observed are not driven solely by sampling density, but
+accuracies we observed are not driven by sampling density, but
 rather may also reflect higher order properties of neural dynamics
 such as functional correlations between distant
 voxels~\citep{BetzEtal17b}.
@@ -648,13 +647,13 @@ information via SuperEEG (Fig.~\ref{fig:informap}A, B).  Despite task
 and patient differences across the two datasets, we nonetheless found
 that the maps of the most promising implantation targets derived from
 both datasets were similar (voxelwise correlation between information
-scores across the two datasets: $r = 0.20, p < 10^{-10}$).  While the
+scores across the two datasets: $r = 0.18, p < 10^{-10}$).  While the
 correspondence between the two maps was imperfect, our finding that
 there were some commonalities between the two maps lends support to
 the notion that different brain areas are differently informative
 about full-brain activity patterns.  We also examined the intersection
 between the top 10\% most informative voxels across the two datasets
-(white outlines in Fig.~\ref{fig:informap}A, B, Fig.~\intersectmap).
+(gray areas in Fig.~\ref{fig:informap}C).
 Supporting the notion that structures that are highly interconnected
 with the rest of the brain might be especially good targets for
 implantation, this intersecting set of voxels with the highest
@@ -675,11 +674,84 @@ a large proportion of the brain's gray matter~\citep[e.g., ][]{TomaVolk11}.
       score by voxel.}  This panel is in the same format as Panel A.
     In both panels the contours indicate the intersections between the
     top 10\% most informative voxels in each map (also see
-    Fig.~\intersectmap).  \textbf{C. Correspondence in information
+    Fig.~\intersectmap).  \textbf{C. Intersection.}  
+    Gray areas indicate the intersections between the
+    top 10\% most informative voxels in each map.  \textbf{D. Correspondence in information
       scores by voxel across Datasets 1 and 2.}  Same format as
     Figure~\ref{fig:density}C.}
   \label{fig:informap}
 \end{figure}
+
+We also wondered what frequency properties contributed to the
+reconstruction accuracy.  For this analysis, we INSTERT TUDORS
+DESCRIPTION FOR FREQ ANALYSIS.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figs/frequency}
+  \caption{\textbf{Reconstruction quality across all electrodes in two
+      ECoG datasets for each frequency band.}  \textbf{A. Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 1.}  The across-patient
+    distribution (left jitter barplot) reflects
+    reconstruction accuracy (correlation) using a correlation model
+    learned from all but one patient's data, and then applied to that
+    held-out patient's data.  The within-patient distribution (right
+    jitter barplot in lighter color)
+    reflects performance using a correlation model learned from the same
+    patient who contributed the to-be-reconstructed electrode.
+    \textbf{B.~Statistical summary of across-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.} In the upper triangles of each
+    map, warmer colors (positive t-values) indicate that the
+    distribution of
+    reconstruction accuracy for the frequency band in a given row
+    yielded was greater than the frequency band in the given
+    column. Cooler colors (negative t-values) indicate that the
+    frequency band in the given row yielded lower reconstruction
+    accuracy than the frequency band in the given column. The lower
+    triangles of each map denote the corresponding p-values for the
+    t-tests. The diagonal entries display the relative average
+    reconstruction accuracy given to each frequency band. \textbf{C.~Statistical summary ofwithin-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.}
+    This panel displays the within-patient statistical summary,
+    in the same format as Panel B.  \textbf{D.~Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 2.}  This panel displays
+    reconstruction accuracy distributions for each frequency band for
+    Dataset 2 in
+    the same format as Panel A. \textbf{E.~Statistical summary of
+      across-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.} This is the same format as Panel
+    B for Dataset 2. \textbf{F.~Statistical summary of
+      within-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.}This is the same format as Panel
+    C for Dataset 2.}
+  \label{fig: frequency}
+\end{figure}
+
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figs/networks}
+  \caption{\textbf{Electrode sampling density by location.}
+    \textbf{A.~Electrode sampling density by voxel in Dataset 1.} Each
+    voxel is colored by the proportion of total electrodes in the
+    dataset that are
+    located within a 20~MNI unit radius sphere centered on the given
+    voxel.  \textbf{B.~Electrode sampling density by voxel in Dataset
+      2.}  This panel displays the sampling density map for Dataset 2,
+    in the same format as Panel A.  \textbf{C.~Correspondence in
+      sampling density by voxel across Datasets 1 and 2.}  The
+    two-dimensional histogram displays the by-voxel densities in the
+    two Datasets, and the one-dimensional histograms display the
+    proportions of voxels in each dataset with the given density
+    value.  The correlation reported in the panel is across voxels in
+    the 4~mm$^3$ MNI brain.}
+  \label{fig: networks}
+\end{figure}
+
+
 
 \section*{Discussion}
 Are our brain's networks static or dynamic?  And to what extent are

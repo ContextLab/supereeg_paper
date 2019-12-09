@@ -17,7 +17,7 @@ KW = dict(title_size=14., zoom=2)
 
 template_brain = 'B3'
 
-bo_list = glob.glob(os.path.join(nii_bo_dir, '*_raw_*.bo'))
+bo_list = glob.glob(os.path.join(nii_bo_dir, '*.bo'))
 
 for b in bo_list:
 
@@ -63,4 +63,4 @@ for b in bo_list:
 
     #sc.add_to_subplot(cb_proj, row=0, col=2, width_max=100)
 
-    sc.screenshot(os.path.join(fig_dir, fname + '.pdf'), transparent=True)
+    sc.screenshot(os.path.join(fig_dir, fname + '.png'), transparent=True)
