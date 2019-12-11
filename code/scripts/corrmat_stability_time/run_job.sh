@@ -22,6 +22,8 @@
 # set the working directory *of the job* to the specified start directory
 cd <config['startdir']>
 
+module load python
+
 echo ACTIVATING supereeg VIRTUAL ENVIRONMENT
 source activate supereeg_env
 

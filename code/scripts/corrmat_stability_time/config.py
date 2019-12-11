@@ -16,8 +16,8 @@ if (socket.gethostname() == 'Lucys-MacBook-Pro-3.local') or (socket.gethostname(
 else:
     config['pyfrdatadir'] = '/idata/cdl/data/ECoG/pyFR/data/bo'
     config['ramdatadir'] = '/dartfs/rc/lab/D/DBIC/CDL/f002s72/RAM_analysis/bos'
-    config['workingdir'] = '/idata/cdl/lowen/corrmat_stability_time'
-    config['startdir'] = '/idata/cdl/lowen'
+    config['workingdir'] = '/dartfs/rc/lab/D/DBIC/CDL/f002s72/supereeg_revision/corrmat_stability_time'
+    config['startdir'] = '/dartfs/rc/lab/D/DBIC/CDL/f002s72/supereeg_revision/'
     config['template'] = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'run_job.sh')
 
 # job creation options
