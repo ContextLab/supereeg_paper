@@ -25,16 +25,11 @@ job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'corrmats
 
 data = str('pyfr')
 
-# or make all:
-files = glob.glob(os.path.join(config[data+'datadir'],'*.bo'))
-
-
-job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + data,
-                        zip([job_script]*len(files), files)))
-
+job_commands = list(map(lambda x: x[0]+" " + data, zip([job_script]*1, range(1))))
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
-job_names = list(map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_' + data +'.sh', files))
+job_names = list(map(lambda x: 'model_'+ data + '.sh', range(len(job_commands))))
+
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
 assert(len(job_commands) == len(job_names))
