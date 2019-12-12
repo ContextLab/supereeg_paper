@@ -45,12 +45,6 @@ def corr_corrmats(mo_1, mo_2):
 print('running time stability across patients for: ' + data)
 
 files = glob.glob(os.path.join(config[data + 'datadir'], '*.mo'))
-#
-# for f in files:
-#
-#     model = se.load(f)
-#     try_parse = model.get_slice(np.arange(100))
-#     try_parse.save(f)
 
 
 total_patients = len(files)
@@ -87,28 +81,10 @@ for r in np.arange(rand_iters):
 
         corrs_rand[r, e] = corr_corrmats(half_1_mo, mo_2)[0][0]
 
-corrs_rand = np.mean(corrs_rand, axis=0)
+#corrs_rand = np.mean(corrs_rand, axis=0)
 
 stable_npz = os.path.join(results_dir, data + '.npz')
 
 np.savez(stable_npz, rand=corrs_rand)
 
 
-#
-# def numfmt(x, pos):
-#     s = '{}'.format(np.round((x / (100 / percent_increase) + (percent_increase / 100)), 2))
-#     return s
-
-
-#yfmt = tkr.FuncFormatter(numfmt)  # create your custom formatter function
-
-# fig, ax = plt.subplots()
-# #fig.gca().xaxis.set_major_formatter(yfmt)
-# ax.plot(corrs_close, 'k', label='Close')
-# ax.plot(corrs_apart, 'r', label='Apart')
-# ax.plot(corrs_rand, 'g', label='Random')
-# leg = ax.legend()
-# plt.ylabel('Correlation of matrices')
-# plt.xlabel('% Time')
-#
-# plt.show()
