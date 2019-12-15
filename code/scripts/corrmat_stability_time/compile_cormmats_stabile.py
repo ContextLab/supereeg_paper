@@ -38,14 +38,10 @@ def compile_corrs(file_path):
 
     data = np.load(file_path, mmap_mode='r')
     f_name = os.path.splitext(os.path.basename(file_path))[0]
-    # rand=data['rand']
-    # apart = data['apart']
-    # close=data['close']
-    # sample_rate= data['sample_rate']
-    # samples=data['samples']
 
     return pd.DataFrame({'rand': data['rand'], 'apart': data['apart'], 'close': data['close'],
-                         'Subject': f_name, 'sample_rate': data['sample_rate'], 'samples': data['samples']})
+                         'Subject': f_name, 'sample_rate': data['sample_rate'], 'samples': data['samples'],
+                         'chunk_size': data['chunk_size']})
 
 
 files = glob.glob(os.path.join(results_dir, '*.npz'))
@@ -65,5 +61,5 @@ print('Nans for :' + str(all_corrs['Subject'][all_corrs['rand'].isna()].unique()
 
 all_corrs.dropna(inplace=True)
 
-all_corrs.to_csv(os.path.join(config['resultsdir'], data + '.csv'))
+all_corrs.to_csv(os.path.join(config['resultsdir'], data + '_time_stability.csv'))
 

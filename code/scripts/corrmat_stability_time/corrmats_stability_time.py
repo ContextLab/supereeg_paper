@@ -14,7 +14,7 @@ fname = sys.argv[1]
 
 data = sys.argv[2]
 
-chunk_size = 10000
+chunk_size = 1000
 
 rand_iters = 2
 
@@ -138,27 +138,10 @@ if elec_count > 1:
 
     stable_npz = os.path.join(results_dir, fname + '.npz')
 
-    np.savez(stable_npz, rand=corrs_rand, apart=corrs_apart, close=corrs_close, sample_rate=bo.sample_rate[0], samples=time_total)
+    np.savez(stable_npz, rand=corrs_rand, apart=corrs_apart, close=corrs_close, sample_rate=bo.sample_rate[0],
+             samples=time_total, chunk_size=chunk_size)
 
 
-    #
-    # def numfmt(x, pos):
-    #     s = '{}'.format(np.round((x / (100 / percent_increase) + (percent_increase / 100)), 2))
-    #     return s
-
-
-    #yfmt = tkr.FuncFormatter(numfmt)  # create your custom formatter function
-
-    # fig, ax = plt.subplots()
-    # #fig.gca().xaxis.set_major_formatter(yfmt)
-    # ax.plot(corrs_close, 'k', label='Close')
-    # ax.plot(corrs_apart, 'r', label='Apart')
-    # ax.plot(corrs_rand, 'g', label='Random')
-    # leg = ax.legend()
-    # plt.ylabel('Correlation of matrices')
-    # plt.xlabel('% Time')
-    #
-    # plt.show()
 
 
 else:
