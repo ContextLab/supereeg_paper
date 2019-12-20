@@ -14,7 +14,7 @@ from config import config
 data = sys.argv[1]
 
 
-rand_iters = 2
+rand_iters = 3
 
 results_dir = os.path.join(config['resultsdir'], data)
 
@@ -46,26 +46,24 @@ print('running time stability across patients for: ' + data)
 
 files = glob.glob(os.path.join(config[data + 'datadir'], '*.mo'))
 
-
 total_patients = len(files)
 
-divided_patients = int(total_patients/ 2)
+divided_patients = int(total_patients / 2)
 
 all_idx = np.arange(total_patients)
-half_1_idx = np.random.choice(total_patients, replace=False, size=divided_patients)
-half_2_idx = np.delete(all_idx, half_1_idx)
 
-np.random.shuffle(half_2_idx)
-
-n_samples = len(half_2_idx)
+n_samples = total_patients  - divided_patients
 
 corrs_rand = np.zeros((rand_iters, n_samples))
 
-
-half_1_mo = se.Model(list(np.array(files)[half_1_idx]), n_subs=len(half_1_idx))
-
-
 for r in np.arange(rand_iters):
+
+    half_1_idx = np.random.choice(total_patients, replace=False, size=divided_patients)
+    half_2_idx = np.delete(all_idx, half_1_idx)
+
+    half_1_mo = se.Model(list(np.array(files)[half_1_idx]), n_subs=len(half_1_idx))
+
+    #np.random.shuffle(half_2_idx)
 
     for e, i in enumerate(half_2_idx):
 

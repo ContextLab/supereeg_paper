@@ -27,7 +27,7 @@ KW = dict(title_size=14., zoom=2)
 
 template_brain = 'B3'
 
-bo = se.load(os.path.join(nii_bo_dir, 'best_95th.bo'))
+bo = se.load(os.path.join(nii_bo_dir, 'best_90th.bo'))
 
 data1 = bo.get_data().values.ravel()
 xyz1 = bo.locs.values

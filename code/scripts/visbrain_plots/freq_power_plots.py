@@ -5,10 +5,10 @@ from visbrain.objects import BrainObj, SceneObj, SourceObj
 
 cmap = "viridis_spliced"
 
-nii_bo_dir = '../../../data/niis/freq'
+nii_bo_dir = '../../../data/niis/supplemental_3/freq'
 
 
-fig_dir = '../../../paper/figs/source/freq'
+fig_dir = '../../../paper/figs/source/supplemental_3/freq'
 
 
 
@@ -18,7 +18,6 @@ b3 = se.load(os.path.join(nii_bo_dir, 'alpha_best.bo'))
 b4 = se.load(os.path.join(nii_bo_dir, 'beta_best.bo'))
 b5 = se.load(os.path.join(nii_bo_dir, 'lgamma_best.bo'))
 b6 = se.load(os.path.join(nii_bo_dir, 'hgamma_best.bo'))
-b7 = se.load(os.path.join(nii_bo_dir, 'broadband_best.bo'))
 
 data1 = b1.get_data().values.ravel()
 xyz1 = b1.locs.values
@@ -38,8 +37,6 @@ xyz5 = b5.locs.values
 data6 = b6.get_data().values.ravel()
 xyz6 = b6.locs.values
 
-data7 = b7.get_data().values.ravel()
-xyz7 = b7.locs.values
 
 template_brain = 'B3'
 
@@ -61,13 +58,11 @@ s_obj_5 = SourceObj('iEEG', xyz5, data=data5, cmap=cmap)
 s_obj_5.color_sources(data=data5)
 s_obj_6 = SourceObj('iEEG', xyz6, data=data6, cmap=cmap)
 s_obj_6.color_sources(data=data6)
-s_obj_7 = SourceObj('iEEG', xyz7, data=data7, cmap=cmap)
-s_obj_7.color_sources(data=data7)
 
 
 #s_obj_all = s_obj_1 + s_obj_2 + s_obj_3 + s_obj_4+ s_obj_5 + s_obj_6 + s_obj_7
 
-s_obj_all = s_obj_7 + s_obj_6 + s_obj_5 + s_obj_4+ s_obj_3 + s_obj_2 + s_obj_1
+s_obj_all = s_obj_6 + s_obj_5 + s_obj_4+ s_obj_3 + s_obj_2 + s_obj_1
 #s_obj_all = s_obj_1
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
