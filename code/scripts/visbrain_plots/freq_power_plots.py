@@ -63,7 +63,6 @@ s_obj_6.color_sources(data=data6)
 #s_obj_all = s_obj_1 + s_obj_2 + s_obj_3 + s_obj_4+ s_obj_5 + s_obj_6 + s_obj_7
 
 s_obj_all = s_obj_6 + s_obj_5 + s_obj_4+ s_obj_3 + s_obj_2 + s_obj_1
-#s_obj_all = s_obj_1
 
 b_obj_proj_left = BrainObj(template_brain, hemisphere='left', translucent=False)
 b_obj_proj_left.project_sources(s_obj_all, clim=(1, 7), cmap='viridis_spliced')
