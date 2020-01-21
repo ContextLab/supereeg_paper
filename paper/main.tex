@@ -18,8 +18,9 @@
 \newcommand{\perexpcorrmaps}{S1}
 \newcommand{\perexptaskrecon}{S2}
 \newcommand{\perexptaskreconseparated}{S3}
-\newcommand{\suppstats}{S4}
-\newcommand{\intersectmap}{S5}
+\newcommand{\freqpower}{S4}
+\newcommand{\networkpower}{S5}
+\newcommand{\suppstats}{S6}
 
 % Include your paper's title here
 
@@ -290,7 +291,9 @@ model~\citep[e.g.,][]{MannEtal18}.
 
 A second mechanism whereby a given region $x$ can contribute to the
 recording at $\eta$ is through (direct or indirect) anatomical
-connections between structures near $x$ and $\eta$.  We use temporal
+connections between structures near $x$ and $\eta$.  Although
+anatomical and function correlations can differ
+markedly~\citep[e.g.,][]{AdacEtal11, HoneEtal09, GoniEtal14}, we use temporal
 correlations in the data to estimate these anatomical
 connections~\citep{BeckEtal18}.  Let $\bar{R}$ be the set of locations
 at which we wish to estimate local field potentials, and let
@@ -399,7 +402,7 @@ $\hat{K}_{\alpha_s, \alpha_s}$ are correlation matrices rather than
 covariance matrices.)  Also, we note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
-large (e.g., for the patient highlighted in Fig.~\ref{fig:recon}, $T =
+large (e.g., for an example patient in Dataset 1, $T =
 12786750$). However, because Equation~\ref{eqn:reconstruction} is time
 invariant, we may compute $Y_{s,k,\beta_s}$ in a piecewise
 manner by filling in $Y_{s,k,\beta_s}$ one row at a time (using the
@@ -513,7 +516,7 @@ across people.
       performance by location.} The colors denote the average across-session
     correlation, using the across-patient correlation model, between
     the observed and reconstructed activity at the given electrode
-    location projected to the cortical surface.}
+    location projected to the cortical surface~\citep{CombEtal19}.}
   \label{fig:corrmap}
 \end{figure}
 
@@ -674,23 +677,45 @@ a large proportion of the brain's gray matter~\citep[e.g., ][]{TomaVolk11}.
       score by voxel.}  This panel is in the same format as Panel A.
     In both panels the contours indicate the intersections between the
     top 10\% most informative voxels in each map (also see
-    Fig.~\intersectmap).  \textbf{C. Intersection.}  
+    Fig.~\networks Panels A.-C. All for networks within this region).  \textbf{C. Intersection.}  
     Gray areas indicate the intersections between the
-    top 10\% most informative voxels in each map.  \textbf{D. Correspondence in information
+    top 10\% most informative voxels in each map and projected onto the cortical surface~\citep{CombEtal19}. \textbf{D. Correspondence in information
       scores by voxel across Datasets 1 and 2.}  Same format as
     Figure~\ref{fig:density}C.}
   \label{fig:informap}
 \end{figure}
 
 We also wondered what frequency properties contributed to the
-reconstruction accuracy.  For this analysis, we INSTERT TUDORS
-DESCRIPTION FOR FREQ ANALYSIS.
+reconstruction accuracy. To recover frequency-band specific voltage activity
+from each recording, a second-order Butterworth filter was applied
+across bands $\delta$, $\theta$, $\alpha$, $\beta$, $\gamma_L$, and
+$\gamma_H$ with respective frequency ranges 2-4 Hz, 4-8 Hz, 8-12 Hz,
+12-30 Hz, 30-60 Hz, and 60-100 Hz. Bandpass signals contain
+information about the phase and amplitude of the underlying frequency
+band, providing the most detailed view of the activity at that
+frequency. Additionally, we calculated the reconstruction accuracies
+using power at each band by taking the absolute
+value of the Hilbert tranform of the bandpassed signal (see Fig.~\freqpower). To compute the broadband power (BB), we
+first computed instantaneous power at 50 log-spaced frequencies
+between 2 and 100 Hz using Morlet wavelets (n=4). Then, for each time
+point and electrode, we fitted a robust Huber regression to frequency
+and power in log-space, and calculated the mean height of the
+resulting line. We then followed the same procedure outlined above
+(see Fig.~\ref{fig:methods}) to
+obtain the reconstruction accuracy at each bandpassed frequency as well
+as broadband power for both datasets (see Fig.~\ref{fig:frequency}).
+We found
+the best average reconstruction accuracy for each dataset was obtained using broadband
+power, which is a correlate of neural firing
+~\citep{MannEtal09}. We also found a similar trend in reconstruction
+accuracy for frequency bands across the two datasets, performing better at lower
+frequencies (peaking at $\alpha$) and worst at high frequencies.  
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/frequency}
   \caption{\textbf{Reconstruction quality across all electrodes in two
-      ECoG datasets for each frequency band.}  \textbf{A. Distributions of correlations
+      ECoG datasets for each frequency band.} \textbf{A. Distributions of correlations
       between observed versus reconstructed activity by electrode, for
       each frequency band in Dataset 1.}  The across-patient
     distribution (left jitter barplot) reflects
@@ -699,7 +724,9 @@ DESCRIPTION FOR FREQ ANALYSIS.
     held-out patient's data.  The within-patient distribution (right
     jitter barplot in lighter color)
     reflects performance using a correlation model learned from the same
-    patient who contributed the to-be-reconstructed electrode.
+    patient who contributed the to-be-reconstructed electrode, colored
+    by frequency and includes the raw voltages displayed in
+    Fig.~\ref{fig:corrmap}A in gray.
     \textbf{B.~Statistical summary of across-patient reconstruction
       quality by electrode for each frequency band in Dataset 1.} In the upper triangles of each
     map, warmer colors (positive t-values) indicate that the
@@ -710,45 +737,90 @@ DESCRIPTION FOR FREQ ANALYSIS.
     frequency band in the given row yielded lower reconstruction
     accuracy than the frequency band in the given column. The lower
     triangles of each map denote the corresponding p-values for the
-    t-tests. The diagonal entries display the relative average
-    reconstruction accuracy given to each frequency band. \textbf{C.~Statistical summary ofwithin-patient reconstruction
+    t-tests. The diagonal entries display the average
+    reconstruction accuracy given to each frequency
+    band. \textbf{C.~Statistical summary of within-patient reconstruction
       quality by electrode for each frequency band in Dataset 1.}
     This panel displays the within-patient statistical summary,
     in the same format as Panel B.  \textbf{D.~Distributions of correlations
       between observed versus reconstructed activity by electrode, for
       each frequency band in Dataset 2.}  This panel displays
     reconstruction accuracy distributions for each frequency band for
-    Dataset 2 in
-    the same format as Panel A. \textbf{E.~Statistical summary of
+    Dataset 2. \textbf{E.~Statistical summary of
       across-patient reconstruction quality by electrode for each
       frequency band in Dataset 2.} This is the same format as Panel
     B for Dataset 2. \textbf{F.~Statistical summary of
       within-patient reconstruction quality by electrode for each
       frequency band in Dataset 2.}This is the same format as Panel
     C for Dataset 2.}
-  \label{fig: frequency}
+  \label{fig:frequency}
 \end{figure}
 
+We also wanted to see how the most informative regions changed by
+frequency. Lower frequency oscillations, such as delta, theta, and alpha, have
+been posited to be processing modes which span large swaths of
+cortical regions and are thought to serve the purpose of integration
+across many cortical sites ~\citep{Knya12}. Higher frequency
+oscillations such as beta and gamma, are more limited to topographic
+area ~\citep{Nune95}, and are modulated by slow oscillations
+hierarchically ~\citep{EngeEtal10}. Using the frequency-specific reconstruction accuracies, we
+followed the process outlined in Fig.~\ref{fig:informap}C, to obtain
+the most informative locations for each frequency.  When we examined the intersection
+between the top 10\% most informative voxels across the two datasets
+for each bandpassed frequency, we found a somewhat consistent hierarchical
+structure (see Fig.~\ref{fig:networks}E).
 
+We then wondered which
+networks were involved in each of
+these frequency-specific intersecting regions.  To better understand the networks involved
+we colored the regions (Fig.~\ref{fig:networks}A) based on the
+network parcellation ~\citep[using $k$=7;][]{YeoEtal11}} (Fig.~\ref{fig:networks}D) and calculated the proportion of each
+of those networks (Fig.~\ref{fig:networks}B).  Consistent with the idea outlined
+above, we found networks most involved in the lowest frequency band,
+$\delta$, were networks involved integration and global processing
+(specifically the dorsal attention ~\citep{MarzEtal13}, default mode,
+and frontoparietal networks).  Although these networks are also seen
+in the $\theta$ intersection, they are less proportionally to the
+visual network.  Alpha power is consistently modulated in EEG studies
+of attention and visuo-motor ~\citep{MartiEtal10, MarzEtal13}, and we
+similarly found a high proportion of visual and somatomotor networks
+within this band.  We found $\beta$ intersections to predominantly
+consist of somatomotor network, consistent with~\citep{RittEtal08,
+  VanEEtal11}.  Also consistent with heavily cited
+literature~\citep{FrieEtal07}, the network most predominant in the
+$\gamma$ intersection was the visual network.  Lastly, broadband power
+was found predominantly in frontoparietal and default mode networks,
+consistent with ~\{OssaEtal11}.  We then carried out a
+meta analysis using Neurosynth~\citep{RubiEtal17} to identify the 5
+terms most commonly associated with the given map
+(Fig.~\ref{fig:networks}C).  
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figs/networks}
-  \caption{\textbf{Electrode sampling density by location.}
-    \textbf{A.~Electrode sampling density by voxel in Dataset 1.} Each
-    voxel is colored by the proportion of total electrodes in the
-    dataset that are
-    located within a 20~MNI unit radius sphere centered on the given
-    voxel.  \textbf{B.~Electrode sampling density by voxel in Dataset
-      2.}  This panel displays the sampling density map for Dataset 2,
-    in the same format as Panel A.  \textbf{C.~Correspondence in
-      sampling density by voxel across Datasets 1 and 2.}  The
-    two-dimensional histogram displays the by-voxel densities in the
-    two Datasets, and the one-dimensional histograms display the
-    proportions of voxels in each dataset with the given density
-    value.  The correlation reported in the panel is across voxels in
-    the 4~mm$^3$ MNI brain.}
-  \label{fig: networks}
+  \caption{\textbf{Most informative electrode locations by frequency
+      and the networks involved.}
+    \textbf{A.~Intersections across datasets for each frequency.} The
+    inflated brain plots display the intersections between the
+    top 10\% most informative voxels were calculated as described in Fig.~\ref{fig:informap}
+    for each frequency and projected onto the cortical surface~\citep{CombEtal19}. Intersecting voxels are colored according to the 7 networks
+    from~\citep{YeoEtal11}.
+    \textbf{B.~Proportion of networks in most informative electrode locations by
+    frequency.}  Pie graphs display the proportion of the 7 networks
+  ~\citep{YeoEtal11} in the most informative locations by
+  frequency, and are sized relative to the average reconstruction
+  accuracy for each frequency. \textbf{C.~Terms associated with most informative
+    electrode locations.}  The
+    lists of terms display the top five Neurosynth
+    terms~\citep{RubiEtal17} decoded from the corresponding brain
+    maps, and colored according the frequency (see Panel
+    E legend). \textbf{D.~Network parcellation from~\citep{YeoEtal11}.}
+    Seven network parcellation as described
+    in~\citep{YeoEtal11}. \textbf{E.~Most informative locations by
+      frequency.} The inflated brain plot displays the locations of
+    the most informative locations (Panel A), colored by frequency,
+    and projected onto the cortical surface~\citep{CombEtal19}.}
+  \label{fig:networks}
 \end{figure}
 
 
@@ -816,9 +888,11 @@ activity in the LFP may be used to estimate the firing rates of
 neurons that underly the population contributing to the
 LFP~\citep{MillEtal08, MannEtal09, JacoEtal10b, CronEtal11}.  Because
 SuperEEG reconstructs LFPs throughout the brain, one could in
-principle use gamma or broadband power in the reconstructed signals to
+principle use broadband power in the reconstructed signals to
 estimate the corresponding firing rates (though not the timings of
-individual action potentials).
+individual action potentials). Interestingly, our frequency-specific
+analysis yielded the best reconstruction accuracies using broadband
+power.  
 
 Beyond providing a means of estimating ongoing activity throughout the
 brain using already implanted electrodes, our work also has
