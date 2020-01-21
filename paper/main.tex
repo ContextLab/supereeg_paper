@@ -246,7 +246,7 @@ algorithm requires measuring correlations between 2 or more electrodes
 from each patient.  For Dataset 1, this yielded clean recordings from
 4168 electrodes implanted throughout the brains of 67 patients
 (Fig.~\ref{fig:methods}A); for Dataset 2, this yielded clean
-recordings from 3159 electrodes from 24 patients.  Each individual
+recordings from 5023 electrodes from 78 patients.  Each individual
 patient contributes electrodes from a limited set of brain locations,
 which we localized in a common space~\citep[MNI152;][]{GrabEtal06}; an
 example Dataset 1 patient's 54 electrodes that passed the above
@@ -292,8 +292,8 @@ model~\citep[e.g.,][]{MannEtal18}.
 A second mechanism whereby a given region $x$ can contribute to the
 recording at $\eta$ is through (direct or indirect) anatomical
 connections between structures near $x$ and $\eta$.  Although
-anatomical and function correlations can differ
-markedly~\citep[e.g.,][]{AdacEtal11, HoneEtal09, GoniEtal14}, we use temporal
+anatomical and functional correlations can differ
+markedly~\citep[e.g.,][]{AdacEtal12, HoneEtal09, GoniEtal14}, we use temporal
 correlations in the data to estimate these anatomical
 connections~\citep{BeckEtal18}.  Let $\bar{R}$ be the set of locations
 at which we wish to estimate local field potentials, and let
@@ -402,7 +402,7 @@ $\hat{K}_{\alpha_s, \alpha_s}$ are correlation matrices rather than
 covariance matrices.)  Also, we note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
-large (e.g., for an example patient in Dataset 1, $T =
+large (e.g., an example patient in Dataset 1, $T =
 12786750$). However, because Equation~\ref{eqn:reconstruction} is time
 invariant, we may compute $Y_{s,k,\beta_s}$ in a piecewise
 manner by filling in $Y_{s,k,\beta_s}$ one row at a time (using the
@@ -577,7 +577,7 @@ proportion.  Across Datasets 1 and 2, the electrode placement
 densities were similar (correlation by voxel:
 $r = 0.6, p < 10^{-10}$).  We wondered whether regions with good
 covererage might be associated with better reconstruction accuracy
-(e.g. Fig.~\ref{fig:corrmap}C, D indicate that many electrodes in the
+(e.g. Fig.~\ref{fig:corrmap}C and D indicate that many electrodes in the
 MTL have relatively high reconstruction accuracy, and occipital
 electrodes tend to have relatively low reconstruction accuracy).  To
 test whether this held more generally across the entire brain, for
@@ -646,7 +646,7 @@ the averages were weighted to reflect patients who had more electrodes
 implanted near that location. This yielded a single map for each
 dataset, highlighting regions that are potentially promising
 implantation targets in terms of providing full-brain activity
-information via SuperEEG (Fig.~\ref{fig:informap}A, B).  Despite task
+information via SuperEEG (Fig.~\ref{fig:informap}A and B).  Despite task
 and patient differences across the two datasets, we nonetheless found
 that the maps of the most promising implantation targets derived from
 both datasets were similar (voxelwise correlation between information
@@ -656,7 +656,8 @@ there were some commonalities between the two maps lends support to
 the notion that different brain areas are differently informative
 about full-brain activity patterns.  We also examined the intersection
 between the top 10\% most informative voxels across the two datasets
-(gray areas in Fig.~\ref{fig:informap}C).
+(gray areas in Fig.~\ref{fig:informap}C, networks shown in
+Fig.~\ref{fig:networks}A (All)).
 Supporting the notion that structures that are highly interconnected
 with the rest of the brain might be especially good targets for
 implantation, this intersecting set of voxels with the highest
@@ -709,7 +710,7 @@ the best average reconstruction accuracy for each dataset was obtained using bro
 power, which is a correlate of neural firing
 ~\citep{MannEtal09}. We also found a similar trend in reconstruction
 accuracy for frequency bands across the two datasets, performing better at lower
-frequencies (peaking at $\alpha$) and worst at high frequencies.  
+frequencies (peaking at $\alpha$) and worst at high frequencies (see Fig.~\ref{fig:frequency}).  
 
 \begin{figure}
   \centering
@@ -757,12 +758,12 @@ frequencies (peaking at $\alpha$) and worst at high frequencies.
 \end{figure}
 
 We also wanted to see how the most informative regions changed by
-frequency. Lower frequency oscillations, such as delta, theta, and alpha, have
-been posited to be processing modes which span large swaths of
+frequency. Lower frequency oscillations, such as $\delta$, $\theta$, and $\alpha$, have
+been posited to be involved in processing modes which span large swaths of
 cortical regions and are thought to serve the purpose of integration
 across many cortical sites ~\citep{Knya12}. Higher frequency
-oscillations such as beta and gamma, are more limited to topographic
-area ~\citep{Nune95}, and are modulated by slow oscillations
+oscillations such as $\beta$ and $\gamma$, are more limited to topographic
+areas ~\citep{Nune95}, and are modulated by slow oscillations
 hierarchically ~\citep{EngeEtal10}. Using the frequency-specific reconstruction accuracies, we
 followed the process outlined in Fig.~\ref{fig:informap}C, to obtain
 the most informative locations for each frequency.  When we examined the intersection
@@ -782,18 +783,14 @@ $\delta$, were networks involved integration and global processing
 and frontoparietal networks).  Although these networks are also seen
 in the $\theta$ intersection, they are less proportionally to the
 visual network.  Alpha power is consistently modulated in EEG studies
-of attention and visuo-motor ~\citep{MartiEtal10, MarzEtal13}, and we
-similarly found a high proportion of visual and somatomotor networks
+of attention and visuo-motor ~\citep{MantEtal07, MarzEtal13}, and we
+similarly found a high proportion of visual, somatomotor, and dorsal attentio networks
 within this band.  We found $\beta$ intersections to predominantly
-consist of somatomotor network, consistent with~\citep{RittEtal08,
-  VanEEtal11}.  Also consistent with heavily cited
+consist of somatomotor network, in line with~\citep{RittEtal09, VaneEtal11}.  Also accordant with heavily cited
 literature~\citep{FrieEtal07}, the network most predominant in the
 $\gamma$ intersection was the visual network.  Lastly, broadband power
 was found predominantly in frontoparietal and default mode networks,
-consistent with ~\{OssaEtal11}.  We then carried out a
-meta analysis using Neurosynth~\citep{RubiEtal17} to identify the 5
-terms most commonly associated with the given map
-(Fig.~\ref{fig:networks}C).  
+consistent with ~\citep{OssaEtal11}.
 
 \begin{figure}
   \centering
@@ -953,7 +950,7 @@ of the authors and does not necessarily represent the official views
 of our supporting organizations.
 
 \section*{Author Contributions}
-J.R.M conceived and initiated the project. L.L.W.O. and
+J.R.M conceived and initiated the project. L.L.W.O., T.A.M, and
 A.C.H. performed the analyses. J.R.M. and L.L.W.O. wrote the
 manuscript.
 

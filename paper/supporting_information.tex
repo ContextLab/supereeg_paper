@@ -4,6 +4,7 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{geometry}
 \usepackage{natbib}
+\usepackage{hyperref}
 \usepackage{pxfonts}
 \usepackage{graphicx}
 \usepackage{newfloat}
@@ -25,13 +26,9 @@ Hanover, NH 03755, USA\\
 $^{2}$Akili Interactive,\\
 Boston, MA 02110, USA}
 
-\bibliographystyle{apa}
+%\bibliographystyle{apa}
 
 \begin{document}
-
-\begin{titlepage}
-  \maketitle
-  \end{titlepage}
 
 \setcounter{equation}{0}
 \setcounter{figure}{0}
@@ -41,9 +38,10 @@ Boston, MA 02110, USA}
 \makeatletter
 \renewcommand{\theequation}{S\arabic{equation}}
 \renewcommand{\thefigure}{S\arabic{figure}}
-\renewcommand{\bibnumfmt}[1]{[S#1]}
-\renewcommand{\citenumfont}[1]{S#1}
 
+\begin{titlepage}
+  \maketitle
+\end{titlepage}
 
 \begin{figure}[b!]
 \centering
@@ -191,7 +189,50 @@ Boston, MA 02110, USA}
 \label{fig:supplemental_6}
 \end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figs/supplemental_7}
+\caption{\textbf{Stability of correlation matrix across time.} \textbf{A.--B.  Features from
+    Dataset 1.}  Features include: (\textbf{A. Correlation of split
+  halves by the percent samples included.})  For each patient, we
+  split the timeseries data in
+  half and created a correlation matrix with one half.  With the
+  remaining data, we created the second correlation matrix with more
+  and more time samples (in 1000 sample increments).  These time
+  samples were either drawn randomly (``Random'') , or were drawn sequentially from
+  either the closest timepoint (``Close'' ) or the furthest timepoint
+  (``Apart'' ). The two correlation matrices were then correlated, and the
+  coefficient plotted relative to the percentage of data included.  (\textbf{B. Correlation of split
+  halves by the number of time samples included.})
+Same analysis as Panel A, but the
+  coefficient plotted relative to the total number of samples included.
+  \textbf{C.--D. Features from Dataset 2.}  Analogous format to Panels
+  A--B.}
+\label{fig:supplemental_7}
+\end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figs/supplemental_8}
+\caption{\textbf{Stability of correlation matrix across patients.} \textbf{A.--B.  Features from
+    Dataset 1.}  Features include: (\textbf{A. Correlation of split
+  halves by number of patients included.})  For 500 iterations, we randomly split the
+patient-specific correlations in half, then created one correlation
+matrix with the first half and created the second correlation matrix
+using more and more patients. The two correlation matrices were then correlated, and the
+  coefficient plotted relative to the number of patients included.
+  (\textbf{B. Standard error of the mean across iterations by the
+    number of patients included.})
+To measure the variability across the iterations, we plot the standard
+error of the mean as a function of the number of patients included in
+the second correlation matix.  
+  \textbf{C.--D. Features from Dataset 2.}  Analogous format to Panels
+  A--B.}
+\label{fig:supplemental_8}
+\end{figure}
+
+\renewcommand{\bibnumfmt}[1]{[S#1]}
+\renewcommand{\citenumfont}[1]{S#1}
 \bibliography{CDL-bibliography/memlab}
 \bibliographystyle{CSE}
 % \newpage
