@@ -11,6 +11,8 @@
 # specify the queue the job will be added to (if more than 600, use largeq)
 #PBS -q <config['q']>
 
+# getting rid of this line temporarily #PBS -l feature=<config['feature']> 
+
 # specify the number of cores and nodes (estimate 4GB of RAM per core)
 #PBS -l nodes=<config['nnodes']>:ppn=<config['ppn']>
 
@@ -22,8 +24,9 @@
 # set the working directory *of the job* to the specified start directory
 cd <config['startdir']>
 
-echo ACTIVATING supereeg VIRTUAL ENVIRONMENT
+echo ACTIVATING supereeg_env VIRTUAL ENVIRONMENT
 conda activate supereeg_env
 
 # run the job
 <config['cmd_wrapper']> <job_command> #note: job_command is reserved for the job command; it should not be specified in config.py
+

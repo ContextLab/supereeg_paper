@@ -19,30 +19,27 @@ except:
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'full_mats.py')
 
-# only make a few:
-bos = ('FR029.mo', 'TJ001.mo', 'TJ015.mo','TJ017.mo', 'TJ025.mo','TJ027.mo')
-#
-# files = map(lambda x: os.path.join(config['datadir'],x), bos)
-
-# or make all:
 files = glob.glob(os.path.join(config['datadir'],'*.bo'))
+# completed = set([os.path.basename(x).split('.mo')[0] for x in glob.glob(os.path.join(config['resultsdir'], 'union', '*.mo'))])
+completed = []
+freqs = ['alpha', 'beta', 'delta', 'theta', 'lgamma', 'hgamma']
+for freq in freqs:
+    completed += glob.glob('/dartfs/rc/lab/D/DBIC/CDL/f003f64/ram_results_voltage/RAM_union/*' + freq + '*')
 
-# options for model: 'pyFR_union'
-model = str('pyFR_union')
-#model = str('gray')
 
-# options for vox_size: 5, 10, 20, 30
-radius =  str('20')
+fcompleted = glob.glob(os.path.join(config['resultsdir'], 'union', '*'))
+fcompleted = set([os.path.basename(x).split('.mo')[0] for x in fcompleted])
+completed = set([os.path.basename(x).split('.mo')[0] for x in completed])
+files = set([os.path.basename(x).split('.bo')[0] for x in files])
+files = [os.path.join(config['datadir'], x + '.bo') for x in completed-fcompleted]
 
-# options for vox_size: 5, 10, 20, 30
-vox_size =  str('6')
 
-job_commands = list(map(lambda x: x[0]+" "+str(x[1])+" " + model+" "+ radius+" "+ vox_size,
-                        zip([job_script]*len(files), files)))
+
+job_commands = list(map(lambda x: x[0] + ' ' + str(x[1]), zip([job_script]*len(files), files)))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
-job_names = list(map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_' + model +'_'+ radius+'_'+ vox_size + '.sh', files))
+job_names = list(map(lambda x: os.path.basename(os.path.splitext(x)[0])+'_model.sh', files))
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
 assert(len(job_commands) == len(job_names))
@@ -140,8 +137,8 @@ for n, c in zip(job_names, job_commands):
         if lock(next_lockfile):
             next_job = create_job(n, c)
 
-            if (socket.gethostname() == 'discovery.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
-                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; qsub'
+            if (socket.gethostname() == 'discovery7.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
+                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; mksub'
             else:
                 submit_command = 'echo "[RUNNING JOB: ' + next_job + ']"; sh'
 

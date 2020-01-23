@@ -21,11 +21,13 @@ else:
 config['scriptdir'] = os.path.join(config['workingdir'], 'scripts')
 config['lockdir'] = os.path.join(config['workingdir'], 'locks')
 config['resultsdir'] = os.path.join(config['workingdir'], 'results')
+config['og_bodir'] = '/dartfs/rc/lab/D/DBIC/CDL/f002s72/RAM_analysis/bos'
+config['og_bodir'] = '/idata/cdl/data/ECoG/pyFR/data/bo'
 
 # runtime options
 config['jobname'] = "compile_locs"  # default job name
 config['q'] = "default"  # options: default, testing, largeq
-config['nnodes'] = 4  # how many nodes to use for this one job
+config['nnodes'] = 1  # how many nodes to use for this one job
 config['ppn'] = 16  # how many processors to use for this one job (assume 4GB of RAM per processor)
 config['walltime'] = '20:00:00'  # maximum runtime, in h:MM:SS
 config['cmd_wrapper'] = "python3"  # replace with actual command wrapper (e.g. matlab, python, etc.)

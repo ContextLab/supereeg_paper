@@ -1,4 +1,3 @@
-
 #!/bin/bash -l
 
 # DO NOT MODIFY THIS FILE!
@@ -15,18 +14,20 @@
 # specify the number of cores and nodes (estimate 4GB of RAM per core)
 #PBS -l nodes=<config['nnodes']>:ppn=<config['ppn']>
 
+# no more #PBS -l feature=<config['feature']>
+
 # specify how long the job should run (wall time)
 #PBS -l walltime=<config['walltime']>
 
 # set the working directory *of this script* to the directory from which the job was submitted
 
 # set the working directory *of the job* to the specified start directory
-cd <config['startdir']>
+# cd <config['startdir']>
 
 echo ACTIVATING supereeg VIRTUAL ENVIRONMENT
-source activate supereeg_env
+
+# conda init bash
+conda activate supereeg_env
 
 # run the job
 <config['cmd_wrapper']> <job_command> #note: job_command is reserved for the job command; it should not be specified in config.py
-
-source deactivate supereeg_env
