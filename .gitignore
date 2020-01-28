@@ -116,3 +116,13 @@ paper/main.pdf
 paper/*.prv*
 paper/*.synctex*
 paper/_region_.tex
+
+*.npz
+*.bo
+
+./.vscode/
+.vscode/
+/.vscode/
+
+code/scripts/visbrain_plots
+best_locs/

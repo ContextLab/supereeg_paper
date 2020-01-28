@@ -16,9 +16,11 @@ try:
 except:
     os.makedirs(config['resultsdir'])
 
+freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma'] #, 'broadband', 'raw']
+
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'union_locs.py')
-job_commands = list(map(lambda x: x[0]+" "+str(x[1]), zip([job_script]*1, range(1))))
+job_commands = list(map(lambda x: x[0]+" "+str(x[1]), zip([job_script]*len(freqnames), freqnames)))
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 job_names = list(map(lambda x: 'pyFR_locs_' + str(x) + '.sh', range(len(job_commands))))
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
@@ -118,8 +120,8 @@ for n, c in zip(job_names, job_commands):
         if lock(next_lockfile):
             next_job = create_job(n, c)
 
-            if (socket.gethostname() == 'discovery.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
-                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; qsub'
+            if (socket.gethostname() == 'discovery7.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
+                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; mksub'
             else:
                 submit_command = 'echo "[RUNNING JOB: ' + next_job + ']"; sh'
 

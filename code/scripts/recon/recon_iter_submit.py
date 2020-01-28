@@ -8,12 +8,14 @@ import os
 import socket
 import getpass
 import datetime as dt
-import supereeg as se
-from supereeg.load import load
 import time
-import pandas as pd
-from supereeg.helpers import filter_subj as filtsub
-import numpy as np
+
+"""
+This file creates a PBS job for each brain object, and performs each
+reconstruction iteratively (hence recon_iter), as opposed to the previous
+implementation (simply 'recon'). This saves on overhead, and is the best
+way to run the analyses.
+"""
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 try:
@@ -21,52 +23,27 @@ try:
 except:
     os.makedirs(config['resultsdir'])
 
-def electrode_search(fname, threshold=10):
-    basefname = os.path.basename(fname)
-    freq = fname.split('_')[-1].split('.bo')[0]
-    og_fname = os.path.join(config['og_bodir'], basefname.split('_' + freq)[0] + '.bo')
-    if not freq in set(['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband', 'raw']):
-        og_fname = fname 
-    kurt_vals = se.load(og_fname, field='kurtosis')
-    thresh_bool = kurt_vals > threshold
-    return sum(~thresh_bool)
-
-
 # each job command should be formatted as a string
-job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon.py')
+job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon_iter.py')
 
-freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
-completed = []
-for freq in freqnames:
-    completed += glob.glob(os.path.join(config['resultsdir'], freq + '_recon', '*_within.npz'))
+files = []
+all_mos = glob.glob(os.path.join(config['modeldir'], '*.mo'))
+all_mos = [os.path.splitext(os.path.basename(f))[0] for f in all_mos]
+for mo in all_mos:
+    rawf = os.path.join(config['og_bodir'], mo + '.bo')
+    freqf = os.path.join(config['datadir'], mo + '.bo')
+    if os.path.exists(rawf):
+        files.append(rawf)
+    elif os.path.exists(freqf): 
+        files.append(freqf)
 
 
-completed = set(['_'.join(os.path.basename(os.path.splitext(f)[0]).split('_')[:-2]) for f in completed])
+job_commands = list(map(lambda x: x[0]+" "+str(x[1]), zip([job_script]*len(files), files)))
 
-all_files = set(glob.glob(os.path.join(config['datadir'],'*.bo')))
-
-files = all_files - completed
-
-# bos = ('BW001.bo', 'BW013.bo')file_
-# files = list(map(lambda x: os.path.join(config['datadir'],x), bos))
-#print(files)
-files = glob.glob(os.path.join(config['datadir'],'*.bo')) + glob.glob(os.path.join(config['og_bodir'], '*.bo'))
-
-file_nums = [(a, i) for item, (a,b) in enumerate(zip(files, map(lambda e :electrode_search(e), files))) for i in range(b)]
-
-print('num of remaining jobs: ' + str(len(file_nums)))
-
-# options for model: 'pyFR_union', 'example_model', 'gray'
-model = str('pyFR_union')
-
-radius = str('20')
-
-job_commands = list(map(lambda x: x[0]+" "+str(x[1][0])+" "+str(x[1][1])+" " + model + " " + radius, zip([job_script]* len(file_nums), file_nums)))
+print('num of remaining jobs: ' + str(len(job_commands)))
 
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
-job_names = list(map(lambda x: os.path.splitext(os.path.basename(x[0]))[0]+"_"+str(x[1])+"_" + model+ "_" + radius + '.sh', file_nums))
-
-
+job_names = list(map(lambda x: os.path.splitext(os.path.basename(x))[0]+'_recon.sh', job_commands))
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
