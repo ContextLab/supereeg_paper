@@ -18,20 +18,26 @@
 \newcommand{\perexpcorrmaps}{S1}
 \newcommand{\perexptaskrecon}{S2}
 \newcommand{\perexptaskreconseparated}{S3}
-\newcommand{\suppstats}{S4}
-\newcommand{\intersectmap}{S5}
+\newcommand{\freqpower}{S4}
+\newcommand{\networkpower}{S5}
+\newcommand{\suppstats}{S6}
 
 % Include your paper's title here
 
 \title{A Gaussian process model of human electrocorticographic data} 
 \author{
   Lucy L. W. Owen$^{1}$,
-  Andrew C. Heusser$^{1, 2}$, and
+  Tudor A. Muntianu$^{1}$,
+  Andrew C. Heusser$^{1, 2}$, \\
+  Patrick Daly$^{3}$,
+  Katherine Scangos$^{3}$, and
   Jeremy R. Manning$^{1\ast}$\\\\
 $^{1}$Department of Psychological and Brain Sciences, Dartmouth College,\\
 Hanover, NH 03755, USA\\
 $^{2}$Akili Interactive,\\
-Boston, MA 02110, USA}
+Boston, MA 02110, USA\\
+$^{3}$Weill Institute for Neurosciences, University of California, San Francisco,\\
+San Francisco, CA 94121, USA}
 
 \date{}
 
@@ -240,7 +246,7 @@ algorithm requires measuring correlations between 2 or more electrodes
 from each patient.  For Dataset 1, this yielded clean recordings from
 4168 electrodes implanted throughout the brains of 67 patients
 (Fig.~\ref{fig:methods}A); for Dataset 2, this yielded clean
-recordings from 3159 electrodes from 24 patients.  Each individual
+recordings from 5023 electrodes from 78 patients.  Each individual
 patient contributes electrodes from a limited set of brain locations,
 which we localized in a common space~\citep[MNI152;][]{GrabEtal06}; an
 example Dataset 1 patient's 54 electrodes that passed the above
@@ -285,7 +291,9 @@ model~\citep[e.g.,][]{MannEtal18}.
 
 A second mechanism whereby a given region $x$ can contribute to the
 recording at $\eta$ is through (direct or indirect) anatomical
-connections between structures near $x$ and $\eta$.  We use temporal
+connections between structures near $x$ and $\eta$.  Although
+anatomical and functional correlations can differ
+markedly~\citep[e.g.,][]{AdacEtal12, HoneEtal09, GoniEtal14}, we use temporal
 correlations in the data to estimate these anatomical
 connections~\citep{BeckEtal18}.  Let $\bar{R}$ be the set of locations
 at which we wish to estimate local field potentials, and let
@@ -394,7 +402,7 @@ $\hat{K}_{\alpha_s, \alpha_s}$ are correlation matrices rather than
 covariance matrices.)  Also, we note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
-large (e.g., for the patient highlighted in Fig.~\ref{fig:recon}, $T =
+large (e.g., an example patient in Dataset 1, $T =
 12786750$). However, because Equation~\ref{eqn:reconstruction} is time
 invariant, we may compute $Y_{s,k,\beta_s}$ in a piecewise
 manner by filling in $Y_{s,k,\beta_s}$ one row at a time (using the
@@ -426,41 +434,8 @@ SuperEEG-estimated recordings at those electrodes match the observed
 recordings from those electrodes (i.e., how closely did the estimated
 $\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$)?
 
-To illustrate our approach, we first examine an individual held-out
-raw LFP trace and its associated SuperEEG-derived reconstruction.
-Figure~\ref{fig:recon}A displays the observed LFP from the red
-electrode in Figure~\ref{fig:methods}A (blue), and its associated
-reconstruction (red), during the 5~s time window during one of the
-example patient's six recording sessions shown in
-Figure~\ref{fig:methods}E.  The two traces match closely
-($r = 0.86, p < 10^{-10}$).  Figure~\ref{fig:recon}B displays a
-two-dimensional histogram of the actual versus reconstructed voltages
-for the entire 14.2 total hours of recordings from the example
-electrode (correlation: $r = 0.91, p < 10^{-10}$).  This example
-confirms that the SuperEEG algorithm recovers the recordings from this
-single electrode well.  Next, we used this general approach to
-quantify the algorithm's performance across the full dataset.
-
-%sample trace & reconstruction, several frames of activity snapshot?
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{figs/recon}
-  \caption{\textbf{Observed and reconstructed LFP from a single
-      electrode.} \textbf{A. Example LFP.}  A 5~s recording from the
-    red electrode in Figure~\ref{fig:methods}A is displayed in blue,
-    and the reconstructed LFP during the same time window is shown in
-    red.  \textbf{B. Observed versus reconstructed LFP over
-      14.2~hours.}  The two-dimensional histogram reflects the
-    relation between distributions of observed versus reconstructed
-    voltages from one patient, across the 14.2 hours of recorded data
-    collected over 6 recording sessions.  The correlation reported in
-    the panel is between the observed and reconstructed voltages.
-    Both panels: all voltages are represented in standard deviation units
-   (computed within session).}
-  \label{fig:recon}
-\end{figure}
-
-For each held-out electrode, from each held-out patient in turn, we
+We used this general approach to
+quantify the algorithm's performance across the full dataset.For each held-out electrode, from each held-out patient in turn, we
 computed the average correlation (across recording sessions) between
 the SuperEEG-reconstructed voltage traces and the observed voltage
 traces from that electrode.  For this analysis we set $\bar{R}$ to be
@@ -470,9 +445,9 @@ in $\bar{R}$, reflecting how well the SuperEEG algorithm was able to
 recover the recording at that location by incorporating data across
 patients (black histogram in Fig.~\ref{fig:corrmap}A, map in
 Fig.~\ref{fig:corrmap}C).  The observed distribution of correlations
-was centered well above zero (mean: 0.52; $t$-test comparing mean of
+was centered well above zero (mean: 0.51; $t$-test comparing mean of
 distribution of $z$-transformed average patient correlation coefficients
-to 0: $t(66) = 25.08, p < 10^{-10}$), indicating that the SuperEEG algorithm
+to 0: $t(66) = 23.55, p < 10^{-10}$), indicating that the SuperEEG algorithm
 recovers held-out activity patterns substantially better than random
 guessing.
 
@@ -497,14 +472,14 @@ $t$-test comparing mean of distribution of $z$-transformed average
 patient correlation coefficients to 0: $t(66) = 15.16, p < 10^{-10}$).
 However, the across-patient correlations were substantially higher
 ($t$-test comparing average $z$-transformed within versus across
-patient electrode correlations: $t(66) = 9.62, p < 10^{-10}$).  This
+patient electrode correlations: $t(66) = 9.17, p < 10^{-10}$).  This
 is an especially conservative test, given that the across-patient
 SuperEEG reconstructions exclude (from the correlation matrix
 estimates) all data from the patient whose data is being
 reconstructed.  We repeated each of these analyses on a second
 independent dataset and found similar results
 (Fig.~\ref{fig:corrmap}B, D; within versus across reconstruction
-accuracy: $t(23) = 6.93, p < 10^{-5}$). We also replicated this result
+accuracy: $t(77) = 11.25, p < 10^{-10}$). We also replicated this result
 separately for each of the two experiments from Dataset 2
 (Fig.~\perexpcorrmaps).  This overall finding, that reconstructions of
 held-out data using correlation models learned from \textit{other}
@@ -538,12 +513,10 @@ across people.
     obtained from Dataset 2.  The histograms aggregate data across
     both Dataset 2 experiments; for results broken down by experiment
     see Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction
-      performance by location.} Each dot reflects the location of a
-    single implanted electrode from Dataset 1 (Panel C) or Dataset 2
-    (Panel D).  The dot colors denote the average across-session
+      performance by location.} The colors denote the average across-session
     correlation, using the across-patient correlation model, between
     the observed and reconstructed activity at the given electrode
-    location.}
+    location projected to the cortical surface~\citep{CombEtal19}.}
   \label{fig:corrmap}
 \end{figure}
 
@@ -554,16 +527,17 @@ reconstruction accuracy across patients suggests that the spatial
 correlations derived from the SuperEEG algorithm are, to some extent,
 similar across tasks.  We tested this finding more directly using
 Dataset 2.  In Dataset 2, the recordings were limited to times when
-each patient was participating in each of two experiments (Experiment
-1, a random-word list free recall task, and Experiment 2, a
-categorized list free recall task).  We wondered whether a correlation
+each patient was participating in one of two experiments.  Experiment
+1 is a random-word list free recall task; Experiment 2 is a
+categorized list free recall task (24 patients particpated in both).  We wondered whether a correlation
 model learned from data from one experiment might yield good
 predictions of data from the other experiment.  Further, we wondered
 about the extent to which it might be beneficial or harmful to combine
 data across tasks.
 
 To test the task-specificity of the SuperEEG-derived correlation
-models, we repeated the above within- and across-patient cross validation
+models, we restricted the dataset to the 24 patients that participated
+in both experiments and repeated the above within- and across-patient cross validation
 procedures separately for Experiment 1 and Experiment 2 data from
 Dataset 2.  We then compared the reconstruction accuracies for held-out
 electrodes, for models trained within versus across the two
@@ -601,9 +575,9 @@ that were contained within a 20 MNI unit radius sphere centered on
 that voxel.  We defined the \textit{density} at that location as this
 proportion.  Across Datasets 1 and 2, the electrode placement
 densities were similar (correlation by voxel:
-$r = 0.56, p < 10^{-10}$).  We wondered whether regions with good
+$r = 0.6, p < 10^{-10}$).  We wondered whether regions with good
 covererage might be associated with better reconstruction accuracy
-(e.g. Fig.~\ref{fig:corrmap}C, D indicate that many electrodes in the
+(e.g. Fig.~\ref{fig:corrmap}C and D indicate that many electrodes in the
 MTL have relatively high reconstruction accuracy, and occipital
 electrodes tend to have relatively low reconstruction accuracy).  To
 test whether this held more generally across the entire brain, for
@@ -611,11 +585,11 @@ each dataset we computed the electrode placement density for each
 electrode from each patient (using the proportion of \textit{other}
 patients' electrodes within 20 MNI units of the given electrode).  We
 then correlated these density values with the across-patient
-reconstruction accuracies for each electrode.  We found no reliable
-correlations between reconstruction accuracy and density for either
-dataset (Dataset 1: $r = 0.09, p = 0.44$; Dataset 2:
+reconstruction accuracies for each electrode.  We found a negative
+correlation between reconstruction accuracy and density for Dataset 1,
+but was unreliable for Dataset 2 (Dataset 1: $r = -0.21, p = 0.05$; Dataset 2:
 $r = -0.30, p = 0.15$).  This indicates that the reconstruction
-accuracies we observed are not driven solely by sampling density, but
+accuracies we observed are not driven by sampling density, but
 rather may also reflect higher order properties of neural dynamics
 such as functional correlations between distant
 voxels~\citep{BetzEtal17b}.
@@ -672,17 +646,18 @@ the averages were weighted to reflect patients who had more electrodes
 implanted near that location. This yielded a single map for each
 dataset, highlighting regions that are potentially promising
 implantation targets in terms of providing full-brain activity
-information via SuperEEG (Fig.~\ref{fig:informap}A, B).  Despite task
+information via SuperEEG (Fig.~\ref{fig:informap}A and B).  Despite task
 and patient differences across the two datasets, we nonetheless found
 that the maps of the most promising implantation targets derived from
 both datasets were similar (voxelwise correlation between information
-scores across the two datasets: $r = 0.20, p < 10^{-10}$).  While the
+scores across the two datasets: $r = 0.18, p < 10^{-10}$).  While the
 correspondence between the two maps was imperfect, our finding that
 there were some commonalities between the two maps lends support to
 the notion that different brain areas are differently informative
 about full-brain activity patterns.  We also examined the intersection
 between the top 10\% most informative voxels across the two datasets
-(white outlines in Fig.~\ref{fig:informap}A, B, Fig.~\intersectmap).
+(gray areas in Fig.~\ref{fig:informap}C, networks shown in
+Fig.~\ref{fig:networks}A (All)).
 Supporting the notion that structures that are highly interconnected
 with the rest of the brain might be especially good targets for
 implantation, this intersecting set of voxels with the highest
@@ -703,11 +678,149 @@ a large proportion of the brain's gray matter~\citep[e.g., ][]{TomaVolk11}.
       score by voxel.}  This panel is in the same format as Panel A.
     In both panels the contours indicate the intersections between the
     top 10\% most informative voxels in each map (also see
-    Fig.~\intersectmap).  \textbf{C. Correspondence in information
+    Fig.~\networks Panels A.-C. All for networks within this region).  \textbf{C. Intersection.}  
+    Gray areas indicate the intersections between the
+    top 10\% most informative voxels in each map and projected onto the cortical surface~\citep{CombEtal19}. \textbf{D. Correspondence in information
       scores by voxel across Datasets 1 and 2.}  Same format as
     Figure~\ref{fig:density}C.}
   \label{fig:informap}
 \end{figure}
+
+We also wondered what frequency properties contributed to the
+reconstruction accuracy. To recover frequency-band specific voltage activity
+from each recording, a second-order Butterworth filter was applied
+across bands $\delta$, $\theta$, $\alpha$, $\beta$, $\gamma_L$, and
+$\gamma_H$ with respective frequency ranges 2-4 Hz, 4-8 Hz, 8-12 Hz,
+12-30 Hz, 30-60 Hz, and 60-100 Hz. Bandpass signals contain
+information about the phase and amplitude of the underlying frequency
+band, providing the most detailed view of the activity at that
+frequency. Additionally, we calculated the reconstruction accuracies
+using power at each band by taking the absolute
+value of the Hilbert tranform of the bandpassed signal (see Fig.~\freqpower). To compute the broadband power (BB), we
+first computed instantaneous power at 50 log-spaced frequencies
+between 2 and 100 Hz using Morlet wavelets (n=4). Then, for each time
+point and electrode, we fitted a robust Huber regression to frequency
+and power in log-space, and calculated the mean height of the
+resulting line. We then followed the same procedure outlined above
+(see Fig.~\ref{fig:methods}) to
+obtain the reconstruction accuracy at each bandpassed frequency as well
+as broadband power for both datasets (see Fig.~\ref{fig:frequency}).
+We found
+the best average reconstruction accuracy for each dataset was obtained using broadband
+power, which is a correlate of neural firing
+~\citep{MannEtal09}. We also found a similar trend in reconstruction
+accuracy for frequency bands across the two datasets, performing better at lower
+frequencies (peaking at $\alpha$) and worst at high frequencies (see Fig.~\ref{fig:frequency}).  
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figs/frequency}
+  \caption{\textbf{Reconstruction quality across all electrodes in two
+      ECoG datasets for each frequency band.} \textbf{A. Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 1.}  The across-patient
+    distribution (left jitter barplot) reflects
+    reconstruction accuracy (correlation) using a correlation model
+    learned from all but one patient's data, and then applied to that
+    held-out patient's data.  The within-patient distribution (right
+    jitter barplot in lighter color)
+    reflects performance using a correlation model learned from the same
+    patient who contributed the to-be-reconstructed electrode, colored
+    by frequency and includes the raw voltages displayed in
+    Fig.~\ref{fig:corrmap}A in gray.
+    \textbf{B.~Statistical summary of across-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.} In the upper triangles of each
+    map, warmer colors (positive t-values) indicate that the
+    distribution of
+    reconstruction accuracy for the frequency band in a given row
+    yielded was greater than the frequency band in the given
+    column. Cooler colors (negative t-values) indicate that the
+    frequency band in the given row yielded lower reconstruction
+    accuracy than the frequency band in the given column. The lower
+    triangles of each map denote the corresponding p-values for the
+    t-tests. The diagonal entries display the average
+    reconstruction accuracy given to each frequency
+    band. \textbf{C.~Statistical summary of within-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.}
+    This panel displays the within-patient statistical summary,
+    in the same format as Panel B.  \textbf{D.~Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 2.}  This panel displays
+    reconstruction accuracy distributions for each frequency band for
+    Dataset 2. \textbf{E.~Statistical summary of
+      across-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.} This is the same format as Panel
+    B for Dataset 2. \textbf{F.~Statistical summary of
+      within-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.}This is the same format as Panel
+    C for Dataset 2.}
+  \label{fig:frequency}
+\end{figure}
+
+We also wanted to see how the most informative regions changed by
+frequency. Lower frequency oscillations, such as $\delta$, $\theta$, and $\alpha$, have
+been posited to be involved in processing modes which span large swaths of
+cortical regions and are thought to serve the purpose of integration
+across many cortical sites ~\citep{Knya12}. Higher frequency
+oscillations such as $\beta$ and $\gamma$, are more limited to topographic
+areas ~\citep{Nune95}, and are modulated by slow oscillations
+hierarchically ~\citep{EngeEtal10}. Using the frequency-specific reconstruction accuracies, we
+followed the process outlined in Fig.~\ref{fig:informap}C, to obtain
+the most informative locations for each frequency.  When we examined the intersection
+between the top 10\% most informative voxels across the two datasets
+for each bandpassed frequency, we found a somewhat consistent hierarchical
+structure (see Fig.~\ref{fig:networks}E).
+
+We then wondered which
+networks were involved in each of
+these frequency-specific intersecting regions.  To better understand the networks involved
+we colored the regions (Fig.~\ref{fig:networks}A) based on the
+network parcellation ~\citep[using $k$=7;][]{YeoEtal11}} (Fig.~\ref{fig:networks}D) and calculated the proportion of each
+of those networks (Fig.~\ref{fig:networks}B).  Consistent with the idea outlined
+above, we found networks most involved in the lowest frequency band,
+$\delta$, were networks involved integration and global processing
+(specifically the dorsal attention ~\citep{MarzEtal13}, default mode,
+and frontoparietal networks).  Although these networks are also seen
+in the $\theta$ intersection, they are less proportionally to the
+visual network.  Alpha power is consistently modulated in EEG studies
+of attention and visuo-motor ~\citep{MantEtal07, MarzEtal13}, and we
+similarly found a high proportion of visual, somatomotor, and dorsal attentio networks
+within this band.  We found $\beta$ intersections to predominantly
+consist of somatomotor network, in line with~\citep{RittEtal09, VaneEtal11}.  Also accordant with heavily cited
+literature~\citep{FrieEtal07}, the network most predominant in the
+$\gamma$ intersection was the visual network.  Lastly, broadband power
+was found predominantly in frontoparietal and default mode networks,
+consistent with ~\citep{OssaEtal11}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figs/networks}
+  \caption{\textbf{Most informative electrode locations by frequency
+      and the networks involved.}
+    \textbf{A.~Intersections across datasets for each frequency.} The
+    inflated brain plots display the intersections between the
+    top 10\% most informative voxels were calculated as described in Fig.~\ref{fig:informap}
+    for each frequency and projected onto the cortical surface~\citep{CombEtal19}. Intersecting voxels are colored according to the 7 networks
+    from~\citep{YeoEtal11}.
+    \textbf{B.~Proportion of networks in most informative electrode locations by
+    frequency.}  Pie graphs display the proportion of the 7 networks
+  ~\citep{YeoEtal11} in the most informative locations by
+  frequency, and are sized relative to the average reconstruction
+  accuracy for each frequency. \textbf{C.~Terms associated with most informative
+    electrode locations.}  The
+    lists of terms display the top five Neurosynth
+    terms~\citep{RubiEtal17} decoded from the corresponding brain
+    maps, and colored according the frequency (see Panel
+    E legend). \textbf{D.~Network parcellation from~\citep{YeoEtal11}.}
+    Seven network parcellation as described
+    in~\citep{YeoEtal11}. \textbf{E.~Most informative locations by
+      frequency.} The inflated brain plot displays the locations of
+    the most informative locations (Panel A), colored by frequency,
+    and projected onto the cortical surface~\citep{CombEtal19}.}
+  \label{fig:networks}
+\end{figure}
+
+
 
 \section*{Discussion}
 Are our brain's networks static or dynamic?  And to what extent are
@@ -772,9 +885,11 @@ activity in the LFP may be used to estimate the firing rates of
 neurons that underly the population contributing to the
 LFP~\citep{MillEtal08, MannEtal09, JacoEtal10b, CronEtal11}.  Because
 SuperEEG reconstructs LFPs throughout the brain, one could in
-principle use gamma or broadband power in the reconstructed signals to
+principle use broadband power in the reconstructed signals to
 estimate the corresponding firing rates (though not the timings of
-individual action potentials).
+individual action potentials). Interestingly, our frequency-specific
+analysis yielded the best reconstruction accuracies using broadband
+power.  
 
 Beyond providing a means of estimating ongoing activity throughout the
 brain using already implanted electrodes, our work also has
@@ -835,7 +950,7 @@ of the authors and does not necessarily represent the official views
 of our supporting organizations.
 
 \section*{Author Contributions}
-J.R.M conceived and initiated the project. L.L.W.O. and
+J.R.M conceived and initiated the project. L.L.W.O., T.A.M, and
 A.C.H. performed the analyses. J.R.M. and L.L.W.O. wrote the
 manuscript.
 

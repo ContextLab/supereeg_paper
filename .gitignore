@@ -111,7 +111,8 @@ ENV/
 *.synctex.gz
 
 *.#*
-
+data/niis
+paper/figs/source/networks/Yeo2011_17Networks_MNI152_FreeSurferConformed1mm_LiberalMask.nii
 paper/main.pdf
 paper/*.prv*
 paper/*.synctex*

@@ -4,6 +4,7 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{geometry}
 \usepackage{natbib}
+\usepackage{hyperref}
 \usepackage{pxfonts}
 \usepackage{graphicx}
 \usepackage{newfloat}
@@ -15,17 +16,19 @@
 \title{\textit{Supplemental figures for}: A Gaussian process model of human electrocorticographic data} 
 \author{
   Lucy L. W. Owen$^{1}$,
-  Andrew C. Heusser$^{1, 2}$, and
+  Tudor A. Muntianu$^{1}$,
+  Andrew C. Heusser$^{1, 2}$, \\
+  Patrick Daly$^{3}$,
+  Katherine Scangos$^{3}$, and
   Jeremy R. Manning$^{1\ast}$\\\\
 $^{1}$Department of Psychological and Brain Sciences, Dartmouth College,\\
 Hanover, NH 03755, USA\\
 $^{2}$Akili Interactive,\\
 Boston, MA 02110, USA}
 
-\bibliographystyle{apa}
+%\bibliographystyle{apa}
 
 \begin{document}
-\maketitle
 
 \setcounter{equation}{0}
 \setcounter{figure}{0}
@@ -35,13 +38,14 @@ Boston, MA 02110, USA}
 \makeatletter
 \renewcommand{\theequation}{S\arabic{equation}}
 \renewcommand{\thefigure}{S\arabic{figure}}
-\renewcommand{\bibnumfmt}[1]{[S#1]}
-\renewcommand{\citenumfont}[1]{S#1}
 
+\begin{titlepage}
+  \maketitle
+\end{titlepage}
 
 \begin{figure}[b!]
 \centering
-\includegraphics[width=0.6\textwidth]{figs/supplemental_1}
+\includegraphics[width=\textwidth]{figs/supplemental_1}
 \caption{\textbf{Reconstruction quality for Datasets 1 and 2.}
   \textbf{A. Distributions of correlations between observed versus
     reconstructed activity by electrode, for Dataset 1.} The split
@@ -108,14 +112,67 @@ Boston, MA 02110, USA}
     average within-experiment (across-session)
     correlation, using the across-patient correlation model, between
     the observed and reconstructed activity at the given electrode
-    location.}
+    location projected to the cortical surface~\citep{CombEtal19}.}
 \label{fig:supplemental_3}
 \end{figure}
+
 
 
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_4}
+\caption{\textbf{Reconstruction quality across all electrodes in two
+      ECoG datasets for each frequency band.} \textbf{A. Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 1.} Same format as Figure~5A, but
+    using power at each frequency.
+    \textbf{B.~Statistical summary of across-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.} Same format as Figure~5B, but
+    using power at each frequency.\textbf{C.~Statistical summary of within-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.}
+    This panel displays the within-patient statistical summary,
+    in the same format as Panel B.  \textbf{D.~Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 2.}  This panel displays
+    reconstruction accuracy distributions for each frequency band for
+    Dataset 2. \textbf{E.~Statistical summary of
+      across-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.} This is the same format as Panel
+    B for Dataset 2. \textbf{F.~Statistical summary of
+      within-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.}This is the same format as Panel
+    C for Dataset 2.}
+\label{fig:supplemental_4}
+\end{figure}
+
+\begin{figure}[ptb]
+\centering
+\includegraphics[width=\textwidth]{figs/supplemental_5}
+\caption{\textbf{Most informative electrode locations by frequency
+      and the networks involved.}
+    \textbf{A.~Intersections across datasets for each frequency.}  Same format as Figure~6A, but
+    using power at each frequency.
+    \textbf{B.~Proportion of networks in most informative electrode locations by
+    frequency.}  Pie graphs display the proportion of the 7 networks
+  ~\citep{YeoEtal11} in the most informative locations by
+  frequency, and are sized relative to the average reconstruction
+  accuracy for each frequency. \textbf{C.~Terms associated with most informative
+    electrode locations.}  The
+    lists of terms display the top five Neurosynth
+    terms~\citep{RubiEtal17} decoded from the corresponding brain
+    maps, and colored according the frequency (see Panel
+    E legend). \textbf{D.~Network parcellation from~\citep{YeoEtal11}.}
+    Seven network parcellation as described
+    in~\citep{YeoEtal11}. \textbf{E.~Most informative locations by
+      frequency.} The inflated brain plot displays the locations of
+    the most informative locations (Panel A), colored by frequency,
+    and projected onto the cortical surface~\citep{CombEtal19}.}
+\label{fig:supplemental_5}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figs/supplemental_6}
 \caption{\textbf{Reconstruction accuracy versus within-subject data
     features for two ECoG datasets.} \textbf{A.--F.  Features from
     Dataset 1.}  Features include: (\textbf{A.}) total number of
@@ -129,23 +186,55 @@ Boston, MA 02110, USA}
   (\textbf{F.}) per-patient average session length (h).
   \textbf{G.--L. Features from Dataset 2.}  Analogous format to Panels
   A--F.}
-\label{fig:supplemental_4}
+\label{fig:supplemental_6}
 \end{figure}
 
-
-\begin{figure}[ptb]
+\begin{figure}[p]
 \centering
-\includegraphics[width=\textwidth]{figs/supplemental_5}
-\caption{\textbf{Most informative electrode locations.}  This map
-  shows the region outlined in white from Figure~5 in greater detail.
-  Across Datasets 1 and 2, electrodes in these locations were
-  identified as yielding the (10\%) best reconstruction accuracies at
-  \textit{other} locations throughout the brain.  The $x$-coordinates
-  in each panel denote the positions of the sagittal slices in MNI space.}
-\label{fig:supplemental_5}
+\includegraphics[width=\textwidth]{figs/supplemental_7}
+\caption{\textbf{Stability of correlation matrix across time.} \textbf{A.--B.  Features from
+    Dataset 1.}  Features include: (\textbf{A. Correlation of split
+  halves by the percent samples included.})  For each patient, we
+  split the timeseries data in
+  half and created a correlation matrix with one half.  With the
+  remaining data, we created the second correlation matrix with more
+  and more time samples (in 1000 sample increments).  These time
+  samples were either drawn randomly (``Random'') , or were drawn sequentially from
+  either the closest timepoint (``Close'' ) or the furthest timepoint
+  (``Apart'' ). The two correlation matrices were then correlated, and the
+  coefficient plotted relative to the percentage of data included.  (\textbf{B. Correlation of split
+  halves by the number of time samples included.})
+Same analysis as Panel A, but the
+  coefficient plotted relative to the total number of samples included.
+  \textbf{C.--D. Features from Dataset 2.}  Analogous format to Panels
+  A--B.}
+\label{fig:supplemental_7}
 \end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figs/supplemental_8}
+\caption{\textbf{Stability of correlation matrix across patients.} \textbf{A.--B.  Features from
+    Dataset 1.}  Features include: (\textbf{A. Correlation of split
+  halves by number of patients included.})  For 500 iterations, we randomly split the
+patient-specific correlations in half, then created one correlation
+matrix with the first half and created the second correlation matrix
+using more and more patients. The two correlation matrices were then correlated, and the
+  coefficient plotted relative to the number of patients included.
+  (\textbf{B. Standard error of the mean across iterations by the
+    number of patients included.})
+To measure the variability across the iterations, we plot the standard
+error of the mean as a function of the number of patients included in
+the second correlation matix.  
+  \textbf{C.--D. Features from Dataset 2.}  Analogous format to Panels
+  A--B.}
+\label{fig:supplemental_8}
+\end{figure}
 
+\renewcommand{\bibnumfmt}[1]{[S#1]}
+\renewcommand{\citenumfont}[1]{S#1}
+\bibliography{CDL-bibliography/memlab}
+\bibliographystyle{CSE}
 % \newpage
 % \renewcommand{\refname}{Supplemental references}
 % \bibliography{memlab}
