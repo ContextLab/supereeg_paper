@@ -159,7 +159,7 @@ The SuperEEG approach to inferring high temporal resolution full-brain
 activity patterns is outlined and summarized in
 Figure~\ref{fig:methods}. We describe (in this section) and evaluate
 (in \textit{Results}) our approach using a two large previously
-collected dataset comprising multi-session intracranial recordings.
+collected datasets comprising multi-session intracranial recordings.
 Dataset 1 comprises multi-session recordings taken from 6876
 electrodes implanted in the brains of 88 epilepsy
 patients~\citep{SedeEtal03, SedeEtal07a, SedeEtal07b, MannEtal11,
@@ -234,7 +234,7 @@ additional information about both datasets.
 We first applied fourth order Butterworth notch filter to remove 60 Hz
 ($\pm$ .5 Hz) line noise from every recording (from every electrode).
 Next, we downsampled the recordings (regardless of the original
-samplerate) to 250 Hz.  (This downsampling step served to both
+sample rate) to 250 Hz.  (This downsampling step served to both
 normalize for differences in sampling rates across patients and to
 ease the computational burden of our subsequent analyses.)  We then
 excluded any electrodes that showed putative epileptiform activity.
@@ -435,7 +435,7 @@ recordings from those electrodes (i.e., how closely did the estimated
 $\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$)?
 
 We used this general approach to
-quantify the algorithm's performance across the full dataset.For each held-out electrode, from each held-out patient in turn, we
+quantify the algorithm's performance across the full dataset. For each held-out electrode, from each held-out patient in turn, we
 computed the average correlation (across recording sessions) between
 the SuperEEG-reconstructed voltage traces and the observed voltage
 traces from that electrode.  For this analysis we set $\bar{R}$ to be
@@ -784,7 +784,7 @@ and frontoparietal networks).  Although these networks are also seen
 in the $\theta$ intersection, they are less proportionally to the
 visual network.  Alpha power is consistently modulated in EEG studies
 of attention and visuo-motor ~\citep{MantEtal07, MarzEtal13}, and we
-similarly found a high proportion of visual, somatomotor, and dorsal attentio networks
+similarly found a high proportion of visual, somatomotor, and dorsal attention networks
 within this band.  We found $\beta$ intersections to predominantly
 consist of somatomotor network, in line with~\citep{RittEtal09, VaneEtal11}.  Also accordant with heavily cited
 literature~\citep{FrieEtal07}, the network most predominant in the
