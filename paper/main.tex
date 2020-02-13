@@ -589,7 +589,7 @@ more generally across the entire brain, for each dataset we computed
 the electrode placement density for each electrode from each patient
 (using the proportion of \textit{other} patients' electrodes within 20
 MNI units of the given electrode).  We then correlated these density
-values with the across-patient reconstruction accuracies for each
+values with the across-patient reconstruction accuracies for eachg
 electrode.  We found a statistically reliable negative correlation
 between reconstruction accuracy and density for Dataset 1, but no
 reliable correlation for Dataset 2 (Dataset 1: $r = -0.21, p = 0.05$;
@@ -599,8 +599,85 @@ by sampling density, but rather may also reflect higher order
 properties of neural dynamics such as functional correlations between
 distant voxels~\citep{BetzEtal17b}.
 
+Prior work in humans and animals has shown that the spatial profile of
+the local field potential differs by frequency band~\citep[e.g., with
+respect to volume conductance properties and contribution to the local
+field potential;][]{BuzsEtal12, FrieEtal07, CronEtal11}.  For example,
+lower frequency components of the local field potential tend to have
+higher power and extend further in space than high-frequency
+components~\citep[e.g., ][]{MillEtal07, MannEtal09}.  We therefore
+wondered whether the reconstructions we observed might be differently
+weighting or considering the contributions of activity at different
+frequency bands.  We therefore examined a range of frequency bands
+($\delta$: 2--4 Hz; $\theta$: 4--8 Hz; $\alpha$: 8--12 Hz; $\beta$:
+12--30 Hz; $\gamma_L$: 30--60 Hz; and $\gamma_H$: 60--100 Hz), along
+with a measure of broadband power~\citep[defined as the mean height of
+a linear robust regression fit in log-log space to the order 4 Morelet
+wavelet-computed power spectrum at 50 log-spaced frequencies from from
+2--100 Hz;][]{MannEtal09}.  We used second-order Butterworth bandpass
+filters to compute the activity patterns within each narrow frequency
+band.  We then repeated our within-subject and across-subject
+cross-validated reconstruction accuracy tests (analogous to
+Fig.~\ref{fig:corrmaps}) separately for each frequency band
+(Fig.~\ref{fig:frequency}).  (We also carried out a similar analysis
+on the Hilbert transform-computed spectral power within each narrow
+band; see Fig.~\freqpower.)  Across both datasets, we found that our
+approach is best at reconstructing patterns of broadband activity
+(right-most bars in Figs.~\ref{fig:frequency}A and D), a correlate of
+population firing rate~\citep{MannEtal09}.  We also achieved good
+reconstruction accuracy within each narrow frequency band
+(Figs.~\ref{fig:frequency} and \freqpower).  Activity at lower
+frequencies ($\delta$, $\theta$, $\alpha$, and $\beta$) tended to be
+reconstructed better than high-frequency patterns ($\gamma_L$ and
+$\gamma_H$), with reconstruction accuracy peaking in the $\alpha$
+band.  Overall, these results indicate that our approach is able to
+accurately recover information within the 2--100 Hz range, although
+those reconstructions are most accurate for low-frequency or broadband patterns.
 
-%%%%%%%%%%%%%%%%%%%%% MOVE FREQEUNCY STUFF HERE
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figs/frequency}
+  \caption{\textbf{Reconstruction quality across all electrodes in two
+      ECoG datasets for each frequency band.} \textbf{A. Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 1.}  The across-patient
+    distribution (left jitter barplot) reflects
+    reconstruction accuracy (correlation) using a correlation model
+    learned from all but one patient's data, and then applied to that
+    held-out patient's data.  The within-patient distribution (right
+    jitter barplot in lighter color)
+    reflects performance using a correlation model learned from the same
+    patient who contributed the to-be-reconstructed electrode, colored
+    by frequency and includes the raw voltages displayed in
+    Fig.~\ref{fig:corrmap}A in gray.
+    \textbf{B.~Statistical summary of across-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.} In the upper triangles of each
+    map, warmer colors (positive t-values) indicate that the
+    distribution of
+    reconstruction accuracy for the frequency band in a given row
+    yielded was greater than the frequency band in the given
+    column. Cooler colors (negative t-values) indicate that the
+    frequency band in the given row yielded lower reconstruction
+    accuracy than the frequency band in the given column. The lower
+    triangles of each map denote the corresponding p-values for the
+    t-tests. The diagonal entries display the average
+    reconstruction accuracy given to each frequency
+    band. \textbf{C.~Statistical summary of within-patient reconstruction
+      quality by electrode for each frequency band in Dataset 1.}
+    This panel displays the within-patient statistical summary,
+    in the same format as Panel B.  \textbf{D.~Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      each frequency band in Dataset 2.}  This panel displays
+    reconstruction accuracy distributions for each frequency band for
+    Dataset 2. \textbf{E.~Statistical summary of
+      across-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.} This is the same format as Panel
+    B for Dataset 2. \textbf{F.~Statistical summary of
+      within-patient reconstruction quality by electrode for each
+      frequency band in Dataset 2.}This is the same format as Panel
+    C for Dataset 2.}
+  \label{fig:frequency}
+\end{figure}
 
 
 \begin{figure}
@@ -622,6 +699,8 @@ distant voxels~\citep{BetzEtal17b}.
     the 4~mm$^3$ MNI brain.}
   \label{fig:density}
 \end{figure}
+
+%%%%%%%%% STOPPED HERE
 
 In neurosurgical applications where one wishes to infer full-brain
 activity patterns, can our framework yield insights into where the
@@ -695,76 +774,6 @@ a large proportion of the brain's gray matter~\citep[e.g., ][]{TomaVolk11}.
   \label{fig:informap}
 \end{figure}
 
-We also wondered what frequency properties contributed to the
-reconstruction accuracy. To recover frequency-band specific voltage activity
-from each recording, a second-order Butterworth filter was applied
-across bands $\delta$, $\theta$, $\alpha$, $\beta$, $\gamma_L$, and
-$\gamma_H$ with respective frequency ranges 2-4 Hz, 4-8 Hz, 8-12 Hz,
-12-30 Hz, 30-60 Hz, and 60-100 Hz. Bandpass signals contain
-information about the phase and amplitude of the underlying frequency
-band, providing the most detailed view of the activity at that
-frequency. Additionally, we calculated the reconstruction accuracies
-using power at each band by taking the absolute
-value of the Hilbert tranform of the bandpassed signal (see Fig.~\freqpower). To compute the broadband power (BB), we
-first computed instantaneous power at 50 log-spaced frequencies
-between 2 and 100 Hz using Morlet wavelets (n=4). Then, for each time
-point and electrode, we fitted a robust Huber regression to frequency
-and power in log-space, and calculated the mean height of the
-resulting line. We then followed the same procedure outlined above
-(see Fig.~\ref{fig:methods}) to
-obtain the reconstruction accuracy at each bandpassed frequency as well
-as broadband power for both datasets (see Fig.~\ref{fig:frequency}).
-We found
-the best average reconstruction accuracy for each dataset was obtained using broadband
-power, which is a correlate of neural firing
-~\citep{MannEtal09}. We also found a similar trend in reconstruction
-accuracy for frequency bands across the two datasets, performing better at lower
-frequencies (peaking at $\alpha$) and worst at high frequencies (see Fig.~\ref{fig:frequency}).  
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{figs/frequency}
-  \caption{\textbf{Reconstruction quality across all electrodes in two
-      ECoG datasets for each frequency band.} \textbf{A. Distributions of correlations
-      between observed versus reconstructed activity by electrode, for
-      each frequency band in Dataset 1.}  The across-patient
-    distribution (left jitter barplot) reflects
-    reconstruction accuracy (correlation) using a correlation model
-    learned from all but one patient's data, and then applied to that
-    held-out patient's data.  The within-patient distribution (right
-    jitter barplot in lighter color)
-    reflects performance using a correlation model learned from the same
-    patient who contributed the to-be-reconstructed electrode, colored
-    by frequency and includes the raw voltages displayed in
-    Fig.~\ref{fig:corrmap}A in gray.
-    \textbf{B.~Statistical summary of across-patient reconstruction
-      quality by electrode for each frequency band in Dataset 1.} In the upper triangles of each
-    map, warmer colors (positive t-values) indicate that the
-    distribution of
-    reconstruction accuracy for the frequency band in a given row
-    yielded was greater than the frequency band in the given
-    column. Cooler colors (negative t-values) indicate that the
-    frequency band in the given row yielded lower reconstruction
-    accuracy than the frequency band in the given column. The lower
-    triangles of each map denote the corresponding p-values for the
-    t-tests. The diagonal entries display the average
-    reconstruction accuracy given to each frequency
-    band. \textbf{C.~Statistical summary of within-patient reconstruction
-      quality by electrode for each frequency band in Dataset 1.}
-    This panel displays the within-patient statistical summary,
-    in the same format as Panel B.  \textbf{D.~Distributions of correlations
-      between observed versus reconstructed activity by electrode, for
-      each frequency band in Dataset 2.}  This panel displays
-    reconstruction accuracy distributions for each frequency band for
-    Dataset 2. \textbf{E.~Statistical summary of
-      across-patient reconstruction quality by electrode for each
-      frequency band in Dataset 2.} This is the same format as Panel
-    B for Dataset 2. \textbf{F.~Statistical summary of
-      within-patient reconstruction quality by electrode for each
-      frequency band in Dataset 2.}This is the same format as Panel
-    C for Dataset 2.}
-  \label{fig:frequency}
-\end{figure}
 
 We also wanted to see how the most informative regions changed by
 frequency. Lower frequency oscillations, such as $\delta$, $\theta$, and $\alpha$, have
