@@ -233,24 +233,25 @@ additional information about both datasets.
 
 We first applied fourth order Butterworth notch filter to remove 60 Hz
 ($\pm$ .5 Hz) line noise from every recording (from every electrode).
-Next, we downsampled the recordings (regardless of the original
-sample rate) to 250 Hz.  (This downsampling step served to both
-normalize for differences in sampling rates across patients and to
-ease the computational burden of our subsequent analyses.)  We then
-excluded any electrodes that showed putative epileptiform activity.
+Next, we downsampled the recordings (regardless of the original sample
+rate) to 250 Hz.  (This downsampling step served to both normalize for
+differences in sampling rates across patients and to ease the
+computational burden of our subsequent analyses.)  We then excluded
+any electrodes that showed putative epileptiform activity.
 Specifically, we excluded from further analysis any electrode that
-exhibited an maximum kurtosis of 10 or greater across all of that
+exhibited a maximum kurtosis of 10 or greater across all of that
 patient's recording sessions.  We also excluded any patients with
 fewer than 2 electrodes that passed this criteria, as the SuperEEG
 algorithm requires measuring correlations between 2 or more electrodes
 from each patient.  For Dataset 1, this yielded clean recordings from
 4168 electrodes implanted throughout the brains of 67 patients
-(Fig.~\ref{fig:methods}A); for Dataset 2, this yielded clean
-recordings from 5023 electrodes from 78 patients.  Each individual
-patient contributes electrodes from a limited set of brain locations,
-which we localized in a common space~\citep[MNI152;][]{GrabEtal06}; an
-example Dataset 1 patient's 54 electrodes that passed the above
-kurtosis threshold test are highlighted in black and red.
+(Fig.~\ref{fig:methods}A, colored dots); for Dataset 2, this yielded
+clean recordings from 5023 electrodes implanted in 78 patients.  Each
+individual patient contributed electrodes from a limited set of brain
+locations, which we localized in a common
+space~\citep[MNI152;][]{GrabEtal06}; an example Dataset 1 patient's 54
+electrodes that survived the kurtosis thresholding procedure are
+highlighted in black and red (Fig.~\ref{fig:methods}A).
 
 The recording from a given electrode is maximally informative about
 the activity of the neural tissue immediately surrounding its
@@ -280,7 +281,7 @@ maximize spatial resolution (which implies a small value of $\lambda$)
 while also maximizing the algorithm's ability to generalize to any
 location throughout the brain, including those without dense electrode
 coverage (which implies a large value of $\lambda$).  Here we set
-$\lambda = 20$, guided in part by our prior work~\citep{MannEtal14b,
+$\lambda = 20$, guided in part by our prior related work~\citep{MannEtal14b,
   MannEtal18}, and in part by examining the brain coverage with
 non-zero weights achieved by placing RBFs at each electrode location
 in Dataset 1 and taking the sum (across all electrodes) at each voxel
@@ -307,7 +308,7 @@ for electrodes $i$ and $j$ from subject $s$ during session $k$, using:
 
 \begin{align}
   \bar{C}_{s} &=
-  \mathrm{r}(\frac{1}{n}(\sum_{k=1}^{n}\mathrm{z}(C_{s,k}))),\label{eqn:inter_corr}~\mathrm{where}\\
+  \mathrm{r}\left(\frac{1}{n}\left(\sum_{k=1}^{n}\mathrm{z}(C_{s,k})\right)\right),\label{eqn:inter_corr}~\mathrm{where}\\
 \mathrm{z}(r) &= \frac{\log(1+r) - \log(1 - r)}{2}~\mathrm{is~the~Fisher}~z \mathrm{-transformation~and}\label{eqn:fishersz}\\
 \mathrm{z}^{-1}(z) = \mathrm{r}(z) &= \frac{\exp(2z) - 1}{\exp(2z) + 1}\mathrm{~is~its~inverse}.\label{eqn:invfishersz}
 \end{align}
@@ -377,7 +378,7 @@ Let $Y_{s,k,\alpha_s}$ be the number-of-timepoints ($T$) by
 $\left|\alpha_s\right|$ matrix of (observed) voltages from the electrodes in
 $\alpha_s$ during session $k$ from patient $s$. Then we can estimate the
 voltage from patient $s$'s $k^{th}$ session at the locations in
-$\beta_s$ using~\cite{Rasm06}:
+$\beta_s$ as follows~\citep{Rasm06}:
 
 \begin{align}
 \hat{Y}_{s,k,\beta_s} &= ((\hat{K}_{\beta_s,\alpha_s}\cdot\hat{K}_{\alpha_s,\alpha_s}^{-1})\cdot Y_{s,k,\alpha_s}^\mathrm{T})^\mathrm{T}.\label{eqn:reconstruction}
@@ -402,11 +403,12 @@ $\hat{K}_{\alpha_s, \alpha_s}$ are correlation matrices rather than
 covariance matrices.)  Also, we note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$
 matrix, which can become computationally intractable when $T$ is very
-large (e.g., an example patient in Dataset 1, $T =
-12786750$). However, because Equation~\ref{eqn:reconstruction} is time
-invariant, we may compute $Y_{s,k,\beta_s}$ in a piecewise
-manner by filling in $Y_{s,k,\beta_s}$ one row at a time (using the
-corresponding samples from $Y_{s, k, \alpha_s}$).
+large (e.g., an example patient in Dataset 1, $T = 12,786,750$; also
+see Fig.~\suppstats, Panels E and K). However, because
+Equation~\ref{eqn:reconstruction} is time invariant, we may compute
+$Y_{s,k,\beta_s}$ in a piecewise manner by filling in
+$Y_{s,k,\beta_s}$ one row at a time (using the corresponding samples
+from $Y_{s, k, \alpha_s}$).
 
 The SuperEEG algorithm described above and in Figure~\ref{fig:methods}
 allows us to estimate, up to a constant scaling factor, local field
@@ -434,24 +436,25 @@ SuperEEG-estimated recordings at those electrodes match the observed
 recordings from those electrodes (i.e., how closely did the estimated
 $\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$)?
 
-We used this general approach to
-quantify the algorithm's performance across the full dataset. For each held-out electrode, from each held-out patient in turn, we
-computed the average correlation (across recording sessions) between
-the SuperEEG-reconstructed voltage traces and the observed voltage
-traces from that electrode.  For this analysis we set $\bar{R}$ to be
-the union of all electrode locations across all patients.  This
-yielded a single correlation coefficient for each electrode location
-in $\bar{R}$, reflecting how well the SuperEEG algorithm was able to
-recover the recording at that location by incorporating data across
-patients (black histogram in Fig.~\ref{fig:corrmap}A, map in
-Fig.~\ref{fig:corrmap}C).  The observed distribution of correlations
-was centered well above zero (mean: 0.51; $t$-test comparing mean of
-distribution of $z$-transformed average patient correlation coefficients
-to 0: $t(66) = 23.55, p < 10^{-10}$), indicating that the SuperEEG algorithm
+We used this general approach to quantify the algorithm's performance
+across the full dataset. For each held-out electrode, from each
+held-out patient in turn, we computed the average correlation (across
+recording sessions) between the SuperEEG-reconstructed voltage traces
+and the observed voltage traces from that electrode.  For this
+analysis we set $\bar{R}$ to be the union of all electrode locations
+across all patients.  This yielded a single correlation coefficient
+for each electrode location in $\bar{R}$, reflecting how well the
+SuperEEG algorithm was able to recover the recording at that location
+by incorporating data across patients (black histogram in
+Fig.~\ref{fig:corrmap}A, map in Fig.~\ref{fig:corrmap}C).  The
+observed distribution of correlations was centered well above zero
+(mean: 0.51; $t$-test comparing mean of distribution of
+$z$-transformed average patient correlation coefficients to 0:
+$t(66) = 23.55, p < 10^{-10}$), indicating that the SuperEEG algorithm
 recovers held-out activity patterns substantially better than random
 guessing.
 
-As a stricter benchmark, we compared the quality of these
+Next, we compared the quality of these
 across-participant reconstructions (i.e., computed using a correlation
 model learned from other patients' data) to reconstructions generated
 using a correlation model trained using the in-patient's data.  In
@@ -537,35 +540,35 @@ data across tasks.
 
 To test the task-specificity of the SuperEEG-derived correlation
 models, we restricted the dataset to the 24 patients that participated
-in both experiments and repeated the above within- and across-patient cross validation
-procedures separately for Experiment 1 and Experiment 2 data from
-Dataset 2.  We then compared the reconstruction accuracies for held-out
-electrodes, for models trained within versus across the two
-experiments, or combining across both experiments
+in both experiments and repeated the above within- and across-patient
+cross validation procedures separately for Experiment 1 and Experiment
+2 data from Dataset 2.  We then compared the reconstruction accuracies
+for held-out electrodes, for models trained within versus across the
+two experiments, or combining across both experiments
 (Fig.~\perexptaskrecon).  In every case we found that across-patient
 models trained using data from all other patients out-performed
 within-patient models trained on data only from the subject
-contributing the given electrode ($t$s$(23) > 6.50, p$s$ < 10^{-5}$).  All
-reconstruction accuracies also reliably exceeded chance performance
-($t$s$(23) > 8.00, p$s$ < 10^{-8}$).  Average reconstruction accuracy was
-highest for the across-patient models limited to data from the same
-experiment (mean accuracy: $0.68$); next-highest for the
-models that combined data across both experiments (mean
-accuracy: $0.61$); and lowest for models trained across tasks (mean
-accuracy: $0.47$).  This result also held for each of the Dataset 2
-experiments individually (Fig.~\perexptaskreconseparated).  Taken
-together, these results indicate that there are reliable commonalities
-in the spatial correlations of full-brain activity across tasks, but
-that there are also reliable differences in these spatial correlations
-across tasks.  Whereas reconstruction accuracy benefits from
-incorporating data from other patients, reconstruction accuracy is
-highest when constrained to within-task data, or data that includes a
-variety of tasks (e.g., Dataset 1, or combining across the two Dataset
-2 experiments).
+contributing the given electrode ($t$s$(23) > 6.50, p$s$ < 10^{-5}$).
+All reconstruction accuracies also reliably exceeded chance
+performance ($t$s$(23) > 8.00, p$s$ < 10^{-8}$).  Average
+reconstruction accuracy was highest for the across-patient models
+limited to data from the same experiment (mean accuracy: $0.68$);
+next-highest for the models that combined data across both experiments
+(mean accuracy: $0.61$); and lowest for models trained across tasks
+(mean accuracy: $0.47$).  This pattern of results also held for each
+of the Dataset 2 experiments individually
+(Fig.~\perexptaskreconseparated).  Taken together, these results
+indicate that there are reliable commonalities in the spatial
+correlations of full-brain activity across tasks, but that there are
+also reliable differences in these spatial correlations across tasks.
+Whereas reconstruction accuracy benefits from incorporating data from
+other patients, reconstruction accuracy is highest when constrained to
+within-task data, or data that includes a variety of tasks (e.g.,
+Dataset 1, or combining across the two Dataset 2 experiments).
 
 Although both datasets we examined provide good full-brain coverage
 (when considering data from every patient; e.g.\
-Fig.~\ref{fig:corrmap}C, D), electrodes are not placed uniformly
+Fig.~\ref{fig:corrmap}C, D), electrodes were not sampled uniformly
 throughout the brain.  For example, electrodes are more likely to be
 implanted in regions like the medial temporal lobe (MTL), and are
 rarely implanted in occipital cortex (Fig.~\ref{fig:density}A, B).
@@ -576,23 +579,29 @@ that voxel.  We defined the \textit{density} at that location as this
 proportion.  Across Datasets 1 and 2, the electrode placement
 densities were similar (correlation by voxel:
 $r = 0.6, p < 10^{-10}$).  We wondered whether regions with good
-covererage might be associated with better reconstruction accuracy
-(e.g. Fig.~\ref{fig:corrmap}C and D indicate that many electrodes in the
-MTL have relatively high reconstruction accuracy, and occipital
-electrodes tend to have relatively low reconstruction accuracy).  To
-test whether this held more generally across the entire brain, for
-each dataset we computed the electrode placement density for each
-electrode from each patient (using the proportion of \textit{other}
-patients' electrodes within 20 MNI units of the given electrode).  We
-then correlated these density values with the across-patient
-reconstruction accuracies for each electrode.  We found a negative
-correlation between reconstruction accuracy and density for Dataset 1,
-but was unreliable for Dataset 2 (Dataset 1: $r = -0.21, p = 0.05$; Dataset 2:
-$r = -0.30, p = 0.15$).  This indicates that the reconstruction
-accuracies we observed are not driven by sampling density, but
-rather may also reflect higher order properties of neural dynamics
-such as functional correlations between distant
-voxels~\citep{BetzEtal17b}.
+covererage might be associated with better reconstruction accuracy.
+For example, Figures~\ref{fig:corrmap}C and D indicate that many
+electrodes in the MTL (which tends to be relatively densely sampled)
+have relatively high reconstruction accuracy, and occipital electrodes
+(which tends to be relatively sparsely sampled) tend to have
+relatively low reconstruction accuracy.  To test whether this held
+more generally across the entire brain, for each dataset we computed
+the electrode placement density for each electrode from each patient
+(using the proportion of \textit{other} patients' electrodes within 20
+MNI units of the given electrode).  We then correlated these density
+values with the across-patient reconstruction accuracies for each
+electrode.  We found a statistically reliable negative correlation
+between reconstruction accuracy and density for Dataset 1, but no
+reliable correlation for Dataset 2 (Dataset 1: $r = -0.21, p = 0.05$;
+Dataset 2: $r = -0.30, p = 0.15$).  This indicates that the
+reconstruction accuracies we observed are \textit{not} driven solely
+by sampling density, but rather may also reflect higher order
+properties of neural dynamics such as functional correlations between
+distant voxels~\citep{BetzEtal17b}.
+
+
+%%%%%%%%%%%%%%%%%%%%% MOVE FREQEUNCY STUFF HERE
+
 
 \begin{figure}
   \centering
