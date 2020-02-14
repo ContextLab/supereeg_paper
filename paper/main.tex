@@ -11,7 +11,7 @@
 
 \topmargin 0.0cm
 \oddsidemargin 0.2cm
-\textwidth 16cm 
+\textwidth 16cm
 \textheight 21cm
 \footskip 1.0cm
 
@@ -24,7 +24,7 @@
 
 % Include your paper's title here
 
-\title{A Gaussian process model of human electrocorticographic data} 
+\title{A Gaussian process model of human electrocorticographic data}
 \author{
   Lucy L. W. Owen$^{1}$,
   Tudor A. Muntianu$^{1}$,
@@ -41,10 +41,10 @@ San Francisco, CA 94121, USA}
 
 \date{}
 
-\begin{document} 
+\begin{document}
 
 \baselineskip24pt
-\maketitle 
+\maketitle
 
 \begin{abstract}
   We present a model-based method for inferring full-brain neural
@@ -700,11 +700,7 @@ those reconstructions are most accurate for low-frequency or broadband patterns.
   \label{fig:density}
 \end{figure}
 
-%%%%%%%%% STOPPED HERE
-
-In neurosurgical applications where one wishes to infer full-brain
-activity patterns, can our framework yield insights into where the
-electrodes should be placed?  A basic assumption of our approach (and
+A basic assumption of our approach (and
 of most prior ECoG work) is that electrode recordings are most
 informative about the neural activity near the recording surface of
 the electrode.  But if we consider that activity patterns throughout
@@ -714,27 +710,22 @@ especially high reconstruction accuracies throughout the rest of the
 brain?  For example, one might hypothesize that brain structures that
 are heavily interconnected with many other structures could be more
 informative about full-brain activity patterns than comparatively
-isolated structures.
-
-To gain insights into whether particular electrode locations might be
-especially informative, we first computed the average reconstruction
-accuracy across all of each patient's electrodes (using the
+isolated structures.  To test this hypothesis, we computed the average reconstruction
+accuracy across all of each patient's electrodes (using our
 across-patients cross validation test; black histograms in
-Fig.~\ref{fig:corrmap}A and B).  We labeled each patient's electrodes
-in each dataset with the average reconstruction accuracy for that
-patient.  In other words, we assigned every electrode from each given
-patient the same value, reflecting how well the activity patterns at
-those electrodes were reconstructed on average.  Next, for each voxel
+Fig.~\ref{fig:corrmap}A and B).  We first labeled each patient's electrodes,
+in each dataset, with the average reconstruction accuracy for that
+patient.  In other words, we assigned every electrode from each
+patient the same value, reflecting how well the activity patterns for that patient were reconstructed.  Next, for each voxel
 in the 4~mm$^3$ MNI brain, we computed the average value across any
 electrode (from any patient) that came within 20 MNI units of that
-voxel's center.  Effectively, we computed an \textit{information
+voxel's center.  This yielded an \textit{information
   score} for each voxel, reflecting the average reconstruction
 accuracy across any patients with electrodes near each voxel-- where
 the averages were weighted to reflect patients who had more electrodes
-implanted near that location. This yielded a single map for each
-dataset, highlighting regions that are potentially promising
-implantation targets in terms of providing full-brain activity
-information via SuperEEG (Fig.~\ref{fig:informap}A and B).  Despite task
+implanted near that location. We created a single map of these information scores for each
+dataset, highlighting regions that are especially informative about activity in \textit{other} brain areas
+(Fig.~\ref{fig:informap}A and B).  Despite task
 and patient differences across the two datasets, we nonetheless found
 that the maps of the most promising implantation targets derived from
 both datasets were similar (voxelwise correlation between information
@@ -766,7 +757,7 @@ a large proportion of the brain's gray matter~\citep[e.g., ][]{TomaVolk11}.
       score by voxel.}  This panel is in the same format as Panel A.
     In both panels the contours indicate the intersections between the
     top 10\% most informative voxels in each map (also see
-    Fig.~\networks Panels A.-C. All for networks within this region).  \textbf{C. Intersection.}  
+    Fig.~\networks Panels A.-C. All for networks within this region).  \textbf{C. Intersection.}
     Gray areas indicate the intersections between the
     top 10\% most informative voxels in each map and projected onto the cortical surface~\citep{CombEtal19}. \textbf{D. Correspondence in information
       scores by voxel across Datasets 1 and 2.}  Same format as
@@ -774,10 +765,20 @@ a large proportion of the brain's gray matter~\citep[e.g., ][]{TomaVolk11}.
   \label{fig:informap}
 \end{figure}
 
+We also wondered whether the map of information scores might vary as a function of the spectral
+components of the activity patterns under consideration.  For example, low frequency $\delta$ activity in the thalamus has been implicated in
+supporting connectivity with cortex~\citep[e.g.,][]{Jone09}; $\theta$ activity
+in frontal regions have been implicated in memory consolidation~\citep{NishEtal09} and integration~\citep{BackEtal16}; parietal and occipital $\alpha activity has been
+implicated in attention modulation~\citep[e.g., see][]{Klim12}; $\beta$ activity in motor cortex have been implicated in motor control and processing~\citep{BrovEtal04, KoelEtal08, RubiEtal06};
+and occipital $\gamma$ activity has been implicated in visual attention and visual processing~\citep{ZhouEtal16, TallEtal05, FrieEtal07}.
+We computed analogous maps of information scores for each individual frequency band.  Across Datasets 1 and 2 we observed a weak, but statistically reliable, correspondence in
+these maps, aside from in the $\alpha$ band ($\delta$: $r = 0.09, p < 10^{-57}$; $\theta$: $r = 0.24, p < 10^{-60}$; $\alpha$: $r = -0.03, p < 0.001$, $\beta$: $r = 0.02, p - 0.0011$; $\gamma_L$: $r = 0.1, p < 10^{-67}$; $\gamma_H$: $r = 0.03, p < 10^{-7}$; broadband: $r = 0.21, p < 10^{-297}).
 
-We also wanted to see how the most informative regions changed by
-frequency. Lower frequency oscillations, such as $\delta$, $\theta$, and $\alpha$, have
-been posited to be involved in processing modes which span large swaths of
+%%%% STOPPED HERE...
+
+
+as $\delta$, $\theta$, and $\alpha$, have
+been implicated in processing modes which span large swaths of
 cortical regions and are thought to serve the purpose of integration
 across many cortical sites ~\citep{Knya12}. Higher frequency
 oscillations such as $\beta$ and $\gamma$, are more limited to topographic
@@ -907,7 +908,7 @@ principle use broadband power in the reconstructed signals to
 estimate the corresponding firing rates (though not the timings of
 individual action potentials). Interestingly, our frequency-specific
 analysis yielded the best reconstruction accuracies using broadband
-power.  
+power.
 
 Beyond providing a means of estimating ongoing activity throughout the
 brain using already implanted electrodes, our work also has
@@ -981,23 +982,3 @@ Reprints and permissions information is available at www.nature.com/reprints.  T
 \clearpage
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
