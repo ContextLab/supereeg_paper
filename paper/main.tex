@@ -771,8 +771,41 @@ supporting connectivity with cortex~\citep[e.g.,][]{Jone09}; $\theta$ activity
 in frontal regions have been implicated in memory consolidation~\citep{NishEtal09} and integration~\citep{BackEtal16}; parietal and occipital $\alpha activity has been
 implicated in attention modulation~\citep[e.g., see][]{Klim12}; $\beta$ activity in motor cortex have been implicated in motor control and processing~\citep{BrovEtal04, KoelEtal08, RubiEtal06};
 and occipital $\gamma$ activity has been implicated in visual attention and visual processing~\citep{ZhouEtal16, TallEtal05, FrieEtal07}.
-We computed analogous maps of information scores for each individual frequency band.  Across Datasets 1 and 2 (with the exception of $\alpha$ band activity), we observed reliable positive correlations
-between the voxel-by-voxel maps of information scores ($\delta$: $r = 0.09, p < 10^{-57}$; $\theta$: $r = 0.24, p < 10^{-60}$; $\alpha$: $r = -0.03, p < 0.001$, $\beta$: $r = 0.02, p - 0.0011$; $\gamma_L$: $r = 0.1, p < 10^{-67}$; $\gamma_H$: $r = 0.03, p < 10^{-7}$; broadband: $r = 0.21, p < 10^{-297}).
+We computed analogous maps of information scores for each individual frequency band.
+Across Datasets 1 and 2 (with the exception of $\alpha$ band activity), we observed reliable positive correlations
+between the voxel-by-voxel maps of information scores ($\delta$: $r = 0.09, p < 10^{-57}$;
+$\theta$: $r = 0.24, p < 10^{-60}$; $\alpha$: $r = -0.03, p < 0.001$,
+$\beta$: $r = 0.02, p - 0.0011$; $\gamma_L$: $r = 0.1, p < 10^{-67}$;
+$\gamma_H$: $r = 0.03, p < 10^{-7}$; broadband: $r = 0.21, p < 10^{-297}).
+
+To gain additional insight into which regions were most informative about
+full-brain activity patterns at different frequency ranges, we next computed (for each frequency range)
+the intersection of the top 10\% highest information scores across the maps for
+Datasets 1 and 2 (analogous to our approach in Fig.~\ref{fig:informap}C).
+This yielded a single map of the (reliably) most informative locations for each frequency range we examined.
+We then carried out two \textit{post hoc} analyses on each of these maps to better characterize
+the underlying structural and functional properties of each set of regions we identified
+as being particularly informative about one or more neural patterns.
+
+A growing body of neuroscientific research is concerned with characterizing the \textit{parcellations}
+of anatomical and functional brain networks~\citep[for review see][]{ZaleEtal10, ArslEtal18}.
+The dominant approaches entail obtaining a full-brain connectivity matrix using either diffusion tensor imaging to identify the brain's network of
+white matter connections, or functional connectivity (typically applied to resting state data) to
+correlate the patterns of activity exhibited by different brain structures.  One can then apply graph theoretic approaches
+to assign each brain structure (typically a single fMRI voxel) to one or more networks~\citep[for review see][]{BullSpor09}.
+The result is a set of distinct (or partially overlapping) brain ``networks'' that may be
+further examined to elucidate their potential functional role.  We overlaid a well-cited seven-network
+parcellation map identified by \cite{YeoEtal11} onto the maps of brain locations that were most informative
+about each neural pattern.  For each of these information maps, we computed the proportion of voxels in the most informative
+brain regions that belonged to each of the seven networks identified by \cite{YeoEtal11}.
+We found that the regions we identified as being most informative about different neural patterns varied
+markedly with respect to which functional networks they belonged to (Fig.~\ref{fig:networks}A, B).  This is consistent with
+the notion that there is no ``universal'' brain region that consistently reflects activity in the rest of the brain.  Rather,
+each region's activity patterns appear to be characterized by different spectral profiles, and the ability to
+infer activity patterns at a particular frequency range depends on the structural and functional
+connectome specific to that frequency range.
+
+%next: neurosynth
 
 %%%%STOPPED HERE
 
