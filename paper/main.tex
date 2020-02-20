@@ -860,9 +860,9 @@ nature of the correlational structure of neural activity (each of which we
 tested).  First, we hypothesized that functional correlations are stable over
 time and across tasks.  We found that, although aspects of the patients'
 functional correlations were stable across tasks, we achieved better
-reconstruction accuracy when we trained the model on within-task data~\citep[we
-acknowledge that our general approach could potentially be extended to better
-model across-task changes, following][and others]{ColeEtal16, TavoEtal16}.
+reconstruction accuracy when we trained the model on within-task data.
+This suggests that our general approach could be extended to better
+model across-task changes, following \cite{ColeEtal16, TavoEtal16} and others.
 Second, we hypothesized that some of the correlational structure of people's
 brain activity is similar across individuals.  Consistent with this hypothesis,
 our model explained the data best when we trained the correlation model using
@@ -880,25 +880,40 @@ used to estimate the firing rates of neurons that underly the population
 contributing to the LFP~\citep{MillEtal08, MannEtal09, JacoEtal10b, CronEtal11}.
 Because SuperEEG reconstructs LFPs throughout the brain, one could in principle
 use broadband power in the reconstructed signals to estimate the corresponding
-firing rates (though not the timings of individual action potentials).
-Interestingly, our frequency-specific analysis yielded the best reconstruction
-accuracies using broadband power.
+firing rates (though not the timings of individual action potentials).  We found
+that we were able to reconstruct full-brain patterns of broadband power well (Fig.~\ref{fig:frequency}).
 
 Beyond providing a means of estimating ongoing activity throughout the brain
-using already implanted electrodes, our work also has implications for where to
-place the electrodes in the first place. Electrodes are typically implanted to
-maximize coverage of suspected epileptogenic tissue.  However, our findings
-suggest that this approach could be further optimized.  Specifically, one could
-leverage not only the non-invasive recordings taken during an initial monitoring
-period (as is currently done routinely), but also recordings collected from
-other patients.  We could then ask: given what we learn from other patients'
-data (and potentially from the scalp EEG recordings of this new patient), where
-should we place a fixed number of electrodes to maximize our ability to map
-seizure foci?  As shown in Figures~\ref{fig:informap} and~\intersectmap,
-recordings from different locations are differently informative in terms of
-reconstructing the spatiotemporal activity patterns throughout the brain.  This
-property might be leveraged in decisions about where to surgically implant
-electrodes in future patients.
+using already implanted electrodes, our work also has implications how to
+optimize electrode placements in neurosurgical evaluations. Electrodes are
+typically implanted to maximize coverage of suspected epileptogenic tissue.
+However, our findings suggest that this approach might be improved.
+Specifically, one could leverage not only the non-invasive recordings taken
+during an initial monitoring period (as is currently done routinely), but also
+recordings collected from \textit{other} patients.  We could then ask: given
+what we learn from other patients' data (and potentially from the scalp EEG
+recordings of this new patient), where should we place a fixed number of
+electrodes to maximize our ability to map seizure foci?  As shown in
+Figures~\ref{fig:informap}, \ref{fig:networks}, and~\intersectmap, recordings
+from different regions vary in their ability to predict different narrowband and
+broadband full-brain activity patterns.
+
+By providing a means of reconstructing full-brain activity patterns, the
+SuperEEG approach maps ECoG recordings from different patients into a common
+neural space, despite that different patients' electrodes were implanted in
+different locations. This feature of our approach enables across-patient ECoG
+studies, analogous to across-patient fMRI studies~\citep[e.g.,][]{HaxbEtal01,
+NormEtal06, HaxbEtal11}. Whereas the focus of this manuscript is to specifically
+evaluate which aspects of neural activity patterns SuperEEG recovers well (or
+poorly), in parallel work we are training across-patient classifiers by
+leveraging the common neural spaces obtained by applying SuperEEG to
+multi-patient data.  For example, we have shown that SuperEEG-derived activity
+patterns may be used to accurately predict psychiatric conditions such as
+depression~\citep{ScanEtal20}.  Analogous approaches could in principle be used
+to develop improved brain-computer interfaces and/or to carry out other analyses
+that would benefit from high spatiotemporal resolution full-brain data in
+individuals.
+
 
 \section*{Concluding remarks}
 Over the past several decades, neuroscientists
