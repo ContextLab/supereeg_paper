@@ -562,7 +562,7 @@ fit in log-log space to the order 4 Morelet wavelet-computed power spectrum at
 second-order Butterworth bandpass filters to compute the activity patterns
 within each narrow frequency band.  We then repeated our within-subject and
 across-subject cross-validated reconstruction accuracy tests (analogous to
-Fig.~\ref{fig:corrmaps}) separately for each frequency band
+Fig.~\ref{fig:corrmap}) separately for each frequency band
 (Fig.~\ref{fig:frequency}).  (We also carried out a similar analysis on the
 Hilbert transform-computed spectral power within each narrow band; see
 Fig.~\freqpower.)  Across both datasets, we found that our approach is best at
@@ -705,16 +705,14 @@ interconnected with a large proportion of the brain's gray matter~\citep[e.g.,
 \end{figure}
 
 We also wondered whether the map of information scores might vary as a function
-of the spectral components of the activity patterns under consideration.  For
-example, low frequency $\delta$ activity in the thalamus has been implicated in
-supporting connectivity with cortex~\citep[e.g.,][]{Jone09}. We computed
-analogous maps of information scores for each individual frequency band. Across
-Datasets 1 and 2 (with the exception of $\alpha$ band activity), we observed
-reliable positive correlations between the voxel-by-voxel maps of information
-scores ($\delta$: $r = 0.09, p < 10^{-57}$; $\theta$: $r = 0.24, p < 10^{-60}$;
-$\alpha$: $r = -0.03, p < 0.001$, $\beta$: $r = 0.02, p - 0.0011$; $\gamma_L$:
-$r = 0.1, p < 10^{-67}$; $\gamma_H$: $r = 0.03, p < 10^{-7}$; broadband: $r =
-0.21, p < 10^{-297})$.
+of the spectral components of the activity patterns under consideration.  We
+computed analogous maps of information scores for each individual frequency
+band. Across Datasets 1 and 2 (with the exception of $\alpha$ band activity), we
+observed reliable positive correlations between the voxel-by-voxel maps of
+information scores ($\delta$: $r = 0.09, p < 10^{-57}$; $\theta$: $r = 0.24, p <
+10^{-60}$; $\alpha$: $r = -0.03, p < 0.001$, $\beta$: $r = 0.02, p - 0.0011$;
+$\gamma_L$: $r = 0.1, p < 10^{-67}$; $\gamma_H$: $r = 0.03, p < 10^{-7}$;
+broadband: $r = 0.21, p < 10^{-297})$.
 
 To gain additional insight into which regions were most informative about
 full-brain activity patterns at different frequency ranges, we next computed
@@ -775,13 +773,13 @@ implicated in modulating widespread $\beta$ patterns across
 neocortex~\citep{SherEtal16}. Somatosensory areas (dark blue) were most
 informative about full-brain $\gamma_L$ patterns. Prior work has implicated
 somatosensory $\gamma_L$ in somatosensory processing and motor
-planning~\citep{AyaEtal03}.  Occipital cortex (purple) was most informative
+planning~\citep{IharEtal03}.  Occipital cortex (purple) was most informative
 about full-brain $\gamma_H$ patterns.  Occipital $\gamma_H$ has also been linked
 with visual processing and reading~\citep{WuEtal11} and the transmission of
 visual representations from low-order to higher-order visual
 areas~\citep{MatsEtal13}.  Full-brain broadband patterns were best predicted by
 inferior parietal cortex precuneus (maroon).  Functional neuroimaging BOLD
-responses~\citep{SimoEtal16} and broadband ECoG patterns~\citep{HoneEtal12} in
+responses~\citep{SimoEtal16} and broadband ECoG patterns~\citep{HoneEtal12a} in
 these default-mode hubs have been implicated in processing context-dependent
 representations that unfold over long timescales.
 
