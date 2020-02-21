@@ -1,3 +1,62 @@
+or
+example, low frequency $\delta$ activity in the thalamus has been implicated in
+supporting connectivity with cortex~\citep[e.g.,][]{Jone09}.
+
+
+as $\delta$, $\theta$, and $\alpha$, have been implicated in processing modes
+which span large swaths of cortical regions and are thought to serve the purpose
+of integration across many cortical sites ~\citep{Knya12}. Higher frequency
+oscillations such as $\beta$ and $\gamma$, are more limited to topographic areas
+~\citep{Nune95}, and are modulated by slow oscillations hierarchically
+~\citep{EngeEtal10}. Using the frequency-specific reconstruction accuracies, we
+followed the process outlined in Fig.~\ref{fig:informap}C, to obtain the most
+informative locations for each frequency.  When we examined the intersection
+between the top 10\% most informative voxels across the two datasets for each
+bandpassed frequency, we found a somewhat consistent hierarchical structure (see
+Fig.~\ref{fig:networks}E).
+
+
+
+
+; $\theta$ activity
+in frontal regions have been implicated in memory
+consolidation~\citep{NishEtal09} and integration~\citep{BackEtal16}; parietal
+and occipital $\alpha$ activity has been implicated in attention
+modulation~\citep[e.g., see][]{Klim12}; $\beta$ activity in motor cortex have
+been implicated in motor control and processing~\citep{BrovEtal04, KoelEtal08,
+RubiEtal06}; and occipital $\gamma$ activity has been implicated in visual
+attention and visual processing~\citep{ZhouEtal16, TallEtal05, FrieEtal07}.
+
+
+
+
+%next: neurosynth
+
+%%%%STOPPED HERE
+
+
+
+We then wondered which networks were involved in each of these
+frequency-specific intersecting regions.  To better understand the networks
+involved we colored the regions (Fig.~\ref{fig:networks}A) based on the network
+parcellation ~\citep[using $k$=7;][]{YeoEtal11}} (Fig.~\ref{fig:networks}D) and
+calculated the proportion of each of those networks (Fig.~\ref{fig:networks}B).
+Consistent with the idea outlined above, we found networks most involved in the
+lowest frequency band, $\delta$, were networks involved integration and global
+processing (specifically the dorsal attention ~\citep{MarzEtal13}, default mode,
+and frontoparietal networks).  Although these networks are also seen in the
+$\theta$ intersection, they are less proportionally to the visual network.
+Alpha power is consistently modulated in EEG studies of attention and
+visuo-motor ~\citep{MantEtal07, MarzEtal13}, and we similarly found a high
+proportion of visual, somatomotor, and dorsal attention networks within this
+band.  We found $\beta$ intersections to predominantly consist of somatomotor
+network, in line with~\citep{RittEtal09, VaneEtal11}.  Also accordant with
+heavily cited literature~\citep{FrieEtal07}, the network most predominant in the
+$\gamma$ intersection was the visual network.  Lastly, broadband power was found
+predominantly in frontoparietal and default mode networks, consistent with
+~\citep{OssaEtal11}.
+
+
 % old discussion section
 Human \textit{SuperEEG}\footnote{The term ``SuperEEG'' was coined by
     Robert J. Sawyer in his popular science fiction novel \textit{The
@@ -6,7 +65,7 @@ Human \textit{SuperEEG}\footnote{The term ``SuperEEG'' was coined by
   neural activity throughout the entire living human brain with perfect
   precision and at arbitrarily high spatiotemporal resolution.}
 
-  
+
 %DISCUSSION POINTS
 %recap main approach
 SuperEEG infers full-brain activity patterns by leveraging
@@ -130,7 +189,7 @@ this finding for each independent experiment within dataset 2 (Fig. S3
 (paired $t$-test between $z$-transformed mean correlation coefficients
 by patient for experiment 1:
 $t(23) = 6.23, p < 10\textsuperscript{-5}$ and experiment 2:
-$t(23) = 6.62, p < 10\textsuperscript{-5}$).  
+$t(23) = 6.62, p < 10\textsuperscript{-5}$).
 
 %%%
 
@@ -226,7 +285,7 @@ neurosurgical applications.
 %%%%%
 
 
-  
+
   The correlational structure of functional neuroimaging data may be
   used to predict which moment of movie or story an individual is
   experiencing, identify which person's brain a recording came from,
@@ -273,7 +332,7 @@ spatiotemporal resolutions, using ECoG recordings taken from a limited
 set of brain locations.
 
 We tested the SuperEEG approach using two large ECoG datasets. Dataset 1 comprises multi-hour recordings from 6876 electrodes taken across several recording sessions as 88 neurosurgical patients studied random word lists periodically throughout their day~\cite{SedeEtal03, SedeEtal07a,
-  SedeEtal07b, MannEtal11, MannEtal12}.  Dataset 2 comprises recordings from XXX electrodes taken as XXX patients performed a series of two memory tasks~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  In both datasets, 
+  SedeEtal07b, MannEtal11, MannEtal12}.  Dataset 2 comprises recordings from XXX electrodes taken as XXX patients performed a series of two memory tasks~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17, LinEtal17, SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  In both datasets,
   we compared the predictions made using models trained across people to predictions made using within-person data.  We found that models that incorporate data from other patients yield far more reliable predictions about an individual patient's brain activity patterns than models trained solely on that individual's data.  This indicates that at least some functional correlations are common across people.  We also used Dataset 2 to compare predictions made using data from within task, across task, or combining within and across task data.  We found that all three approaches yielded reliable predictions, but the within task predictions were the most accurate.  This indicates that some aspects of our functional connectomes are common across tasks, whereas other aspects are task-specific.  Finally, all of the models we trained (within and across patients and tasks) assumed a static connectome and yielded above-chance accuracy.  This indicates that despite moment-by-moment fluctuations in the functional connectome, at least some aspects of our connectome appear to be stable over the course of several hours.
 
 %%%%%
@@ -282,7 +341,7 @@ We tested the SuperEEG approach using two large ECoG datasets. Dataset 1 compris
 
 
 
-, the gross \textit{structural} aspects of our brain are essentailly static over the timescales of typical experiments (on the order of 
+, the gross \textit{structural} aspects of our brain are essentailly static over the timescales of typical experiments (on the order of
 
 Current human brain recording techniques are fraught with compromise.
 Commonly used approaches include functional magnetic resonance imaging
@@ -373,7 +432,7 @@ accurately activity may be estimated (recovered), which may have important
 implications for electrode design and for electrode placement in
 neurosurgical applications.
 
-Further, if some aspects of our connectomes are static, can we use them to fill in ``missing'' data?  In other words, given recordings from a subset of brain locations, how reliably can activity patterns from the rest of the brain be inferred using an estimated static connectome?  And to what extent can those 
+Further, if some aspects of our connectomes are static, can we use them to fill in ``missing'' data?  In other words, given recordings from a subset of brain locations, how reliably can activity patterns from the rest of the brain be inferred using an estimated static connectome?  And to what extent can those
 
 
 Human \textit{Super EEG}\footnote{The term ``Super EEG'' was
@@ -402,11 +461,11 @@ when implanting electrodes into new patients, perhaps those electrodes
 should target regions
 
 we hypothesized might influence the quality of the
-data reconstructions is the 
+data reconstructions is the
 
 Whereas the above analyses show that the Super EEG algorithm may be
 used to estimate time-varying LFPs throught the brain using data from a small
-number of implanted electrodes, 
+number of implanted electrodes,
 
 Having established that data within and across patients may be used to
 accurately estimate neural recordings from unsampled locations, we
@@ -416,7 +475,7 @@ informative to these estimates.
 We also carried out an analogous analysis
 across patients by comparing the average correlation coefficients from
 each patient obtained using Super EEG versus using the nearest
-neighbor's voltages ($t(XXX) = XXX, p = XXX$).  
+neighbor's voltages ($t(XXX) = XXX, p = XXX$).
 
 %average correlation by nearest within-subject and across-subject electrode
 %distance
@@ -461,7 +520,7 @@ neighbor's voltages ($t(XXX) = XXX, p = XXX$).
 %estimates of how different brain structures were interacting, such
 %that the estimates contributed by some patients' data would be driven
 %by high frequency activity that was not present in other patients'
-%data due to differences in sampling rates. 
+%data due to differences in sampling rates.
 
 
 
@@ -497,7 +556,7 @@ Methods overview. Electrode
     between all locations in $\bar{R}$.  We obtain an estimated
     full-brain correlation matrix using each patient's
     data. \textbf{D.  Combined correlation matrix.}  We estimate a
-    single full-brain correlation matrix by averaging 
+    single full-brain correlation matrix by averaging
     the patient-specific correlation matrices.  \textbf{E.
       Reconstructing ``missing'' activity.}  Given the observed
     activity from the patient's electrodes and the estimated
@@ -529,7 +588,7 @@ Methods overview. Electrode
 % for across-electrode impedance differences, so the estimates will be
 % off by a constant scaling factor.
 
-% % already mention this above... 
+% % already mention this above...
 
 % the next section addresses 'patient 1' and 'electrode 1'... keep this way of describing??
 
@@ -561,4 +620,4 @@ reveals that the reconstruction quality varies somewhat with the spatial
 location being considered.  Specifically, activity at locations that
 receive dense electrode coverage within and across patients
 (e.g. medial temporal lobe) is estimated more accurately than activity
-at sparsely sampled locations (Fig.~\ref{fig:density}B).  
+at sparsely sampled locations (Fig.~\ref{fig:density}B).
