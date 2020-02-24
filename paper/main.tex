@@ -171,7 +171,7 @@ including recordings taken during the main experimental task as well as during
 non-experimental time.  We used Dataset 1 to develop our main SuperEEG approach,
 and to examine the extent to which SuperEEG might be able to generate
 task-general predictions.  Dataset 2 comprised multi-session recordings from
-4436 electrodes implanted in the brains of 40 epilepsy
+14860 electrodes implanted in the brains of 131 epilepsy
 patients~\citep{EzzyEtal17, HoraEtal17, KragEtal17, KuceEtal17, LinEtal17,
 SoloEtal18, WeidEtal18, EzzyEtal18, KuceEtal18}.  Each recording session lasted
 from 0.4--2.2~h (total recording time: 0.4--6.6~h; Fig.~\suppstats K).  Whereas
@@ -214,12 +214,12 @@ information about both datasets.
   the held-out location (red).} \label{fig:methods}
 \end{figure}
 
-We first applied fourth order Butterworth notch filter to remove 60 Hz ($\pm$ .5
-Hz) line noise from every recording (from every electrode). Next, we downsampled
-the recordings (regardless of the original sample rate) to 250 Hz.  (This
-downsampling step served to both normalize for differences in sampling rates
-across patients and to ease the computational burden of our subsequent
-analyses.)  We then excluded any electrodes that showed putative epileptiform
+We first applied fourth order Butterworth notch filters to remove 60 Hz ($\pm$
+.5 Hz) line noise from every recording (from every electrode). Next, we
+downsampled the recordings (regardless of the original sample rate) to 250 Hz.
+This downsampling step served to both normalize for differences in sampling
+rates across patients and to ease the computational burden of our subsequent
+analyses.  We then excluded any electrodes that showed putative epileptiform
 activity. Specifically, we excluded from further analysis any electrode that
 exhibited a maximum kurtosis of 10 or greater across all of that patient's
 recording sessions.  We also excluded any patients with fewer than 2 electrodes
@@ -374,7 +374,7 @@ $\hat{K}_{\beta_s, \alpha_s}$ and $\hat{K}_{\alpha_s, \alpha_s}$ are correlation
 matrices rather than covariance matrices.)  Also, we note that
 Equation~\ref{eqn:reconstruction} requires computing a $T$ by $T$ matrix, which
 can become computationally intractable when $T$ is very large (e.g., an example
-patient in Dataset 1, $T = 12,786,750$; also see Fig.~\suppstats, Panels E and
+patient in Dataset 1, $T = 51147$; also see Fig.~\suppstats, Panels E and
 K). However, because Equation~\ref{eqn:reconstruction} is time invariant, we may
 compute $Y_{s,k,\beta_s}$ in a piecewise manner by filling in $Y_{s,k,\beta_s}$
 one row at a time (using the corresponding samples from $Y_{s, k, \alpha_s}$).
@@ -457,27 +457,24 @@ similar across people.
 
 %correlations by brain area, distribution of correlations
 \begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{figs/corrmap}
-  \caption{\textbf{Reconstruction quality across all electrodes in two
-      ECoG datasets.}  \textbf{A. Distributions of correlations
-      between observed versus reconstructed activity by electrode, for
-      Dataset 1.}  The across-patient distribution (black) reflects
-    reconstruction accuracy (correlation) using a correlation model
-    learned from all but one patient's data, and then applied to that
-    held-out patient's data.  The within-patient distribution (gray)
-    reflects performance using a correlation model learned from the same
-    patient who contributed the to-be-reconstructed electrode.
-    \textbf{B. Distributions of correlations for Dataset 2.}  This
-    panel is in the same format as Panel A, but reflects results
-    obtained from Dataset 2.  The histograms aggregate data across
-    both Dataset 2 experiments; for results broken down by experiment
-    see Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction
-      performance by location.} The colors denote the average across-session
-    correlation, using the across-patient correlation model, between
-    the observed and reconstructed activity at the given electrode
-    location projected to the cortical surface~\citep{CombEtal19}.}
-  \label{fig:corrmap}
+  \centering \includegraphics[width=\textwidth]{figs/corrmap}
+  \caption{\textbf{Reconstruction accuracy across all electrodes in two ECoG
+  datasets.}  \textbf{A. Distributions of correlations between observed versus
+  reconstructed activity by electrode, for Dataset 1.}  The across-patient
+  distribution (black) reflects reconstruction accuracy (correlation) using a
+  correlation model learned from all but one patient's data, and then applied to
+  that held-out patient's data.  The within-patient distribution (gray) reflects
+  performance using a correlation model learned from the same patient who
+  contributed the to-be-reconstructed electrode. \textbf{B. Distributions of
+  correlations for Dataset 2.}  This panel is in the same format as Panel A, but
+  reflects results obtained from Dataset 2.  The histograms aggregate data
+  across both Dataset 2 experiments; for results broken down by experiment see
+  Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction accuracy by
+  location.} The colors denote the average across-session correlations, using
+  the across-patient correlation model, between the observed and reconstructed
+  activity at the given electrode location projected to the cortical
+  surface~\citep{CombEtal19}.  Panel C displays the map for Dataset 1 and Panel
+  D displays the map for Dataset 2.} \label{fig:corrmap}
 \end{figure}
 
 The recordings we analyzed from Dataset 1 comprised data collected as the
@@ -518,32 +515,31 @@ constrained to within-task data, or data that includes a variety of tasks (e.g.,
 Dataset 1, or combining across the two Dataset 2 experiments).
 
 Although both datasets we examined provide good full-brain coverage (when
-considering data from every patient; e.g.\ Fig.~\ref{fig:corrmap}C, D),
-electrodes were not sampled uniformly throughout the brain.  For example,
-electrodes are more likely to be implanted in regions like the medial temporal
-lobe (MTL), and are rarely implanted in occipital cortex
-(Fig.~\ref{fig:density}A, B). Separately for each dataset, for each voxel in the
-4~mm$^3$ voxel MNI152 brain, we computed the proportion of electrodes in the
-dataset that were contained within a 20 MNI unit radius sphere centered on that
-voxel.  We defined the \textit{density} at that location as this proportion.
-Across Datasets 1 and 2, the electrode placement densities were similar
-(correlation by voxel: $r = 0.6, p < 10^{-10}$).  We wondered whether regions
-with good covererage might be associated with better reconstruction accuracy.
-For example, Figures~\ref{fig:corrmap}C and D indicate that many electrodes in
-the MTL (which tends to be relatively densely sampled) have relatively high
-reconstruction accuracy, and occipital electrodes (which tends to be relatively
-sparsely sampled) tend to have relatively low reconstruction accuracy.  To test
-whether this held more generally across the entire brain, for each dataset we
-computed the electrode placement density for each electrode from each patient
-(using the proportion of \textit{other} patients' electrodes within 20 MNI units
-of the given electrode).  We then correlated these density values with the
-across-patient reconstruction accuracies for eachg electrode.  We found a
-statistically reliable negative correlation between reconstruction accuracy and
-density for Dataset 1, but no reliable correlation for Dataset 2 (Dataset 1: $r
-= -0.21, p = 0.05$; Dataset 2: $r = -0.30, p = 0.15$).  This indicates that the
-reconstruction accuracies we observed are \textit{not} driven solely by sampling
-density, but rather may also reflect higher order properties of neural dynamics
-such as functional correlations between distant voxels~\citep{BetzEtal17b}.
+considering data from every patient), electrodes were not sampled uniformly
+throughout the brain.  For example, electrodes are more likely to be implanted
+in regions like the medial temporal lobe (MTL), and are rarely implanted in
+occipital cortex (Fig.~\ref{fig:density}A, B). Separately for each dataset, for
+each voxel in the 4~mm$^3$ voxel MNI152 brain, we computed the proportion of
+electrodes in the dataset that were contained within a 20 MNI unit radius sphere
+centered on that voxel.  We defined the \textit{density} at that location as
+this proportion. Across Datasets 1 and 2, the electrode placement densities were
+similar (correlation by voxel: $r = 0.6, p < 10^{-10}$).  We wondered whether
+regions with good covererage might be associated with better reconstruction
+accuracy. For example, Figures~\ref{fig:density}A and B indicate that many
+electrodes in the MTL (which tends to be relatively densely sampled) have
+relatively high reconstruction accuracy, and occipital electrodes (which tends
+to be relatively sparsely sampled) tend to have relatively low reconstruction
+accuracy.  To test whether this held more generally across the entire brain, for
+each dataset we computed the electrode placement density for each electrode from
+each patient (using the proportion of \textit{other} patients' electrodes within
+20 MNI units of the given electrode).  We then correlated these density values
+with the across-patient reconstruction accuracies for each electrode.  We found
+no reliable correlation between reconstruction accuracy and density for Dataset
+1 ($r = 0.05, p = 0.70$) and a reliable negative correlation for Dataset 2 ($r =
+-0.21, p = 0.05$).  This indicates that the reconstruction accuracies we
+observed are \textit{not} driven solely by sampling density, but rather may also
+reflect higher order properties of neural dynamics such as functional
+correlations between distant voxels~\citep{BetzEtal17b}.
 
 Prior work in humans and animals has shown that the spatial profile of the local
 field potential differs by frequency band~\citep[e.g., with respect to volume
@@ -556,17 +552,17 @@ might be differently weighting or considering the contributions of activity at
 different frequency bands.  We therefore examined a range of frequency bands
 ($\delta$: 2--4 Hz; $\theta$: 4--8 Hz; $\alpha$: 8--12 Hz; $\beta$: 12--30 Hz;
 $\gamma_L$: 30--60 Hz; and $\gamma_H$: 60--100 Hz), along with a measure of
-broadband power~\citep[defined as the mean height of a linear robust regression
-fit in log-log space to the order 4 Morelet wavelet-computed power spectrum at
-50 log-spaced frequencies from from 2--100 Hz;][]{MannEtal09}.  We used
-second-order Butterworth bandpass filters to compute the activity patterns
-within each narrow frequency band.  We then repeated our within-subject and
-across-subject cross-validated reconstruction accuracy tests (analogous to
-Fig.~\ref{fig:corrmap}) separately for each frequency band
-(Fig.~\ref{fig:frequency}).  (We also carried out a similar analysis on the
-Hilbert transform-computed spectral power within each narrow band; see
-Fig.~\freqpower.)  Across both datasets, we found that our approach is best at
-reconstructing patterns of broadband activity (right-most bars in
+broadband power.  We defined broadband power as the mean height of a linear
+robust regression fit in log-log space to the order 4 Morelet wavelet-computed
+power spectrum at 50 log-spaced frequencies from from 2--100
+Hz~\citep{MannEtal09}. We used second-order Butterworth bandpass filters to
+compute the activity patterns within each narrow frequency band.  We then
+repeated our within-subject and across-subject cross-validated reconstruction
+accuracy tests (analogous to Fig.~\ref{fig:corrmap}) separately for each
+frequency band (Fig.~\ref{fig:frequency}).  (We also carried out a similar
+analysis on the Hilbert transform-computed spectral power within each narrow
+band; see Fig.~\freqpower.)  Across both datasets, we found that our approach is
+best at reconstructing patterns of broadband activity (right-most bars in
 Figs.~\ref{fig:frequency}A and D), a correlate of population firing
 rate~\citep{MannEtal09}.  We also achieved good reconstruction accuracy within
 each narrow frequency band (Figs.~\ref{fig:frequency} and \freqpower).  Activity
@@ -578,137 +574,118 @@ within the 2--100 Hz range, although those reconstructions are most accurate for
 low-frequency or broadband patterns.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{figs/frequency}
-  \caption{\textbf{Reconstruction quality across all electrodes in two
-      ECoG datasets for each frequency band.} \textbf{A. Distributions of correlations
-      between observed versus reconstructed activity by electrode, for
-      each frequency band in Dataset 1.}  The across-patient
-    distribution (left jitter barplot) reflects
-    reconstruction accuracy (correlation) using a correlation model
-    learned from all but one patient's data, and then applied to that
-    held-out patient's data.  The within-patient distribution (right
-    jitter barplot in lighter color)
-    reflects performance using a correlation model learned from the same
-    patient who contributed the to-be-reconstructed electrode, colored
-    by frequency and includes the raw voltages displayed in
-    Fig.~\ref{fig:corrmap}A in gray.
-    \textbf{B.~Statistical summary of across-patient reconstruction
-      quality by electrode for each frequency band in Dataset 1.} In the upper triangles of each
-    map, warmer colors (positive t-values) indicate that the
-    distribution of
-    reconstruction accuracy for the frequency band in a given row
-    yielded was greater than the frequency band in the given
-    column. Cooler colors (negative t-values) indicate that the
-    frequency band in the given row yielded lower reconstruction
-    accuracy than the frequency band in the given column. The lower
-    triangles of each map denote the corresponding p-values for the
-    t-tests. The diagonal entries display the average
-    reconstruction accuracy given to each frequency
-    band. \textbf{C.~Statistical summary of within-patient reconstruction
-      quality by electrode for each frequency band in Dataset 1.}
-    This panel displays the within-patient statistical summary,
-    in the same format as Panel B.  \textbf{D.~Distributions of correlations
-      between observed versus reconstructed activity by electrode, for
-      each frequency band in Dataset 2.}  This panel displays
-    reconstruction accuracy distributions for each frequency band for
-    Dataset 2. \textbf{E.~Statistical summary of
-      across-patient reconstruction quality by electrode for each
-      frequency band in Dataset 2.} This is the same format as Panel
-    B for Dataset 2. \textbf{F.~Statistical summary of
-      within-patient reconstruction quality by electrode for each
-      frequency band in Dataset 2.}This is the same format as Panel
-    C for Dataset 2.}
-  \label{fig:frequency}
+  \centering \includegraphics[width=\textwidth]{figs/frequency}
+  \caption{\textbf{Reconstruction accuracy across all electrodes in two ECoG
+  datasets for each frequency triangles.} \textbf{A. Distributions of
+  correlations between observed versus reconstructed activity by electrode, for
+  each frequency band in Dataset 1.}  Each color denotes a different frequency
+  range. Within each color group, the darker dots and bar on the left display
+  the distribution (and mean) across-patient reconstruction accuracies
+  (analogous to the black histograms in Fig.~\ref{fig:corrmap}).  The lighter
+  dots and bar on the right display the distribution (and mean) within-patient
+  reconstruction accuracies (analogous to the gray histograms in
+  Fig.~\ref{fig:corrmap}). To facilitate visual comparison with the
+  frequency-specific results, the leftmost bars (gray) re-plot the histograms in
+  Fig.~\ref{fig:corrmap}A. \textbf{B.~Statistical summary of across-patient
+  reconstruction accuracy by electrode for each frequency band in Dataset 1.} In
+  the upper triangles of each map, warmer colors (positive $t$-values) indicate
+  that the distribution of reconstruction accuracy for the frequency band in a
+  given row yielded was greater than the frequency band in the given column.
+  Cooler colors (negative $t$-values) indicate that the frequency band in the
+  given row yielded lower reconstruction accuracy than the frequency band in the
+  given column. The lower triangles of each map denote the corresponding
+  $p$-values for the $t$-tests. The diagonal entries display the average
+  reconstruction accuracy within each frequency band. \textbf{C.~Statistical
+  summary of within-patient reconstruction accuracy by electrode for each
+  frequency band in Dataset 1.} This panel displays the within-patient
+  statistical summary, in the same format as Panel B.  \textbf{D.~Distributions
+  of correlations between observed versus reconstructed activity by electrode,
+  for each frequency band in Dataset 2.}  This panel displays reconstruction
+  accuracy distributions for each frequency range for Dataset 2.
+  \textbf{E.--F.~Statistical summaries of across-patient and within-patient
+  reconstruction accuracy by electrode for each frequency band in Dataset 2.}
+  These panels are in the same as Panels B and C, but display results from
+  Dataset 2.} \label{fig:frequency}
 \end{figure}
 
 
 \begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{figs/density}
-  \caption{\textbf{Electrode sampling density by location.}
-    \textbf{A.~Electrode sampling density by voxel in Dataset 1.} Each
-    voxel is colored by the proportion of total electrodes in the
-    dataset that are
-    located within a 20~MNI unit radius sphere centered on the given
-    voxel.  \textbf{B.~Electrode sampling density by voxel in Dataset
-      2.}  This panel displays the sampling density map for Dataset 2,
-    in the same format as Panel A.  \textbf{C.~Correspondence in
-      sampling density by voxel across Datasets 1 and 2.}  The
-    two-dimensional histogram displays the by-voxel densities in the
-    two Datasets, and the one-dimensional histograms display the
-    proportions of voxels in each dataset with the given density
-    value.  The correlation reported in the panel is across voxels in
-    the 4~mm$^3$ MNI brain.}
-  \label{fig:density}
+  \centering \includegraphics[width=\textwidth]{figs/density}
+  \caption{\textbf{Electrode sampling density by location.} \textbf{A.~Electrode
+  sampling density by voxel location in Dataset 1.} Each voxel is colored by the
+  proportion of total electrodes in the dataset that are located within a 20~MNI
+  unit radius sphere centered on the given voxel.  \textbf{B.~Electrode sampling
+  density by voxel location in Dataset 2.}  This panel displays the sampling
+  density map for Dataset 2, in the same format as Panel A.
+  \textbf{C.~Correspondence in sampling density by voxel location across
+  Datasets 1 and 2.}  The two-dimensional histogram displays the per-voxel
+  sampling densities in the two Datasets, and the one-dimensional histograms
+  display the proportions of voxels in each dataset with the given density
+  value.  The correlation reported in the panel is across voxels in the 4~mm$^3$
+  MNI152 brain.} \label{fig:density}
 \end{figure}
 
 A basic assumption of our approach (and of most prior ECoG work) is that
 electrode recordings are most informative about the neural activity near the
 recording surface of the electrode.  But if we consider that activity patterns
 throughout the brain are meaningfully correlated, are there particular
-implantation locations that, if present in a patient's brain, yield especially
-high reconstruction accuracies throughout the rest of the brain?  For example,
-one might hypothesize that brain structures that are heavily interconnected with
-many other structures could be more informative about full-brain activity
-patterns than comparatively isolated structures.  To test this hypothesis, we
-computed the average reconstruction accuracy across all of each patient's
-electrodes (using our across-patients cross validation test; black histograms in
-Fig.~\ref{fig:corrmap}A and B).  We first labeled each patient's electrodes, in
-each dataset, with the average reconstruction accuracy for that patient.  In
-other words, we assigned every electrode from each patient the same value,
-reflecting how well the activity patterns for that patient were reconstructed.
-Next, for each voxel in the 4~mm$^3$ MNI brain, we computed the average value
-across any electrode (from any patient) that came within 20 MNI units of that
-voxel's center.  This yielded an \textit{information score} for each voxel,
-reflecting the average reconstruction accuracy across any patients with
-electrodes near each voxel-- where the averages were weighted to reflect
+implantation locations that, recorded from in a given patient's brain, yield
+especially high reconstruction accuracies throughout the rest of their brain?
+For example, one might hypothesize that brain structures that are heavily
+interconnected with many other structures could be more informative about
+full-brain activity patterns than comparatively isolated structures.  To test
+this hypothesis, we computed the average reconstruction accuracy across all of
+each patient's electrodes (using our across-patients cross validation test;
+black histograms in Fig.~\ref{fig:corrmap}A and B).  We first labeled each
+patient's electrodes, in each dataset, with the average reconstruction accuracy
+for that patient.  In other words, we assigned every electrode from each patient
+the same value, reflecting how well the activity patterns for that patient were
+reconstructed. Next, for each voxel in the 4~mm$^3$ MNI brain, we computed the
+average value across any electrode (from any patient) that came within 20 MNI
+units of that voxel's center.  This yielded an \textit{information score} for
+each voxel, reflecting the average reconstruction accuracy across any patients
+with electrodes near each voxel-- where the averages were weighted to reflect
 patients who had more electrodes implanted near that location. We created a
 single map of these information scores for each dataset, highlighting regions
 that are especially informative about activity in \textit{other} brain areas
 (Fig.~\ref{fig:informap}A and B).  Despite task and patient differences across
 the two datasets, we nonetheless found that the maps of the most promising
-implantation targets derived from both datasets were similar (voxelwise
+implantation targets derived from both datasets were correlated (voxel-wise
 correlation between information scores across the two datasets: $r = 0.18, p <
-10^{-10}$).  While the correspondence between the two maps was imperfect, our
-finding that there were some commonalities between the two maps lends support to
-the notion that different brain areas are differently informative about
-full-brain activity patterns.  We also examined the intersection between the top
-10\% most informative voxels across the two datasets (gray areas in
-Fig.~\ref{fig:informap}C, networks shown in Fig.~\ref{fig:networks}A (All)).
-Supporting the notion that structures that are highly interconnected with the
-rest of the brain might be especially good targets for implantation, this
-intersecting set of voxels with the highest information scores included major
-portions of the dorsal attention network (e.g., inferior parietal lobule,
-precuneus, inferior temporal gyrus, thalamus, and striatum) as well as some
-portions of the default mode network (e.g., angular gyrus) that are highly
-interconnected with a large proportion of the brain's gray matter~\citep[e.g.,
-][]{TomaVolk11}.
+10^{-10}$).  Our finding that there were some commonalities between the two
+datasets' maps lends support to the notion that different brain areas are
+(reliably) differently informative about full-brain activity patterns.  We also
+examined the intersection between the top 10\% most informative voxels across
+the two datasets (gray areas in Fig.~\ref{fig:informap}C, networks shown in
+Fig.~\ref{fig:networks}A, top row). Supporting the notion that structures that
+are highly interconnected with the rest of the brain are most informative about
+full-brain activity patterns, the intersecting set of voxels with the highest
+information scores included major portions of the dorsal attention network
+(e.g., inferior parietal lobule, precuneus, inferior temporal gyrus, thalamus,
+and striatum) as well as some portions of the default mode network (e.g.,
+angular gyrus) that are highly interconnected with a large proportion of the
+brain's gray matter~\citep[e.g.,][]{TomaVolk11}.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{figs/informap}
-  \caption{\textbf{Most informative electrode locations.}
-    \textbf{A. Dataset 1 information score by voxel.} The voxel colors
-    reflect the weighted average reconstruction accuracy across all
-    electrodes from any patients with at least one electrode within 20
-    MNI units of the given voxel.  \textbf{B. Dataset 2 information
-      score by voxel.}  This panel is in the same format as Panel A.
-    In both panels the contours indicate the intersections between the
-    top 10\% most informative voxels in each map (also see
-    Fig.~\networks Panels A.-C. All for networks within this region).  \textbf{C. Intersection.}
-    Gray areas indicate the intersections between the
-    top 10\% most informative voxels in each map and projected onto the cortical surface~\citep{CombEtal19}. \textbf{D. Correspondence in information
-      scores by voxel across Datasets 1 and 2.}  Same format as
-    Figure~\ref{fig:density}C.}
+  \centering \includegraphics[width=\textwidth]{figs/informap}
+  \caption{\textbf{Most informative recording locations.} \textbf{A. Dataset 1
+  information scores by voxel.} The voxel colors reflect the weighted average
+  reconstruction accuracy across all electrodes from any patients with at least
+  one electrode within 20 MNI units of the given voxel.  \textbf{B. Dataset 2
+  information scores by voxel.}  This panel is in the same format as Panel A.
+  \textbf{C. Intersection.} Gray areas indicate the intersections between the
+  top 10\% most informative voxels in each map and projected onto the cortical
+  surface~\citep{CombEtal19}. \textbf{D. Correspondence in information scores by
+  voxel across Datasets 1 and 2.}  The correlation reported in the Panel is
+  between the per-voxel information scores across Datasets 1 and 2.}
   \label{fig:informap}
 \end{figure}
 
 We also wondered whether the map of information scores might vary as a function
 of the spectral components of the activity patterns under consideration.  We
 computed analogous maps of information scores for each individual frequency
-band. Across Datasets 1 and 2 (with the exception of $\alpha$ band activity), we
-observed reliable positive correlations between the voxel-by-voxel maps of
+range. Across Datasets 1 and 2 (with the exception of $\alpha$ band activity),
+we observed reliable positive correlations between the voxel-by-voxel maps of
 information scores ($\delta$: $r = 0.09, p < 10^{-57}$; $\theta$: $r = 0.24, p <
 10^{-60}$; $\alpha$: $r = -0.03, p < 0.001$, $\beta$: $r = 0.02, p - 0.0011$;
 $\gamma_L$: $r = 0.1, p < 10^{-67}$; $\gamma_H$: $r = 0.03, p < 10^{-7}$;
@@ -719,8 +696,8 @@ full-brain activity patterns at different frequency ranges, we next computed
 (for each frequency range) the intersection of the top 10\% highest information
 scores across the maps for Datasets 1 and 2 (analogous to our approach in
 Fig.~\ref{fig:informap}C). This yielded a single map of the (reliably) most
-informative locations for each frequency range we examined. We then carried out
-two \textit{post hoc} analyses on each of these maps to better characterize the
+informative locations, for each frequency range we examined. We then carried out
+\textit{post hoc} analyses on each of these maps to better characterize the
 underlying structural and functional properties of each set of regions we
 identified as being particularly informative about one or more neural patterns.
 
@@ -736,13 +713,36 @@ voxel) to one or more networks~\citep[for review see][]{BullSpor09}. The result
 is a set of distinct (or partially overlapping) brain ``networks'' that may be
 further examined to elucidate their potential functional role.  We overlaid a
 well-cited seven-network parcellation map identified by \cite{YeoEtal11} onto
-the maps of brain locations that were most informative about each neural
+the maps of brain locations that were most informative about each type of neural
 pattern.  For each of these information maps, we computed the proportion of
 voxels in the most informative brain regions that belonged to each of the seven
 networks identified by \cite{YeoEtal11}; Figure~\ref{fig:networks}D. We found
 that the regions we identified as being most informative about different neural
 patterns varied markedly with respect to which functional networks they belonged
 to (Fig.~\ref{fig:networks}A, B).
+
+\begin{figure}
+  \centering \includegraphics[width=\textwidth]{figs/networks}
+  \caption{\textbf{Most informative recording locations by frequency range.}
+  \textbf{A.~Intersections between information score maps by frequency range.}
+  The regions indicated in each row depict the intersection between the top 10\%
+  most informative locations across Datasets 1 and 2.  \textbf{B.~Network
+  memberships of the most informative brain regions.}  The pie charts display
+  the proportions of voxels in each region that belong to the seven networks
+  identified by \cite{YeoEtal11}.  The relative sizes of the charts for each
+  frequency range reflct the average across-subject reconstruction accuracies
+  (Fig.~\ref{fig:corrmap}A, D).  The voxels in Panel A are colored according to
+  the same network memberships.  \textbf{C.~Neurosynth terms associated with the
+  most informative brain regions, by frequency range.}  The lists in each row
+  display the top five neurosynth terms~\citep{RubiEtal17} decoded for each
+  region.  \textbf{D.~Network parcellation map and legend.}  The parcellation
+  defined by \cite{YeoEtal11} is displayed on the inflated brain maps.  The
+  colors and network labels serve as a legend for Panels A and B.
+  \textbf{E.~Combined map of the most informative brain regions.}  The map
+  displays the union of the most informative maps in Panel A, colored by
+  frequency range.  The labels also serve as a legend for Panel C.}
+  \label{fig:networks}
+\end{figure}
 
 The frequency-specific information score maps we observed were consistent with
 the notion that there is no ``universal'' brain region that  reflects all
@@ -760,9 +760,9 @@ were best predicted by regions of ventromedial prefrontal cortex, striatum, and
 thalamus (yellow).  These regions are also implicated in modulating $\delta$
 oscillations during sleep, and are heavily interconnected with
 cortex~\citep[e.g.,][]{AmziSter98}.  The brain areas most predictive of
-full-brain $\theta$ patterns were occipital and parietal regions traditionally
-linked with visual processing and visual attention (light green). Prior work has
-implicated $\theta$ oscillations in these areas in periodic sampling of visual
+full-brain $\theta$ patterns were occipital and parietal regions associated with
+visual processing and visual attention (light green). Prior work has implicated
+$\theta$ oscillations in these areas in periodic sampling of visual
 attention~\citep[e.g.,][]{BuscVanR10}.  We found that full-brain $\alpha$
 patterns were best predicted by motor areas (dark green), which also exhibit
 $\alpha$ band changes during voluntary movements~\citep[e.g.,][]{JurkEtal06}.
@@ -783,42 +783,16 @@ responses~\citep{SimoEtal16} and broadband ECoG patterns~\citep{HoneEtal12a} in
 these default-mode hubs have been implicated in processing context-dependent
 representations that unfold over long timescales.
 
-Taken together, the frequency-specific information maps suggest potential new
+Taken together, the frequency-specific information maps suggest a potential new
 interpretation of many of the above previously reported findings.  Prior work
 has largely treated region-specific narrowband and broadband activity as an
-indictor that activity at those frequency ranges reflect that the given region
+indictor that activity at those frequency ranges reflects that the given region
 is representing or supporting a particular function.  Our work suggests the
 alternative interpretation that when we observe a particular neural pattern in a
-particular brain region, it may instead reflect how that region is is transmitting
-information to the rest of the brain via patterns at the given frequency range.
+particular brain region, it may instead reflect how that region is is
+transmitting information to the rest of the brain via signalling at the given
+frequency range.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{figs/networks}
-  \caption{\textbf{Most informative electrode locations by frequency
-      and the networks involved.}
-    \textbf{A.~Intersections across datasets for each frequency.} The
-    inflated brain plots display the intersections between the
-    top 10\% most informative voxels were calculated as described in Fig.~\ref{fig:informap}
-    for each frequency and projected onto the cortical surface~\citep{CombEtal19}. Intersecting voxels are colored according to the 7 networks
-    from~\citep{YeoEtal11}.
-    \textbf{B.~Proportion of networks in most informative electrode locations by
-    frequency.}  Pie graphs display the proportion of the 7 networks
-  ~\citep{YeoEtal11} in the most informative locations by
-  frequency, and are sized relative to the average reconstruction
-  accuracy for each frequency. \textbf{C.~Terms associated with most informative
-    electrode locations.}  The
-    lists of terms display the top five Neurosynth
-    terms~\citep{RubiEtal17} decoded from the corresponding brain
-    maps, and colored according the frequency (see Panel
-    E legend). \textbf{D.~Network parcellation from~\citep{YeoEtal11}.}
-    Seven network parcellation as described
-    in~\citep{YeoEtal11}. \textbf{E.~Most informative locations by
-      frequency.} The inflated brain plot displays the locations of
-    the most informative locations (Panel A), colored by frequency,
-    and projected onto the cortical surface~\citep{CombEtal19}.}
-  \label{fig:networks}
-\end{figure}
 
 
 
@@ -858,43 +832,44 @@ nature of the correlational structure of neural activity (each of which we
 tested).  First, we hypothesized that functional correlations are stable over
 time and across tasks.  We found that, although aspects of the patients'
 functional correlations were stable across tasks, we achieved better
-reconstruction accuracy when we trained the model on within-task data.
-This suggests that our general approach could be extended to better
-model across-task changes, following \cite{ColeEtal16, TavoEtal16} and others.
-Second, we hypothesized that some of the correlational structure of people's
-brain activity is similar across individuals.  Consistent with this hypothesis,
-our model explained the data best when we trained the correlation model using
-data from \textit{other} patients-- even when compared to a correlation model
-trained on the same patient's data.  Third, we resolved ambiguities in the data
-by hypothesizing that neural activity from nearby sources will tend to be
-similar, all else being equal.  This hypothesis was supported through our
-finding that all of the models we trained that incorporated this spatial
-smoothness assumption predicted held-out data well above chance.
+reconstruction accuracy when we trained the model on within-task data. This
+suggests that our general approach could be extended to better model across-task
+changes, e.g., following \cite{ColeEtal16, TavoEtal16}; and others. Second, we
+hypothesized that some of the correlational structure of people's brain activity
+is similar across individuals.  Consistent with this hypothesis, our model
+explained the data best when we trained the correlation model using data from
+\textit{other} patients-- even when compared to a correlation model trained on
+the same patient's data.  Third, we resolved ambiguities in the data by
+hypothesizing that neural activity from nearby sources will tend to be similar,
+all else being equal.  This hypothesis was supported through our finding that
+all of the models we trained that incorporated this spatial smoothness
+assumption predicted held-out data well above chance.
 
 One potential limitation of our approach is that it does not provide a natural
-means of estimating the precise timing of single-neuron action potentials.
-Prior work has shown that gamma band and broadband activity in the LFP may be
-used to estimate the firing rates of neurons that underly the population
-contributing to the LFP~\citep{MillEtal08, MannEtal09, JacoEtal10b, CronEtal11}.
-Because SuperEEG reconstructs LFPs throughout the brain, one could in principle
-use broadband power in the reconstructed signals to estimate the corresponding
+means of estimating the precise timing of single-neuron action potentials. Prior
+work has shown that gamma band and broadband activity in the LFP may be used to
+estimate the firing rates of neurons that underly the population contributing to
+the LFP~\citep{MillEtal08, MannEtal09, JacoEtal10b, CronEtal11}. Because
+SuperEEG reconstructs LFPs throughout the brain, one could in principle use
+broadband power in the reconstructed signals to estimate the corresponding
 firing rates (though not the timings of individual action potentials).  We found
-that we were able to reconstruct full-brain patterns of broadband power well (Fig.~\ref{fig:frequency}).
+that we were able to reconstruct full-brain patterns of broadband power well
+(Fig.~\ref{fig:frequency}).
 
 Beyond providing a means of estimating ongoing activity throughout the brain
 using already implanted electrodes, our work also has implications how to
 optimize electrode placements in neurosurgical evaluations. Electrodes are
 typically implanted to maximize coverage of suspected epileptogenic tissue.
-However, our findings suggest that this approach might be improved.
+However, our findings suggest that this approach might be improved upon.
 Specifically, one could leverage not only the non-invasive recordings taken
 during an initial monitoring period (as is currently done routinely), but also
 recordings collected from \textit{other} patients.  We could then ask: given
 what we learn from other patients' data (and potentially from the scalp EEG
 recordings of this new patient), where should we place a fixed number of
 electrodes to maximize our ability to map seizure foci?  As shown in
-Figures~\ref{fig:informap}, \ref{fig:networks}, and~\intersectmap, recordings
-from different regions vary in their ability to predict different narrowband and
-broadband full-brain activity patterns.
+Figures~\ref{fig:informap}, \ref{fig:networks}, and~\networkpower, recordings
+from different regions vary with respect to how informative they are about
+different narrowband and broadband full-brain activity patterns.
 
 By providing a means of reconstructing full-brain activity patterns, the
 SuperEEG approach maps ECoG recordings from different patients into a common
@@ -905,12 +880,12 @@ NormEtal06, HaxbEtal11}. Whereas the focus of this manuscript is to specifically
 evaluate which aspects of neural activity patterns SuperEEG recovers well (or
 poorly), in parallel work we are training across-patient classifiers by
 leveraging the common neural spaces obtained by applying SuperEEG to
-multi-patient data.  For example, we have shown that SuperEEG-derived activity
-patterns may be used to accurately predict psychiatric conditions such as
-depression~\citep{ScanEtal20}.  Analogous approaches could in principle be used
-to develop improved brain-computer interfaces and/or to carry out other analyses
-that would benefit from high spatiotemporal resolution full-brain data in
-individuals.
+multi-patient ECoG data.  For example, we have shown that SuperEEG-derived
+activity patterns may be used to accurately predict psychiatric conditions such
+as depression~\citep{ScanEtal20}.  Analogous approaches could in principle be
+used to develop improved brain-computer interfaces and/or to carry out other
+analyses that would benefit from high spatiotemporal resolution full-brain data
+in individuals.
 
 
 \section*{Concluding remarks}
@@ -933,7 +908,7 @@ current manuscript, available
 \href{https://github.com/ContextLab/supereeg_paper}{\underline{here}}.
 
 \section*{Data availability}
-The dataset analyzed in this study was generously shared by Michael
+The datasets analyzed in this study were generously shared by Michael
 J. Kahana.  A portion of Dataset 1 may be downloaded
 \href{http://memory.psych.upenn.edu/Request_EEG_access?paper=SedeEtal03}{\underline{here}}.
 Dataset 2 may be downloaded
@@ -950,10 +925,10 @@ RAM Cooperative Agreement N66001-14-2-4-032 to J.R.M.  The content is solely the
 responsibility of the authors and does not necessarily represent the official
 views of our supporting organizations.
 
-\section*{Author Contributions}
-J.R.M conceived and initiated the project.
-L.L.W.O., T.A.M, and A.C.H. performed the analyses. J.R.M. and L.L.W.O. wrote
-the manuscript.
+\section*{Author Contributions} J.R.M conceived and initiated the project.
+L.L.W.O., T.A.M, and A.C.H. performed the analyses using software packages that
+all authors contributed to. J.R.M. and L.L.W.O. wrote the manuscript with input
+from all other authors.
 
 \section*{Author Information}
 Reprints and permissions information is available
