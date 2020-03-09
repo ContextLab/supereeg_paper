@@ -39,35 +39,53 @@ Boston, MA 02110, USA}
 \renewcommand{\theequation}{S\arabic{equation}}
 \renewcommand{\thefigure}{S\arabic{figure}}
 
+\newcommand{\methods}{1}
+\newcommand{\corrmaps}{2}
+\newcommand{\freqs}{3}
+\newcommand{\density}{4}
+\newcommand{\infomap}{5}
+\newcommand{\infomapfreqs}{6}
+
 \begin{titlepage}
   \maketitle
 \end{titlepage}
 
-\begin{figure}[b!]
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_1}
-\caption{\textbf{Reconstruction quality for Datasets 1 and 2.}
+\caption{\textbf{Reconstruction quality across all electrodes in two
+    ECoG datasets, broken down by experiment.}
   \textbf{A. Distributions of correlations between observed versus
-    reconstructed activity by electrode, for Dataset 1.} The split
-  violin plot reflects the same data as Figure~3A, presented here for
-  comparison.  \textbf{B. Distributions of correlation between
-    observed versus reconstructed activity by electrode, for Dataset
-    2.}  The left-most split violin plot (``Within'') reflects the
-  same data as Figure~3B, presented here for comparison.  The
-  ``Across'' plot reflects the same analyses, but limited to models
-  that were trained and tested on \textit{different} Dataset 2
-  experiments.  The ``All'' plot reflects the same analyses, but
-  including models that were trained and tested on both of the Dataset
-  2 experiments.  All plots: the dark gray distributions denote
-  across-subject correlations (model trained on all but one patient
-  and tested on the held-out patient), and the medium gray
-  distributions denote within-subject correlations (model trained on
-  all but one electrode from one patient, and tested on the held-out
-  electrode).  The horizontal bars denote $t$-tests between the
-  corresponding distributions (after $z$-transforming the
-  correlations), and the white numbers reflect the distribution means.
-  The symbols denote the corresponding $p$-values of those statistical
-  tests.}
+    reconstructed activity by electrode, for Dataset 1.}  The
+  across-patient distribution (black) reflects reconstruction accuracy
+  (correlation) using a correlation model learned from all but one
+  patient's data, and then applied to that held-out patient's data.
+  The within-patient distribution (gray) reflects performance using a
+  correlation model learned from the same patient who contributed the
+  to-be-reconstructed electrode.  The split violin plot displays the
+  same distributions shown in Figure~\corrmaps A.
+  \textbf{B. Distributions of correlations for Dataset 2.}  The split
+  violin plots are in the same format as those in Panel A.  The
+  leftmost plot (``Within'') displays the same distributions shown in
+  Figure~\corrmaps B.  All reconstructions reflected in the
+  distribution were carried out using a model trained and tested using
+  data from the same experiment.  The middle plots (``Across'')
+  reflect reconstructions trained and tested using data from different
+  experiments.  The rightmost plot (``All'') reflect reconstructions
+  obtained using models trained and tested on data from both
+  experiments.  The black distributions reflect models trained and
+  tested across patients (analogous to the black histograms in
+  Figure~\corrmaps) and the gray distributions reflect models trained
+  and tested within patient (analogous to the gray histograms in
+  Figure~\corrmaps).  The dark gray significance bars reflect
+  paired-sample $t$-tests comparing the ($z$-transformed)
+  reconstruction accuracy for each electrode obtained within versus
+  across patients.  The black significance bars reflect paired-sample
+  $t$-tests comparing the across-patient reconstruction accuracies
+  across datasets.  The light gray significance bars reflect
+  paired-sample $t$-tests comparing the within-patient reconstruction
+  accuracies across datasets.  The symbols denote the corresponding
+  $p$-values of those statistical tests.}
 \label{fig:supplemental_1}
 \end{figure}
 
@@ -75,27 +93,42 @@ Boston, MA 02110, USA}
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_2}
-\caption{\textbf{Reconstruction quality for Dataset 2,
-    Experiments 1 and 2.} \textbf{A. Distributions of correlations
-    between observed versus reconstructed activity by electrode, for
-    Experiment 1.}  Each split violin plot and horizontal bar is in
-  the same format as the plots in Figure~\ref{fig:supplemental_1}.
-  ``Within'' denotes within-subject correlations (model trained on all
-  but one electrode from one patient, and tested on the held-out
-  electrode); ``Across'' denotes across-subject correlations (model
-  trained an all but one patient and tested on the held-out patient);
-  ``All'' denotes a model trained on all data from all patients,
-  except for one held-out electrode (and tested on the held-out
-  electrode).  \textbf{B. Distributions of correlations between
-    observed versus reconstructed activity by electrode, for
-    Experiment 2.}  All of the plots and bars are in the same format
-  as those in Panel A.}
+\caption{\textbf{Reconstruction quality for Dataset 2, Experiments 1
+    and 2.}  \textbf{A. Distributions of correlations between observed
+    versus reconstructed activity by electrode, for Dataset 2
+    (Experiment 1).}  The plots are in the same format as
+  Figure~\ref{fig:supplemental_1}B, but reflect data only from
+  Experiment 1 in Dataset 2.  \textbf{A. Distributions of correlations between observed
+    versus reconstructed activity by electrode, for Dataset 2
+    (Experiment 2).  The plots are in the same format as Panel A, but
+    reflect data only from Experiment 2 in Dataset 2.}} 
 \label{fig:supplemental_2}
 \end{figure}
 
+%JRM STOPPED HERE
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_3}
+\caption{\textbf{Reconstruction quality across all electrodes, broken
+    down by Dataset 2 experiment.}  \textbf{A. Distributions of correlations
+      between observed versus reconstructed activity by electrode, for
+      Dataset 1.}  The across-patient distribution (black) reflects
+    reconstruction accuracy (correlation) using a correlation model
+    learned from all but one patient's data, and then applied to that
+    held-out patient's data.  The within-patient distribution (gray)
+    reflects performance using a correlation model learned from the same
+    patient who contributed the to-be-reconstructed electrode.
+    \textbf{B. Distributions of correlations for Dataset 2.}  This
+    panel is in the same format as Panel A, but reflects results
+    obtained from Dataset 2.  The histograms aggregate data across
+    both Dataset 2 experiments; for results broken down by experiment
+    see Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction
+      performance by location.} The colors denote the average across-session
+    correlation, using the across-patient correlation model, between
+    the observed and reconstructed activity at the given electrode
+    location projected to the cortical surface~\citep{CombEtal19}.}
+
+
 \caption{\textbf{Reconstruction quality across all electrodes in two
       Dataset 2 experiments.}  \textbf{A. Distributions of correlations
       between observed versus reconstructed activity by electrode, for
@@ -145,7 +178,7 @@ Boston, MA 02110, USA}
 \label{fig:supplemental_4}
 \end{figure}
 
-\begin{figure}[ptb]
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_5}
 \caption{\textbf{Most informative electrode locations by frequency
@@ -231,6 +264,8 @@ the second correlation matix.
 \label{fig:supplemental_8}
 \end{figure}
 
+\clearpage
+\newpage
 \renewcommand{\bibnumfmt}[1]{[S#1]}
 \renewcommand{\citenumfont}[1]{S#1}
 \bibliography{CDL-bibliography/memlab}
