@@ -194,7 +194,7 @@ information about both datasets.
   \textbf{B.~Radial basis function kernel.} Each electrode contributed by the
   patient (black) weights on the full set of locations under consideration (all
   dots in Panel A, defined as $\bar{R}$ in the text).  The weights fall off with
-  positional distance~\citep[in MNI152 space;][]{LyttEtal07} according to an RBF. \textbf{C.~Per-patient
+  positional distance (in MNI152 space) according to an RBF. \textbf{C.~Per-patient
   correlation matrices.}  After computing the pairwise correlations between the
   recordings from each patient's electrodes, we use RBF-weighted averages to
   estimate correlations between all locations in $\bar{R}$.  We obtain an
@@ -215,7 +215,7 @@ information about both datasets.
 \end{figure}
 
 We first applied fourth order Butterworth notch filters to remove 60 Hz ($\pm$
-.5 Hz) line noise from every recording (from every electrode). Next, we
+0.5 Hz) line noise from every recording (from every electrode). Next, we
 downsampled the recordings (regardless of the original samplerate) to 250 Hz.
 This downsampling step served to both normalize for differences in sampling
 rates across patients and to ease the computational burden of our subsequent
@@ -542,7 +542,7 @@ within a 20 MNI unit radius sphere centered on that voxel.  We defined the
 the electrode placement densities were similar (correlation by voxel: $r = 0.6,
 p < 10^{-10}$).  We wondered whether regions with good covererage might be
 associated with better reconstruction accuracy. For example,
-Figures~\ref{fig:corrmap}A and B indicate that many electrodes in the MTL (which
+Figures~\ref{fig:corrmap}C and D indicate that some electrodes in the MTL (which
 tends to be relatively densely sampled) have relatively high reconstruction
 accuracy, and occipital electrodes (which tends to be relatively sparsely
 sampled) tend to have relatively low reconstruction accuracy.  To test whether
@@ -553,7 +553,7 @@ given electrode).  We then correlated these density values with the
 across-patient reconstruction accuracies for each electrode.  We found no
 reliable correlation between reconstruction accuracy and density for Dataset 1
 ($r = 0.05, p = 0.70$) and a reliable negative correlation for Dataset 2 ($r =
--0.21, p = 0.05$).  This indicates that the reconstruction accuracies we
+-0.21, p = 0.05$).  This suggests that the reconstruction accuracies we
 observed are \textit{not} driven solely by sampling density, but rather may also
 reflect higher order properties of neural dynamics such as functional
 correlations between distant voxels~\citep{BetzEtal17b}.
@@ -568,8 +568,8 @@ MannEtal09}.  We wondered whether the reconstructions we observed might be
 differently weighting or considering the contributions of activity at different
 frequency bands.  We therefore examined a range of frequency bands ($\delta$:
 2--4 Hz; $\theta$: 4--8 Hz; $\alpha$: 8--12 Hz; $\beta$: 12--30 Hz; $\gamma_L$:
-30--60 Hz; and $\gamma_H$: 60--100 Hz), along with a measure of broadband power.
-We used second-order Butterworth bandpass filters to compute the activity
+30--60 Hz; and $\gamma_H$: 60--100 Hz), along with a measure of broadband (BB)
+power. We used second-order Butterworth bandpass filters to compute the activity
 patterns within each narrow frequency band.  We defined broadband power as the
 mean height of a linear robust regression fit in log-log space to the order 4
 Morelet wavelet-computed power spectrum at 50 log-spaced frequencies from from
@@ -730,8 +730,8 @@ to (Fig.~\ref{fig:networks}A, B).
   memberships of the most informative brain regions.}  The pie charts display
   the proportions of voxels in each region that belong to the seven networks
   identified by \cite{YeoEtal11}.  The relative sizes of the charts for each
-  frequency band reflct the average across-subject reconstruction accuracies
-  (Figs.~\ref{fig:corrmap}A, D).  The voxels in Panel A are colored according to
+  frequency band reflect the average across-subject reconstruction accuracies
+  (Figs.~\ref{fig:frequency}A, D).  The voxels in Panel A are colored according to
   the same network memberships.  \textbf{C.~Neurosynth terms associated with the
   most informative brain regions, by frequency band.}  The lists in each row
   display the top five neurosynth terms~\citep{RubiEtal17} decoded for each
