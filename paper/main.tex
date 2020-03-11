@@ -15,12 +15,14 @@
 \textheight 21cm
 \footskip 1.0cm
 
-\newcommand{\perexpcorrmaps}{S1}
-\newcommand{\perexptaskrecon}{S2}
-\newcommand{\perexptaskreconseparated}{S3}
+\newcommand{\combinedexpviolins}{S1}
+\newcommand{\splitexpviolins}{S2}
+\newcommand{\splitexpcorrmaps}{S3}
 \newcommand{\freqpower}{S4}
 \newcommand{\networkpower}{S5}
 \newcommand{\suppstats}{S6}
+\newcommand{\temporalstability}{S7}
+\newcommand{\patientstability}{S8}
 
 % Include your paper's title here
 
@@ -387,21 +389,25 @@ each patient at all arbitrarily chosen locations in the set $\overline{R}$,
 locations}.  We next turn to an evaluation of the accuracy of those estimates.
 
 \section*{Results}
-We used a cross-validation approach to test the accuracy with
-which the SuperEEG algorithm reconstructs activity throughout the brain. For
+We used a cross-validation approach to test the accuracy with which
+the SuperEEG algorithm reconstructs activity throughout the brain. For
 each patient in turn, we estimated full-brain correlation matrices
-(Eqn.~\ref{eqn:corrmat}) using data from all of the \textit{other} patients.
-This step ensured that the data we were reconstructing could not also be used to
-estimate the between-location correlations that drove the reconstructions via
-Equation~\ref{eqn:reconstruction} (otherwise the analysis would be circular).
-For that held-out patient, we held out each electrode in turn.  We used
-Equation~\ref{eqn:reconstruction} to reconstruct activity at the held-out
-electrode location, using the correlation matrix learned from all other
-patients' data as $\hat{K}$, and using activity recorded from the other
-electrodes from the held-out patient as $Y_{s, k, \alpha_s}$.  We then asked:
-how closely did each of the SuperEEG-estimated recordings at those electrodes
-match the observed recordings from those electrodes (i.e., how closely did the
-estimated $\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$)?
+(Eqn.~\ref{eqn:corrmat}) using data from all of the \textit{other}
+patients.  This step ensured that the data we were reconstructing
+could not also be used to estimate the between-location correlations
+that drove the reconstructions via Equation~\ref{eqn:reconstruction}
+(otherwise the analysis would be circular).  For that held-out
+patient, we held out each electrode in turn.  We used
+Equation~\ref{eqn:reconstruction} to reconstruct activity at the
+held-out electrode location, using the correlation matrix learned from
+all other patients' data as $\hat{K}$, and using activity recorded
+from the other electrodes from the held-out patient as
+$Y_{s, k, \alpha_s}$.  (For analyses examining the stability of our
+estimates of $\hat{K}$ across time and patients, see
+Figs.~\temporalstability~and \patientstability, respectively).  We then asked: how closely did each of the
+SuperEEG-estimated recordings at those electrodes match the observed
+recordings from those electrodes (i.e., how closely did the estimated
+$\hat{Y}_{s, k, \beta_s}$ match the observed $Y_{s, k, \beta_s}$)?
 
 We used this general approach to quantify the algorithm's performance across the
 full dataset. For each held-out electrode, from each held-out patient in turn,
@@ -443,7 +449,7 @@ the patient whose data is being reconstructed.  We repeated each of these
 analyses on a second independent dataset and found similar results
 (Fig.~\ref{fig:corrmap}B, D; within versus across reconstruction accuracy:
 $t(77) = 11.25, p < 10^{-10}$). We also replicated this result separately for
-each of the two experiments from Dataset 2 (Fig.~\perexpcorrmaps).  This overall
+each of the two experiments from Dataset 2 (Fig.~\splitexpcorrmaps).  This overall
 finding, that reconstructions of held-out data using correlation models learned
 from \textit{other} patient's data yield higher reconstruction accuracy than
 correlation models learned from the patient whose data is being reconstructed,
@@ -470,7 +476,7 @@ similar across people.
   correlations for Dataset 2.}  This panel is in the same format as Panel A, but
   reflects results obtained from Dataset 2.  The histograms aggregate data
   across both Dataset 2 experiments; for results broken down by experiment see
-  Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction accuracy by
+  Figures~\splitexpviolins~and~\splitexpcorrmaps. \textbf{C.--D.  Reconstruction accuracy by
   location.} The colors denote the average across-session correlations, using
   the across-patient correlation model, between the observed and reconstructed
   activity at the given electrode location projected to the cortical
@@ -497,7 +503,7 @@ and repeated the above within- and across-patient cross validation procedures
 separately for Experiment 1 and Experiment 2 data from Dataset 2.  We then
 compared the reconstruction accuracies for held-out electrodes, for models
 trained within versus across the two experiments, or combining across both
-experiments (Fig.~\perexptaskrecon).  In every case we found that across-patient
+experiments (Fig.~\combinedexpviolins).  In every case we found that across-patient
 models trained using data from all other patients out-performed within-patient
 models trained on data only from the subject contributing the given electrode
 ($t$s$(23) > 6.50, p$s$ < 10^{-5}$). All reconstruction accuracies also reliably
@@ -507,7 +513,7 @@ data from the same experiment (mean accuracy: $r = 0.68$); next-highest for the
 models that combined data across both experiments (mean accuracy: $r = 0.61$); and
 lowest for models trained across tasks (mean accuracy: $r = 0.47$).  This pattern of
 results also held for each of the Dataset 2 experiments individually
-(Fig.~\perexptaskreconseparated).  Taken together, these results indicate that
+(Fig.~\splitexpviolins).  Taken together, these results indicate that
 there are reliable commonalities in the spatial correlations of full-brain
 activity across tasks, but that there are also reliable differences in these
 spatial correlations across tasks. Whereas reconstruction accuracy benefits from
@@ -699,7 +705,8 @@ Fig.~\ref{fig:informap}C). This yielded a single map of the (reliably) most
 informative locations, for each frequency band we examined. We then carried out
 \textit{post hoc} analyses on each of these maps to characterize the underlying
 structural and functional properties of each set of regions we identified as
-being particularly informative about one or more types of neural pattern.
+being particularly informative about one or more types of neural
+pattern (Figs.~\ref{fig:networks} and~\networkpower).
 
 A growing body of neuroscientific research is concerned with characterizing the
 \textit{parcellations} of anatomical and functional brain networks~\citep[for
