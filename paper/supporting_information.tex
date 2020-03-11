@@ -51,41 +51,35 @@ Boston, MA 02110, USA}
 \end{titlepage}
 
 \begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{figs/supplemental_1}
-\caption{\textbf{Reconstruction accuracy across all electrodes in two
-    ECoG datasets, broken down by experiment.}
-  \textbf{A. Distributions of correlations between observed versus
-    reconstructed activity by electrode, for Dataset 1.}  The
-  across-patient distribution (black) reflects reconstruction accuracy
-  (correlation) using a correlation model learned from all but one
-  patient's data, and then applied to that held-out patient's data.
-  The within-patient distribution (gray) reflects performance using a
-  correlation model learned from the same patient who contributed the
-  to-be-reconstructed electrode.  The split violin plot displays the
-  same distributions shown in Figure~\corrmaps A.
-  \textbf{B. Distributions of correlations for Dataset 2.}  The split
-  violin plots are in the same format as those in Panel A.  The
-  leftmost plot (``Within'') displays the same distributions shown in
-  Figure~\corrmaps B.  All reconstructions reflected in the
-  distribution were carried out using a model trained and tested using
-  data from the same experiment.  The middle plots (``Across'')
-  reflect reconstructions trained and tested using data from different
-  experiments.  The rightmost plot (``All'') reflect reconstructions
-  obtained using models trained and tested on data from both
-  experiments.  The black distributions reflect models trained and
-  tested across patients (analogous to the black histograms in
-  Figure~\corrmaps) and the gray distributions reflect models trained
-  and tested within patient (analogous to the gray histograms in
-  Figure~\corrmaps).  The dark gray significance bars reflect
-  paired-sample $t$-tests comparing the ($z$-transformed)
-  reconstruction accuracy for each electrode obtained within versus
-  across patients.  The black significance bars reflect paired-sample
-  $t$-tests comparing the across-patient reconstruction accuracies
-  across datasets.  The light gray significance bars reflect
-  paired-sample $t$-tests comparing the within-patient reconstruction
-  accuracies across datasets.  The symbols denote the corresponding
-  $p$-values of those statistical tests.}
+\centering \includegraphics[width=\textwidth]{figs/supplemental_1}
+\caption{\textbf{Reconstruction accuracy across all electrodes in two ECoG
+datasets, broken down by experiment.} \textbf{A. Distributions of correlations
+between observed versus reconstructed activity by electrode, for Dataset 1.}
+The across-patient distribution (black) reflects reconstruction accuracy
+(correlation) using a correlation model learned from all but one patient's data,
+and then applied to that held-out patient's data. The within-patient
+distribution (gray) reflects performance using a correlation model learned from
+the same patient who contributed the to-be-reconstructed electrode.  The split
+violin plot displays the same distributions shown in Figure~\corrmaps A.  The
+white numbers within each half denote the means of each distribution. \textbf{B.
+Distributions of correlations for Dataset 2.}  The split violin plots are in the
+same format as those in Panel A.  The leftmost plot (``Within'') displays the
+same distributions shown in Figure~\corrmaps B.  All reconstructions reflected
+in the distribution were carried out using a model trained and tested using data
+from the same experiment.  The middle plots (``Across'') reflect reconstructions
+trained and tested using data from different experiments.  The rightmost plot
+(``All'') reflect reconstructions obtained using models trained and tested on
+data from both experiments.  The black distributions reflect models trained and
+tested across patients (analogous to the black histograms in Figure~\corrmaps)
+and the gray distributions reflect models trained and tested within patient
+(analogous to the gray histograms in Figure~\corrmaps).  The dark gray
+significance bars reflect paired-sample $t$-tests comparing the
+($z$-transformed) reconstruction accuracy for each electrode obtained within
+versus across patients.  The black significance bars reflect paired-sample
+$t$-tests comparing the across-patient reconstruction accuracies across
+datasets.  The light gray significance bars reflect paired-sample $t$-tests
+comparing the within-patient reconstruction accuracies across datasets.  The
+symbols denote the corresponding $p$-values of those statistical tests.}
 \label{fig:supplemental_1}
 \end{figure}
 
@@ -108,7 +102,7 @@ Boston, MA 02110, USA}
 \begin{figure}[p]
 \centering \includegraphics[width=\textwidth]{figs/supplemental_3}
 \caption{\textbf{Reconstruction accuracy across all electrodes in Dataset 2.}
-This figure is analogous to Figure~\corrmaps in the main text, but displays data
+This figure is analogous to Figure~\corrmaps~in the main text, but displays data
 for Dataset 2 broken down by experiment. \textbf{A. Distributions of
 correlations between observed versus reconstructed activity by electrode for
 Experiment 1.}  The across-patient distribution (black) reflects reconstruction
@@ -132,7 +126,7 @@ C displays the map for Experiment 1 and Panel D displays the map for Experiment 
 \includegraphics[width=\textwidth]{figs/supplemental_4}
 \caption{\textbf{Reconstruction accuracy across all electrodes in two ECoG
 datasets for power in each frequency band.} This figure is analogous to
-Figure~\freqs in the main text, but displays the reconstruction accuracies of
+Figure~\freqs~in the main text, but displays the reconstruction accuracies of
 the \textit{power} in each frequency band, rather than the bandpass-filtered
 voltages, as in Figure~\freqs. \textbf{A. Distributions of correlations between
 observed versus reconstructed power by electrode for each frequency band in
@@ -169,9 +163,9 @@ from Dataset 2.}
 \begin{figure}[p]
 \centering \includegraphics[width=\textwidth]{figs/supplemental_5}
 \caption{\textbf{Most informative recording locations by frequency band.} This
-figure is analogous to Figure~\infomapfreqs in the main text, but displays the
+figure is analogous to Figure~\infomapfreqs~in the main text, but displays the
 brain regions that were most informative about the \textit{power} in each
-frequency band (whereas Fig.~\infomapfreqs displays the regions that were most
+frequency band (whereas Fig.~\infomapfreqs~displays the regions that were most
 informative about the bandpass-filtered voltages within each band).
 \textbf{A.~Intersections between information score maps by frequency band.} The
 regions indicated in each row depict the intersection between the top 10\% most
@@ -180,7 +174,7 @@ of the most informative brain regions.}  The pie charts display the proportions
 of voxels in each region that belong to the seven networks identified by
 \cite{YeoEtal11}.  The relative sizes of the charts for each frequency band
 reflect the average across-subject reconstruction accuracies
-(Figs.~\ref{fig:frequency}A, D).  The voxels in Panel A are colored according to
+(Figs.~\freqs A, D).  The voxels in Panel A are colored according to
 the same network memberships.  \textbf{C.~Neurosynth terms associated with the
 most informative brain regions, by frequency band.}  The lists in each row
 display the top five neurosynth terms~\citep{RubiEtal17} decoded for each
@@ -220,44 +214,34 @@ total duration (in hours) of each patient's recordings, across all of their reco
 
 %JRM STOPPED HERE
 \begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{figs/supplemental_7}
-\caption{\textbf{Stability of correlation matrix across time.} \textbf{A.--B.  Features from
-    Dataset 1.}  Features include: (\textbf{A. Correlation of split
-  halves by the percent samples included.})  For each patient, we
-  split the timeseries data in
-  half and created a correlation matrix with one half.  With the
-  remaining data, we created the second correlation matrix with more
-  and more time samples (in 1000 sample increments).  These time
-  samples were either drawn randomly (``Random'') , or were drawn sequentially from
-  either the closest timepoint (``Close'' ) or the furthest timepoint
-  (``Apart'' ). The two correlation matrices were then correlated, and the
-  coefficient plotted relative to the percentage of data included.  (\textbf{B. Correlation of split
-  halves by the number of time samples included.})
-Same analysis as Panel A, but the
-  coefficient plotted relative to the total number of samples included.
-  \textbf{C.--D. Features from Dataset 2.}  Analogous format to Panels
-  A--B.}
+\centering \includegraphics[width=\textwidth]{figs/supplemental_7}
+\caption{\textbf{Temporal stability of estimated patient-specific correlation
+matrices.}  For each patient $s$, we computed their patient-specific correlation
+matrix ($C_s$) using two different subsets of their recorded data.  We
+correlated the upper triangles of these estimates of $C_s$ to obtain a single
+correlation for each participant, reflecting how stable (in time) the estimates
+were.  We computed this stability measure, for each patient, as a function of
+how much data was used to estimate each $C_s$ (expressed as a proportion of the
+patient's total dataset, as in Panels \textbf{A} and \textbf{C}; or as the total duration of the
+patient's recordings, as in Panels \textbf{B} and \textbf{D}).  We also varied how the timepoints
+that went into each estimate were related. Specifically, we first concatenated the data from each patient's recording sessions to
+construct a single data timeseries (ignoring session boundaries) for each patient.  We then constructed two
+estimates of $C_s$ by drawing each patient's data from two equally sized sets of timepoints chosen from their multi-session data matrix.
+The timepoints were drawn either at \textit{random} without replacement (teal lines); from equally sized timespans at the start and end of the multi-session data matrix (\textit{apart}, blue lines); or from two equally sized timespans just prior to and just after the data midpoint (\textit{close}, purple lines).  Panels A and B display the resulting correlations for Dataset 1, and panels C and D display the correlations for Dataset 2.
+Error ribbons in all panels denote 95\% confidence intervals (computed across patients).}
 \label{fig:supplemental_7}
 \end{figure}
 
 \begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{figs/supplemental_8}
-\caption{\textbf{Stability of correlation matrix across patients.} \textbf{A.--B.  Features from
-    Dataset 1.}  Features include: (\textbf{A. Correlation of split
-  halves by number of patients included.})  For 500 iterations, we randomly split the
-patient-specific correlations in half, then created one correlation
-matrix with the first half and created the second correlation matrix
-using more and more patients. The two correlation matrices were then correlated, and the
-  coefficient plotted relative to the number of patients included.
-  (\textbf{B. Standard error of the mean across iterations by the
-    number of patients included.})
-To measure the variability across the iterations, we plot the standard
-error of the mean as a function of the number of patients included in
-the second correlation matix.
-  \textbf{C.--D. Features from Dataset 2.}  Analogous format to Panels
-  A--B.}
+\centering \includegraphics[width=\textwidth]{figs/supplemental_8}
+\caption{\textbf{Stability of full-brain correlation matrices across patients.}
+We estimated full-brain correlation matrices ($\bar{K}$) using different subsets
+of patients from each dataset. We explored how stable these estimates were as a
+function of how many patients were used to compute $\bar{K}$. For each sample
+size $n$ (number of patients), we drew two non-overlapping sets of $n$ patients
+(without replacement) from the full set of patients in each dataset. We then estimated $\bar{K}$ using the two sets of $n$ patients.  We computed the correlation between the upper triangles of these matrices as a measure of how similar the matrices were.  We repeated this procedure 500 times for each value of $n$ (ranging from 1 up to $\frac{1}{2}$ of the total number of patients in the given dataset); this yielded a distribution of correlation coefficients for each value of $n$.  Panels \textbf{A} and \textbf{C} diplay the mean correlations as a function of $n$ for Datasets 1 and 2, respectively.  The error ribbons denote 95\% confidence intervals (computed across iterations).  Panels \textbf{B} and \textbf{D} display
+the standard error of the mean (SEM) of these distributions of correlations as a function of $n$, for Datasets 1 and 2, respectively.  The error ribbons
+denote bootstrap-derived 95\% confidence intervals.}
 \label{fig:supplemental_8}
 \end{figure}
 
