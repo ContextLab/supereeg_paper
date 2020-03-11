@@ -1,7 +1,7 @@
-paper/main.fdb_latexmk
-paper/main.fls
-paper/boneyard.fdb_latexmk
-paper/boneyard.fls
+*.fdb_latexmk
+*.fls
+paper/supporting_information.pdf
+paper/main.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[font=small,labelfont=bf]{caption}
@@ -239,7 +239,7 @@ We estimated full-brain correlation matrices ($\bar{K}$) using different subsets
 of patients from each dataset. We explored how stable these estimates were as a
 function of how many patients were used to compute $\bar{K}$. For each sample
 size $n$ (number of patients), we drew two non-overlapping sets of $n$ patients
-(without replacement) from the full set of patients in each dataset. We then estimated $\bar{K}$ using the two sets of $n$ patients.  We computed the correlation between the upper triangles of these matrices as a measure of how similar the matrices were.  We repeated this procedure 500 times for each value of $n$ (ranging from 1 up to $\frac{1}{2}$ of the total number of patients in the given dataset); this yielded a distribution of correlation coefficients for each value of $n$.  Panels \textbf{A} and \textbf{C} diplay the mean correlations as a function of $n$ for Datasets 1 and 2, respectively.  The error ribbons denote 95\% confidence intervals (computed across iterations).  Panels \textbf{B} and \textbf{D} display
+(without replacement) from the full set of patients in each dataset. We then estimated $\bar{K}$ using the two sets of $n$ patients.  We computed the correlation between the upper triangles of these matrices as a measure of how similar the matrices were.  We repeated this procedure 500 times for each value of $n$ (ranging from 1 up to $\frac{1}{2}$ of the total number of patients in the given dataset); this yielded a distribution of correlation coefficients for each value of $n$.  Panels \textbf{A} and \textbf{C} display the mean correlations as a function of $n$ for Datasets 1 and 2, respectively.  The error ribbons denote 95\% confidence intervals (computed across iterations).  Panels \textbf{B} and \textbf{D} display
 the standard error of the mean (SEM) of these distributions of correlations as a function of $n$, for Datasets 1 and 2, respectively.  The error ribbons
 denote bootstrap-derived 95\% confidence intervals.}
 \label{fig:supplemental_8}
@@ -247,12 +247,13 @@ denote bootstrap-derived 95\% confidence intervals.}
 
 \clearpage
 \newpage
+\renewcommand{\refname}{Supplemental references}
 \renewcommand{\bibnumfmt}[1]{[S#1]}
 \renewcommand{\citenumfont}[1]{S#1}
 \bibliography{CDL-bibliography/memlab}
 \bibliographystyle{CSE}
 % \newpage
-% \renewcommand{\refname}{Supplemental references}
+
 % \bibliography{memlab}
 
 
