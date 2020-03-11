@@ -53,7 +53,7 @@ Boston, MA 02110, USA}
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_1}
-\caption{\textbf{Reconstruction quality across all electrodes in two
+\caption{\textbf{Reconstruction accuracy across all electrodes in two
     ECoG datasets, broken down by experiment.}
   \textbf{A. Distributions of correlations between observed versus
     reconstructed activity by electrode, for Dataset 1.}  The
@@ -93,135 +93,132 @@ Boston, MA 02110, USA}
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_2}
-\caption{\textbf{Reconstruction quality for Dataset 2, Experiments 1
+\caption{\textbf{Reconstruction accuracy for Dataset 2, Experiments 1
     and 2.}  \textbf{A. Distributions of correlations between observed
     versus reconstructed activity by electrode, for Dataset 2
     (Experiment 1).}  The plots are in the same format as
   Figure~\ref{fig:supplemental_1}B, but reflect data only from
   Experiment 1 in Dataset 2.  \textbf{A. Distributions of correlations between observed
     versus reconstructed activity by electrode, for Dataset 2
-    (Experiment 2).  The plots are in the same format as Panel A, but
-    reflect data only from Experiment 2 in Dataset 2.}}
-% \label{fig:supplemental_2}
-% \end{figure}
-%
-% %JRM STOPPED HERE
-% \begin{figure}[p]
-% \centering
-% \includegraphics[width=\textwidth]{figs/supplemental_3}
-% \caption{\textbf{Reconstruction quality across all electrodes, broken
-%     down by Dataset 2 experiment.}  \textbf{A. Distributions of correlations
-%       between observed versus reconstructed activity by electrode, for
-%       Dataset 1.}  The across-patient distribution (black) reflects
-%     reconstruction accuracy (correlation) using a correlation model
-%     learned from all but one patient's data, and then applied to that
-%     held-out patient's data.  The within-patient distribution (gray)
-%     reflects performance using a correlation model learned from the same
-%     patient who contributed the to-be-reconstructed electrode.
-%     \textbf{B. Distributions of correlations for Dataset 2.}  This
-%     panel is in the same format as Panel A, but reflects results
-%     obtained from Dataset 2.  The histograms aggregate data across
-%     both Dataset 2 experiments; for results broken down by experiment
-%     see Figure~\perexptaskreconseparated. \textbf{C.--D.  Reconstruction
-%       performance by location.} The colors denote the average across-session
-%     correlation, using the across-patient correlation model, between
-%     the observed and reconstructed activity at the given electrode
-%     location projected to the cortical surface~\citep{CombEtal19}.}
-%
-%
-% \caption{\textbf{Reconstruction quality across all electrodes in two
-%       Dataset 2 experiments.}  \textbf{A. Distributions of correlations
-%       between observed versus reconstructed activity by electrode, for
-%       Experiment 1.}  Same format as Figure~3A and B, but reflects data shown
-%     in Figure~\ref{fig:supplemental_2}A (leftmost violin plot).
-%  \textbf{B. Distributions of correlations
-%       between observed versus reconstructed activity by electrode, for
-%       Experiment 2.}  Same format as Figure~3A and B, but reflects
-%     data shown in Figure~\ref{fig:supplemental_2}B (leftmost violin
-%     plot).  \textbf{C.--D.  Reconstruction
-%       performance by location.} Each dot reflects the location of a
-%     single implanted electrode from Dataset 2, Experiment 1 (Panel C)
-%     or Dataset 2, Experiment 2 (Panel D).  The dot colors denote the
-%     average within-experiment (across-session)
-%     correlation, using the across-patient correlation model, between
-%     the observed and reconstructed activity at the given electrode
-%     location projected to the cortical surface~\citep{CombEtal19}.}
-\label{fig:supplemental_3}
+    (Experiment 2).}  The plots are in the same format as Panel A, but
+    reflect data only from Experiment 2 in Dataset 2.}
+\label{fig:supplemental_2}
 \end{figure}
 
+\begin{figure}[p]
+\centering \includegraphics[width=\textwidth]{figs/supplemental_3}
+\caption{\textbf{Reconstruction accuracy across all electrodes in Dataset 2.}
+This figure is analogous to Figure~\corrmaps in the main text, but displays data
+for Dataset 2 broken down by experiment. \textbf{A. Distributions of
+correlations between observed versus reconstructed activity by electrode for
+Experiment 1.}  The across-patient distribution (black) reflects reconstruction
+accuracy (correlation) using a correlation model learned from all but one
+patient's data, and then applied to that held-out patient's data.  The
+within-patient distribution (gray) reflects performance using a correlation
+model learned from the same patient who contributed the to-be-reconstructed
+electrode. \textbf{B. Distributions of correlations for Experiment 2.}  This
+panel is in the same format as Panel A, but reflects results obtained from
+Experiment 2. \textbf{C.--D. Reconstruction accuracy by location.} The colors
+denote the average across-session correlations, using the across-patient
+correlation model, between the observed and reconstructed activity at the given
+electrode location projected to the cortical surface~\citep{CombEtal19}.  Panel
+C displays the map for Experiment 1 and Panel D displays the map for Experiment 2.}
+\label{fig:supplemental_3}
+\end{figure}
 
 
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_4}
-\caption{\textbf{Reconstruction quality across all electrodes in two
-      ECoG datasets for each frequency band.} \textbf{A. Distributions of correlations
-      between observed versus reconstructed activity by electrode, for
-      each frequency band in Dataset 1.} Same format as Figure~5A, but
-    using power at each frequency.
-    \textbf{B.~Statistical summary of across-patient reconstruction
-      quality by electrode for each frequency band in Dataset 1.} Same format as Figure~5B, but
-    using power at each frequency.\textbf{C.~Statistical summary of within-patient reconstruction
-      quality by electrode for each frequency band in Dataset 1.}
-    This panel displays the within-patient statistical summary,
-    in the same format as Panel B.  \textbf{D.~Distributions of correlations
-      between observed versus reconstructed activity by electrode, for
-      each frequency band in Dataset 2.}  This panel displays
-    reconstruction accuracy distributions for each frequency band for
-    Dataset 2. \textbf{E.~Statistical summary of
-      across-patient reconstruction quality by electrode for each
-      frequency band in Dataset 2.} This is the same format as Panel
-    B for Dataset 2. \textbf{F.~Statistical summary of
-      within-patient reconstruction quality by electrode for each
-      frequency band in Dataset 2.}This is the same format as Panel
-    C for Dataset 2.}
+\caption{\textbf{Reconstruction accuracy across all electrodes in two ECoG
+datasets for power in each frequency band.} This figure is analogous to
+Figure~\freqs in the main text, but displays the reconstruction accuracies of
+the \textit{power} in each frequency band, rather than the bandpass-filtered
+voltages, as in Figure~\freqs. \textbf{A. Distributions of correlations between
+observed versus reconstructed power by electrode for each frequency band in
+Dataset 1.}  Each color denotes a different frequency band. Within each color
+group, the darker dots and bar on the left display the distribution (and mean)
+across-patient reconstruction accuracies (analogous to the black histograms in
+Fig.~\corrmaps).  The lighter dots and bar on the right display the distribution
+(and mean) within-patient reconstruction accuracies (analogous to the gray
+histograms in Fig.~\corrmaps). Each dot indicates the reconstruction accuracy
+for one electrode in the dataset. \textbf{B.~Statistical summary of
+across-patient reconstruction accuracy by electrode for each frequency band in
+Dataset 1.} In the upper triangles of each map, warmer colors (positive
+$t$-values) indicate that the reconstruction accuracy for the frequency band in
+the given row was greater (via a two-tailed paired-sample $t$-test) than for the
+frequency band in the given column. Cooler colors (negative $t$-values) indicate
+that reconstruction accuracy for the frequency band in the given row was lower
+than for the frequency band in the given column. The lower triangles of each map
+denote the corresponding $p$-values for the $t$-tests. The diagonal entries
+display the average reconstruction accuracy within each frequency band.
+\textbf{C.~Statistical summary of within-patient reconstruction accuracy by
+electrode for each frequency band in Dataset 1.} This panel displays the
+within-patient statistical summary, in the same format as Panel B.
+\textbf{D.~Distributions of correlations between observed versus reconstructed
+activity by electrode, for each frequency band in Dataset 2.} This panel
+displays reconstruction accuracy distributions for each frequency band for
+Dataset 2. \textbf{E.--F.~Statistical summaries of across-patient and
+within-patient reconstruction accuracy by electrode for each frequency band in
+Dataset 2.} These panels are in the same as Panels B and C, but display results
+from Dataset 2.}
 \label{fig:supplemental_4}
 \end{figure}
 
+
 \begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{figs/supplemental_5}
-\caption{\textbf{Most informative electrode locations by frequency
-      and the networks involved.}
-    \textbf{A.~Intersections across datasets for each frequency.}  Same format as Figure~6A, but
-    using power at each frequency.
-    \textbf{B.~Proportion of networks in most informative electrode locations by
-    frequency.}  Pie graphs display the proportion of the 7 networks
-  ~\citep{YeoEtal11} in the most informative locations by
-  frequency, and are sized relative to the average reconstruction
-  accuracy for each frequency. \textbf{C.~Terms associated with most informative
-    electrode locations.}  The
-    lists of terms display the top five Neurosynth
-    terms~\citep{RubiEtal17} decoded from the corresponding brain
-    maps, and colored according the frequency (see Panel
-    E legend). \textbf{D.~Network parcellation from~\citep{YeoEtal11}.}
-    Seven network parcellation as described
-    in~\citep{YeoEtal11}. \textbf{E.~Most informative locations by
-      frequency.} The inflated brain plot displays the locations of
-    the most informative locations (Panel A), colored by frequency,
-    and projected onto the cortical surface~\citep{CombEtal19}.}
+\centering \includegraphics[width=\textwidth]{figs/supplemental_5}
+\caption{\textbf{Most informative recording locations by frequency band.} This
+figure is analogous to Figure~\infomapfreqs in the main text, but displays the
+brain regions that were most informative about the \textit{power} in each
+frequency band (whereas Fig.~\infomapfreqs displays the regions that were most
+informative about the bandpass-filtered voltages within each band).
+\textbf{A.~Intersections between information score maps by frequency band.} The
+regions indicated in each row depict the intersection between the top 10\% most
+informative locations across Datasets 1 and 2.  \textbf{B.~Network memberships
+of the most informative brain regions.}  The pie charts display the proportions
+of voxels in each region that belong to the seven networks identified by
+\cite{YeoEtal11}.  The relative sizes of the charts for each frequency band
+reflect the average across-subject reconstruction accuracies
+(Figs.~\ref{fig:frequency}A, D).  The voxels in Panel A are colored according to
+the same network memberships.  \textbf{C.~Neurosynth terms associated with the
+most informative brain regions, by frequency band.}  The lists in each row
+display the top five neurosynth terms~\citep{RubiEtal17} decoded for each
+region.  \textbf{D.~Network parcellation map and legend.}  The parcellation
+defined by \cite{YeoEtal11} is displayed on the inflated brain maps.  The colors
+and network labels serve as a legend for Panels A and B. \textbf{E.~Combined map
+of the most informative brain regions.}  The map displays the union of the most
+informative maps in Panel A, colored by frequency band.  The labels also serve
+as a legend for Panel C.}
 \label{fig:supplemental_5}
 \end{figure}
 
 \begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{figs/supplemental_6}
-\caption{\textbf{Reconstruction accuracy versus within-subject data
-    features for two ECoG datasets.} \textbf{A.--F.  Features from
-    Dataset 1.}  Features include: (\textbf{A.}) total number of
-  electrodes implanted in each patient's brain, (\textbf{B.})
-  per-patient number of electrodes that were filtered out due to
-  having an maximum kurtosis greater than 10 across all recording
-  sessions, (\textbf{C.})  per-patient proportion of electrodes that
-  were filtered out due to having an average kurtosis greater than 10,
-  (\textbf{D.})  per-patient number of recording sessions,
-  (\textbf{E.}) per-patient total recording time (h), and
-  (\textbf{F.}) per-patient average session length (h).
-  \textbf{G.--L. Features from Dataset 2.}  Analogous format to Panels
-  A--F.}
+\centering \includegraphics[width=\textwidth]{figs/supplemental_6}
+\caption{\textbf{Reconstruction accuracy versus within-subject data features for
+two ECoG datasets.} The individual dots in each panel  reflect data from one
+patient.  The least-squares linear regression lines (with shaded 95\% confidence
+intervals) and the correlations reported in each panel are between the data
+shown on the $x$- and $y$-axes of the panel.  The $y$-axis in each panel
+denotes the average $z$-transformed correlation between the observed and
+predicted voltage timeseries at each electrode (across all of the patient's
+electrodes). The cross-validated predictions were obtained using the
+across-patient model (Fig.~\corrmaps A and B, black histograms).  \textbf{A.--F.
+Dataset 1.}  \textbf{A. Total electrodes.}  The $x$-coordinates of each dot
+display the total number of electrodes implanted in each patient's brain.
+\textbf{B. Number thresholded.}  The $x$-coordinates of each dot display the
+number of implanted electrodes that survived the kurtosis-based filtering
+procedure (see \textit{Approach}).  \textbf{C. Proportion thresholded.} The
+$x$-coordinates of each dot display the \textit{proportion} of each patient's
+implanted electrodes (relative to the total number) that survived the
+kurtosis-based filtering procedure.  \textbf{D. Sessions.}  The $x$-coordinates of each dot display the
+number of distinct recording sessions contributed by each patient.  \textbf{E. Total time.} The $x$-coordinates of each dot display the
+total duration (in hours) of each patient's recordings, across all of their recording sessions.  \textbf{F. Average session length.} The $x$-coordinates of each dot display average duration (in hours) of the patient's recording sessions.
+  \textbf{G.--L. Features from Dataset 2.}  These panels display analogous information to Panels A--F, but for Dataset 2 patients.}
 \label{fig:supplemental_6}
 \end{figure}
 
+%JRM STOPPED HERE
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figs/supplemental_7}
