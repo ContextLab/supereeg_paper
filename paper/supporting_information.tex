@@ -215,33 +215,63 @@ total duration (in hours) of each patient's recordings, across all of their reco
 %JRM STOPPED HERE
 \begin{figure}[p]
 \centering \includegraphics[width=\textwidth]{figs/supplemental_7}
-\caption{\textbf{Temporal stability of estimated patient-specific correlation
-matrices.}  For each patient $s$, we computed their patient-specific correlation
-matrix ($C_s$) using two different subsets of their recorded data.  We
-correlated the upper triangles of these estimates of $C_s$ to obtain a single
-correlation for each participant, reflecting how stable (in time) the estimates
-were.  We computed this stability measure, for each patient, as a function of
-how much data was used to estimate each $C_s$ (expressed as a proportion of the
-patient's total dataset, as in Panels \textbf{A} and \textbf{C}; or as the total duration of the
-patient's recordings, as in Panels \textbf{B} and \textbf{D}).  We also varied how the timepoints
-that went into each estimate were related. Specifically, we first concatenated the data from each patient's recording sessions to
-construct a single data timeseries (ignoring session boundaries) for each patient.  We then constructed two
-estimates of $C_s$ by drawing each patient's data from two equally sized sets of timepoints chosen from their multi-session data matrix.
-The timepoints were drawn either at \textit{random} without replacement (teal lines); from equally sized timespans at the start and end of the multi-session data matrix (\textit{apart}, blue lines); or from two equally sized timespans just prior to and just after the data midpoint (\textit{close}, purple lines).  Panels A and B display the resulting correlations for Dataset 1, and panels C and D display the correlations for Dataset 2.
-Error ribbons in all panels denote 95\% confidence intervals (computed across patients).}
+\caption{\textbf{Temporal stability of estimated patient-specific
+    correlation matrices.}  For each patient $s$, we computed their
+  patient-specific correlation matrix ($C_s$) using two different
+  subsets of their recorded data.  We correlated the upper triangles
+  of these estimates of $C_s$ to obtain a single correlation for each
+  participant, reflecting how stable (in time) the estimates were.  We
+  computed this stability measure, for each patient, as a function of
+  how much data was used to estimate each $C_s$ (expressed as a
+  proportion of the patient's total dataset, as in Panels \textbf{A}
+  and \textbf{C}; or as the total duration of the patient's
+  recordings, as in Panels \textbf{B} and \textbf{D}).  We also varied
+  how the timepoints that went into each estimate were
+  related. Specifically, we first concatenated the data from each
+  patient's recording sessions to construct a single data timeseries
+  (ignoring session boundaries) for each patient.  We then constructed
+  two estimates of $C_s$ by drawing each patient's data from two
+  equally sized sets of $t$ timepoints chosen from their multi-session
+  data matrix.  These timepoints were drawn either at \textit{random}
+  without replacement (teal lines); from equally sized timespans at
+  the start and end of the multi-session data matrix (\textit{apart},
+  blue lines); or from two equally sized timespans just prior to and
+  just after the data midpoint (\textit{close}, purple lines).  For
+  the random condition of this analysis, as we increased $t$, we
+  ensured that all of the timepoints included in the analysis for
+  smaller values of $t$ were also included in the analyses for larger
+  values of $t$.  For example, the randomly drawn timepoints for
+  $t = 2000$ included the same timepoints drawn for $t = 1000$, plus
+  an additional 1000 new timepoints.  Panels A and B display the
+  resulting correlations for Dataset 1, and panels C and D display the
+  correlations for Dataset 2.  Error ribbons in all panels denote 95\%
+  confidence intervals (computed across patients).}
 \label{fig:supplemental_7}
 \end{figure}
 
 \begin{figure}[p]
 \centering \includegraphics[width=\textwidth]{figs/supplemental_8}
-\caption{\textbf{Stability of full-brain correlation matrices across patients.}
-We estimated full-brain correlation matrices ($\bar{K}$) using different subsets
-of patients from each dataset. We explored how stable these estimates were as a
-function of how many patients were used to compute $\bar{K}$. For each sample
-size $n$ (number of patients), we drew two non-overlapping sets of $n$ patients
-(without replacement) from the full set of patients in each dataset. We then estimated $\bar{K}$ using the two sets of $n$ patients.  We computed the correlation between the upper triangles of these matrices as a measure of how similar the matrices were.  We repeated this procedure 500 times for each value of $n$ (ranging from 1 up to $\frac{1}{2}$ of the total number of patients in the given dataset); this yielded a distribution of correlation coefficients for each value of $n$.  Panels \textbf{A} and \textbf{C} display the mean correlations as a function of $n$ for Datasets 1 and 2, respectively.  The error ribbons denote 95\% confidence intervals (computed across iterations).  Panels \textbf{B} and \textbf{D} display
-the standard error of the mean (SEM) of these distributions of correlations as a function of $n$, for Datasets 1 and 2, respectively.  The error ribbons
-denote bootstrap-derived 95\% confidence intervals.}
+\caption{\textbf{Stability of full-brain correlation matrices across
+    patients.}  We estimated full-brain correlation matrices
+  ($\bar{K}$) using different subsets of patients from each
+  dataset. We explored how stable these estimates were as a function
+  of how many patients were used to compute $\bar{K}$. For each sample
+  size $n$ (number of patients), we drew two non-overlapping sets of
+  $n$ patients (without replacement) from the full set of patients in
+  each dataset. We then estimated $\bar{K}$ using the two sets of $n$
+  patients.  We computed the correlation between the upper triangles
+  of these matrices as a measure of how similar the matrices were.  We
+  repeated this procedure 500 times for each value of $n$ (ranging
+  from 1 up to $\frac{1}{2}$ of the total number of patients in the
+  given dataset); this yielded a distribution of correlation
+  coefficients for each value of $n$.  Panels \textbf{A} and
+  \textbf{C} display the mean correlations as a function of $n$ for
+  Datasets 1 and 2, respectively.  The error ribbons denote 95\%
+  confidence intervals (computed across iterations).  Panels
+  \textbf{B} and \textbf{D} display the standard error of the mean
+  (SEM) of these distributions of correlations as a function of $n$,
+  for Datasets 1 and 2, respectively.  The error ribbons denote
+  bootstrap-derived 95\% confidence intervals.}
 \label{fig:supplemental_8}
 \end{figure}
 
