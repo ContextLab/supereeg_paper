@@ -193,11 +193,11 @@ information about both datasets.
   cluster (computed using the full-brain correlation model shown in Panel D).
   \textbf{B.~Radial basis function kernel.} Each electrode contributed by the
   patient (black) weights on the full set of locations under consideration (all
-  dots in Panel A, defined as $\bar{R}$ in the text).  The weights fall off with
+  dots in Panel A, defined as $\overline{R}$ in the text).  The weights fall off with
   positional distance (in MNI152 space) according to an RBF. \textbf{C.~Per-patient
   correlation matrices.}  After computing the pairwise correlations between the
   recordings from each patient's electrodes, we use RBF-weighted averages to
-  estimate correlations between all locations in $\bar{R}$.  We obtain an
+  estimate correlations between all locations in $\overline{R}$.  We obtain an
   estimated full-brain correlation matrix using each patient's data.
   \textbf{D.~Merged correlation model.}  We combine the per-patient correlation
   matrices (Panel C) to obtain a single full-brain correlation model that
@@ -269,17 +269,17 @@ $\eta$ is through (direct or indirect) anatomical connections between structures
 near $x$ and $\eta$.  Although anatomical and functional correlations can differ
 markedly~\citep[e.g.,][]{AdacEtal12, HoneEtal09, GoniEtal14}, we use temporal
 correlations in the data to estimate these anatomical
-connections~\citep{BeckEtal18}.  Let $\bar{R}$ be the set of locations at which
-we wish to estimate local field potentials, and let $R_{s} \subseteq \bar{R}$ be
+connections~\citep{BeckEtal18}.  Let $\overline{R}$ be the set of locations at which
+we wish to estimate local field potentials, and let $R_{s} \subseteq \overline{R}$ be
 set of locations at which we observe local field potentials from patient $s$
 (excluding the electrodes that did not pass the kurtosis test described above).
-In the analyses below we define $\bar{R} = \cup_{s=1}^S R_s$.  We can calculate
+In the analyses below we define $\overline{R} = \cup_{s=1}^S R_s$.  We can calculate
 the expected inter-electrode correlation matrix for patient $s$, where
 $C_{s,k}(i,j)$ is the correlation between the time series of voltages for
 electrodes $i$ and $j$ from subject $s$ during session $k$, using:
 
 \begin{align}
-  \bar{C}_{s} &=
+  \overline{C}_{s} &=
   \mathrm{r}\left(\frac{1}{n}\left(\sum_{k=1}^{n}\mathrm{z}(C_{s,k})\right)\right),\label{eqn:inter_corr}~\mathrm{where}\\
   \mathrm{z}(r) &= \frac{\log(1+r) - \log(1 - r)}{2}~\mathrm{is~the~Fisher}~z
   \mathrm{-transformation~and}\label{eqn:fishersz}\\ \mathrm{z}^{-1}(z) =
@@ -288,7 +288,7 @@ electrodes $i$ and $j$ from subject $s$ during session $k$, using:
   Equation~\ref{eqn:rbf} to construct a number of to-be-estimated locations by
   number of patient electrode locations weight matrix, $W_s$.  Specifically,
   $W_s$ approximates how informative the recordings at each location in $R_s$
-  are in reconstructing activity at each location in $\bar{R}$, where the
+  are in reconstructing activity at each location in $\overline{R}$, where the
   contributions fall off with an RBF according to the distances between the
   corresponding locations:
 
@@ -297,11 +297,11 @@ W_s(i, j) = \mathrm{rbf}(i|j,\lambda)\label{eqn:weight_matrix}.
 \end{align}
 
 Given this weight matrix, $W_s$, and the observed inter-electrode correlation
-matrix for patient $s$, $\bar{C}_{s}$, we can estimate the correlation matrix
-for all locations in $\bar{R}$ ($\hat{C}_s$; Fig.~\ref{fig:methods}C) using:
+matrix for patient $s$, $\overline{C}_{s}$, we can estimate the correlation matrix
+for all locations in $\overline{R}$ ($\hat{C}_s$; Fig.~\ref{fig:methods}C) using:
 
 \begin{align}
-\hat{N}_{s}(x,y) & = { \sum_{i = 1}^{| R_{s}|}\sum_{j=1}^{i-1} W(x,i) \cdot W(y,j)\cdot \mathrm{z}(\bar{C}_{s}(i,j))}\label{eqn:subj_corrmat_num}\\
+\hat{N}_{s}(x,y) & = { \sum_{i = 1}^{| R_{s}|}\sum_{j=1}^{i-1} W(x,i) \cdot W(y,j)\cdot \mathrm{z}(\overline{C}_{s}(i,j))}\label{eqn:subj_corrmat_num}\\
  \hat{D}_{s}(x,y) & = \sum_{i = 1}^{| R_{s}|}\sum_{j=1}^{i-1} W(x,i)
                     \cdot W(y,j). \label{eqn:subj_corrmat_den}\\
  \hat{C}_s &= \mathrm{r}\left( \frac{\hat{N}_{s}}{\hat{D}_{s}} \right)
@@ -324,15 +324,15 @@ particular set of locations in $\hat{K}$ contribute more to the
 estimate.
 
 Having used the multi-patient data to estimate a full-brain correlation matrix
-at the set of locations in $\bar{R}$ that we wish to know about, we next use
-$\hat{K}$ to estimate activity patterns everywhere in $\bar{R}$, given
-observations at only a subset of locations in $\bar{R}$
+at the set of locations in $\overline{R}$ that we wish to know about, we next use
+$\hat{K}$ to estimate activity patterns everywhere in $\overline{R}$, given
+observations at only a subset of locations in $\overline{R}$
 (Fig.~\ref{fig:methods}E).
 
 Let $\alpha_s$ be the set of indices of patient $s$'s electrode locations in
-$\bar{R}$ (i.e., the locations in $R_s$), and let $\beta_s$ be the set of
-indices of all other locations in $\bar{R}$. In other words, $\beta_s$ reflects
-the locations in $\bar{R}$ where we did not observe a recording for patient $s$
+$\overline{R}$ (i.e., the locations in $R_s$), and let $\beta_s$ be the set of
+indices of all other locations in $\overline{R}$. In other words, $\beta_s$ reflects
+the locations in $\overline{R}$ where we did not observe a recording for patient $s$
 (these are the recording locations we will want to fill in using SuperEEG). We
 can sub-divide $\hat{K}$ as follows:
 
@@ -361,7 +361,7 @@ Equation~\ref{eqn:reconstruction} allows us to estimate the recordings
 at all locations indexed by $\beta_s$, which we can define \textit{a priori}
 to include any locations we wish, throughout the brain.  This yields
 estimates of the time-varying voltages at \textit{every} location in
-$\bar{R}$, provided that we define $\bar{R}$ in advance to include the
+$\overline{R}$, provided that we define $\overline{R}$ in advance to include the
 union of all of the locations in $R_s$ and all of the locations
 at which we wish to estimate recordings (i.e., a timeseries of
 voltages).
@@ -382,7 +382,7 @@ at a time (using the corresponding samples from $Y_{s, k, \alpha_s}$).
 
 The SuperEEG algorithm described above and in Figure~\ref{fig:methods} allows us
 to estimate, up to a constant scaling factor, local field potentials (LFPs) for
-each patient at all arbitrarily chosen locations in the set $\bar{R}$,
+each patient at all arbitrarily chosen locations in the set $\overline{R}$,
 \textit{even if we did not record that patient's brain at all of those
 locations}.  We next turn to an evaluation of the accuracy of those estimates.
 
@@ -407,9 +407,9 @@ We used this general approach to quantify the algorithm's performance across the
 full dataset. For each held-out electrode, from each held-out patient in turn,
 we computed the average correlation (across recording sessions) between the
 SuperEEG-reconstructed voltage traces and the observed voltage traces from that
-electrode.  For this analysis we set $\bar{R}$ to be the union of all electrode
+electrode.  For this analysis we set $\overline{R}$ to be the union of all electrode
 locations across all patients.  This yielded a single correlation coefficient
-for each electrode location in $\bar{R}$, reflecting how well the SuperEEG
+for each electrode location in $\overline{R}$, reflecting how well the SuperEEG
 algorithm was able to recover the recording at that location by incorporating
 data across patients (black histogram in Fig.~\ref{fig:corrmap}A, map in
 Fig.~\ref{fig:corrmap}C).  The observed distribution of correlations was
