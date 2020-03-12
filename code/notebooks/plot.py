@@ -835,8 +835,8 @@ def plot_split_barplot_colors(df, X, Y, H, x_order, hue_order, left_colors, righ
         axes[e].spines['bottom'].set_visible(False)
 
         z_df = df_temp.copy(deep=True)
-        z_df[Y] = r2z(z_df[Y])
-        yposlist = z2r(z_df.groupby([X, H])[Y].mean())
+        z_df[Y] = r2z(z_df[Y] + offset)
+        yposlist = z2r(z_df.groupby([X, H])[Y].mean()) - offset
         xposlist = range(1)
 
         locs,labels = plt.yticks()
