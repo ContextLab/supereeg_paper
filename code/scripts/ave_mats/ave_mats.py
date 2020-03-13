@@ -5,21 +5,16 @@ import sys
 import os
 from config import config
 
+freq = sys.argv[1]
 
+model_dir = os.path.join(config['datadir'])
 
-model_template = sys.argv[1]
+results_dir = config['resultsdir']
+model_dir = config['datadir']
 
-radius = sys.argv[2]
-
-vox_size = sys.argv[3]
-
-if model_template == 'pyFR_union':
-    model_dir = os.path.join(config['datadir'],  model_template +"_" + vox_size)
-
-else:
-    model_dir = os.path.join(config['datadir'], model_template + "_" + vox_size)
-
-results_dir = os.path.join(config['resultsdir'],  model_template +"_"+ vox_size)
+if os.path.exists(os.path.join(results_dir, 'ave_mat_' + freq)):
+    print('ave mat already exists')
+    exit()
 
 try:
     if not os.path.exists(results_dir):
@@ -27,8 +22,17 @@ try:
 except OSError as err:
    print(err)
 
-mos =glob.glob(os.path.join(model_dir, '*.mo'))
+mos = glob.glob(os.path.join(model_dir, '*' + freq + '.mo'))
+
+if freq == 'raw':
+    freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
+    mos = set(glob.glob(os.path.join(model_dir, '*')))
+    for fre in freqnames:
+        mos -= set(glob.glob(os.path.join(model_dir, '*' + fre + '*')))
+    mos = list(mos)
+
+print(len(mos))
 
 mo = se.Model(mos, n_subs=len(mos))
 
-mo.save(os.path.join(results_dir, 'ave_mat'))
+mo.save(os.path.join(results_dir, 'ave_mat_' + freq))

@@ -314,20 +314,23 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
             transform=ax.transAxes, fontsize=40)
 
     if legend:
-        leg = ax.legend(['Within', 'Across'], fontsize=50, loc='upper left')
+        leg = ax.legend(['Across', 'Within'], fontsize=50, loc='upper left')
         LH = leg.legendHandles
-        LH[1].set_color('k')
+        LH[0].set_color('k')
+        LH[0].set_alpha(1)
+        LH[1].set_color('lightgray')
         LH[1].set_alpha(1)
 
     ylim = ax.get_ylim()[1]
     m1, n1 = [z2r(df[X]).mean(), z2r(df[Y]).mean()], [ylim, ylim]
     plt.plot(m1, n1, marker = '|', mew=4, markersize=20, color='k', linewidth=4)
     a1 = (z2r(df[X]).mean() + z2r(df[Y]).mean()) /2
-    ax.plot(a1, ylim + .1, marker = '*', markersize=20, color='k')
+    #ax.plot(a1, ylim + .1, marker = '*', markersize=20, color='k')
     ax.tick_params(axis='x', labelsize=40)
     ax.tick_params(axis='y', labelsize=40)
     ax.set_ylabel('Proportion \n of electrodes', fontsize=50)
-
+    
+    ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.2f'))
     ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
     ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=9))
 
@@ -354,7 +357,7 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
     print('t test: ')
     print(t_stat_group)
 
-def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None):
+def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None, save_nii=None):
     nii = se.load('std', vox_size=vox_size)
     full_locs = nii.get_locs().values
     W = np.exp(_log_rbf(full_locs, locs, width=width))
@@ -364,6 +367,9 @@ def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None):
     ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=1, vmin=0)
     #ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=1, vmin=0, display_mode='lyrz')
 
+    if save_nii:
+        nii_bo.save(save_nii)
+        
     if not outfile is None:
         plt.savefig(outfile)
     else:
@@ -416,7 +422,7 @@ def density_by_voxel(locs, r=20, vox_size=4):
 
     return density_locs
 
-def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None):
+def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None, save_nii=None):
 
     sub_nii = se.load('std', vox_size=4)
     sub_locs = sub_nii.get_locs().values
@@ -430,6 +436,10 @@ def density_by_voxel_plot(locs, r=20, vox_size=4, outfile=None):
     bo_nii = se.Brain(data=np.atleast_2d(density_locs), locs=sub_locs)
     nii_bo = se.helpers._brain_to_nifti(bo_nii, sub_nii)
     ni_plt.plot_glass_brain(nii_bo, colorbar=True, threshold=None, vmax=.1, vmin=0, display_mode='lyrz')
+    
+    if save_nii:
+        nii_bo.save(save_nii)
+        
     if not outfile is None:
         plt.savefig(outfile)
     else:
@@ -509,7 +519,7 @@ def most_informative_locs_plot(df, vox_size=5, width=10, outfile=None):
 def most_informative_locs(df, vox_size=5, width=10):
 
     locs = compile_df_locs(df['R'])
-
+    #locs = df['R']
     sub_nii = se.load('std', vox_size=vox_size)
     sub_locs = sub_nii.get_locs().values
 
@@ -690,3 +700,215 @@ def plot_contour(dataframe, X, Y, title=None, outfile=None):
     plt.tight_layout()
     if outfile:
         plt.savefig(outfile)
+
+def plot_split_violin_colors(df, X, Y, H, x_order, hue_order, left_colors, right_colors, latex_x=None, outfile=None):
+    
+    """
+    X, Y, H :  names of variables in df
+        Inputs for plotting long-form data
+        
+    df :  DataFrame
+        Longform dataframe 
+    
+    hue_order : lists of strings
+        Order to plot the categorical hue variable
+        
+    x_order : lists of strings
+        Order to plot the categorical x variable
+        
+    left_colors, right_colors : RGB or RGBA tuple of float values 
+        RGB values
+    
+    outfile : string
+        Save file
+
+    """
+    
+
+    fig, axes = plt.subplots(1, len(x_order), figsize=(30, 16), sharey='all')
+
+
+    for e, freq in enumerate(x_order):
+
+        #freq_df = pd.read_csv(os.path.join(freq_dir, freq + '.csv'), index_col=0)
+        df_temp = df[df[X]==freq]
+
+        plt.ylim(-1,1.2)
+        sns.violinplot(x=X, y=Y, hue=H, ylim=[-1,1], data=df_temp, 
+                       palette={hue_order[0]: left_colors[e], hue_order[1]: right_colors[e]}, split=True, ax=axes[e])
+        axes[e].legend().set_visible(False)
+        axes[e].tick_params(axis='x', labelsize=30)
+        if latex_x: 
+            axes[e].set_xticklabels([latex_x[e]])
+        else:
+            axes[e].set_xticklabels([freq])
+        axes[e].set_xlabel('')
+        axes[e].set_ylabel('')
+        if e ==0:
+            axes[e].tick_params(top='off', bottom='off', left='off', right='off', labelleft='on', labelbottom='on')
+        else:
+            axes[e].tick_params(top='off', bottom='off', left='off', right='off', labelleft='off', labelbottom='on')
+        axes[e].spines['right'].set_visible(False)
+        axes[e].spines['left'].set_visible(False)
+        axes[e].spines['top'].set_visible(False)
+        axes[e].spines['bottom'].set_visible(False)
+
+        z_df = df.copy(deep=True)
+        z_df[Y] = r2z(z_df[Y])
+        yposlist = z2r(z_df.groupby([X, H])[Y].mean())
+        xposlist = range(1)
+
+#         c = 0
+#         for i in range(len(yposlist)):
+
+#             if (i%2) == 0:
+#                 axes[e].text(c-.13, yposlist[i], np.round(yposlist[i],2), fontsize=14, color='k')
+#             else:
+#                 axes[e].text(c+.05, yposlist[i], np.round(yposlist[i],2) , fontsize=14, color='k')
+#                 c +=1
+                
+    axes[0].tick_params(axis='y', which='both', length=0, labelsize=18)
+    axes[0].set_ylabel(Y, fontsize=30)
+    plt.tight_layout()
+
+    if outfile:
+        plt.savefig(outfile)
+        
+
+def plot_split_barplot_colors(df, X, Y, H, x_order, hue_order, left_colors, right_colors, latex_x=None, outfile=None):
+    
+    """
+    X, Y, H :  names of variables in df
+        Inputs for plotting long-form data
+        
+    df :  DataFrame
+        Longform dataframe 
+    
+    hue_order : lists of strings
+        Order to plot the categorical hue variable
+        
+    x_order : lists of strings
+        Order to plot the categorical x variable
+        
+    left_colors, right_colors : RGB or RGBA tuple of float values 
+        RGB values
+    
+    outfile : string
+        Save file
+
+    """
+    
+    sns.set(style="white")
+
+    fig, axes = plt.subplots(1, len(x_order), figsize=(13, 8), sharey='all')
+
+
+    for e, freq in enumerate(x_order):
+        
+        #freq_df = pd.read_csv(os.path.join(freq_dir, freq + '.csv'), index_col=0)
+        df_temp = df[df[X]==freq]
+        #offset = long_form_freq['Correlation'].min()
+        offset = -.2
+        df_temp['Correlation'] = df_temp['Correlation'] - offset
+        sns.barplot(x=X, y=Y, hue=H, data=df_temp, linewidth=6, alpha=1, facecolor=(1, 1, 1, 0), 
+                    errcolor=left_colors[e], edgecolor=left_colors[e], palette={hue_order[0]: left_colors[e], hue_order[1]: right_colors[e]}, ax=axes[e])
+        sns.stripplot(x=X, y=Y, hue=H, data=df_temp, jitter=.4, split=True, alpha=.15,
+                    palette={hue_order[0]: left_colors[e], hue_order[1]: right_colors[e]}, ax=axes[e])
+
+        axes[e].legend().set_visible(False)
+        axes[e].tick_params(axis='x', labelsize=27)
+        axes[e].tick_params(axis='y', labelsize=27)
+        if latex_x: 
+            axes[e].set_xticklabels([latex_x[e]])
+        else:
+            axes[e].set_xticklabels([freq])
+        axes[e].set_xlabel('')
+        axes[e].set_ylabel('')
+        if e ==0:
+            axes[e].tick_params(top='off', bottom='off', left='off', right='off', labelleft='on', labelbottom='on')
+            
+        else:
+            axes[e].tick_params(top='off', bottom='off', left='off', right='off', labelleft='off', labelbottom='on')
+        axes[e].spines['right'].set_visible(False)
+        axes[e].spines['left'].set_visible(False)
+        axes[e].spines['top'].set_visible(False)
+        axes[e].spines['bottom'].set_visible(False)
+
+        z_df = df_temp.copy(deep=True)
+        z_df[Y] = r2z(z_df[Y] + offset)
+        yposlist = z2r(z_df.groupby([X, H])[Y].mean()) - offset
+        xposlist = range(1)
+
+        locs,labels = plt.yticks()
+
+        plt.yticks(locs, map(lambda y: "%.1f" % y, locs + offset))
+
+    axes[0].tick_params(axis='y', which='both', length=0, labelsize=27)
+    axes[0].set_ylabel(Y, fontsize=27)
+    axes[0].set(ylim=(-.05, 1.2))
+    plt.tight_layout()
+
+    if outfile:
+        plt.savefig(outfile)
+        
+        
+def plot_ridges(df, X, H, hue_solid, hue_transparent, palette, outfile=None):
+    
+    """
+    X, H :  names of variables in df
+        Inputs for plotting wide-form data
+        
+    df :  DataFrame
+        Longform dataframe 
+    
+    hue_solid, hue_transparent : strings
+        How to plot the categorical hue variable
+        
+        
+    left_colors, right_colors : RGB or RGBA tuple of float values 
+        RGB values
+    
+    outfile : string
+        Save file
+
+    """
+    
+    sns.set(style="white", rc={"axes.facecolor": (0, 0, 0, 0)})
+
+
+    g = sns.FacetGrid(df, row=H, hue=H, aspect=10, height=.99, palette=palette)
+
+    # Draw the densities in a few steps
+    g.map(sns.kdeplot, hue_solid, clip_on=True, shade=True, alpha=1, lw=1.5, bw=.2)
+    g.map(sns.kdeplot, hue_solid, clip_on=True, lw=2, bw=.2)
+    g.map(sns.kdeplot, hue_transparent, clip_on=True, shade=True, alpha=.2, lw=1.5, bw=.2)
+    g.map(sns.kdeplot, hue_transparent, clip_on=True, color="w", lw=2, bw=.2)
+    g.map(plt.axhline, y=0, lw=2, clip_on=True)
+
+    first_freq = df[H].unique()[0]
+    yposlist = z2r(df.groupby([H])[hue_solid].mean()[first_freq])
+
+    g.map(plt.axvline, x=yposlist, lw=2, color="k", clip_on=False)
+
+    # Define and use a simple function to label the plot in axes coordinates
+    def label(x, color, label):
+        ax = plt.gca()
+        ax.text(0, .2, label, fontweight="bold", color=color,
+                ha="left", va="center", transform=ax.transAxes)
+
+
+    g.map(label, hue_solid)
+    g.set(xlim=(-.5,1.2))
+    # Set the subplots to overlap
+    g.fig.subplots_adjust(hspace=-.15)
+
+    # Remove axes details that don't play well with overlap
+    g.set_titles("")
+    g.set(yticks=[])
+    g.set(xticks=[-.2, 0.0, .2, .4, .6, .8, 1.0])
+    plt.xlabel(X, fontsize=16)
+    g.despine(bottom=True, left=True)
+    if outfile:
+        plt.savefig(outfile)
+        
+        

@@ -1,6 +1,6 @@
 # supereeg_paper
 
-##To run pyFR analysis:
+## To run pyFR analysis:
 
 ## 1: file_io:
 - converts patient data from npz to brain objects and resample data to 250 Hz

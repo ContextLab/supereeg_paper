@@ -1,3 +1,8 @@
+*.fdb_latexmk
+*.fls
+paper/supporting_information.pdf
+paper/main.pdf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -111,8 +116,19 @@ ENV/
 *.synctex.gz
 
 *.#*
-
+data/niis
+paper/figs/source/networks/Yeo2011_17Networks_MNI152_FreeSurferConformed1mm_LiberalMask.nii
 paper/main.pdf
 paper/*.prv*
 paper/*.synctex*
 paper/_region_.tex
+
+*.npz
+*.bo
+
+./.vscode/
+.vscode/
+/.vscode/
+
+code/scripts/visbrain_plots
+best_locs/

@@ -19,20 +19,12 @@ except:
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ave_mats.py')
 
-# options for model: 'pyFR_union', 'example_model', 'gray'
+freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband', 'raw']
 
-model = str('pyFR_union')
-#model = str('example_model')
-
-radius = str('20')
-
-# options for vox_size: 5, 10, 20, 30
-vox_size =  str('6')
-
-job_commands = list(map(lambda x: x[0]+" " + model+" "+ radius+" "+ vox_size, zip([job_script]*1, range(1))))
+job_commands = list(map(lambda x: x[0]+" " + x[1], zip([job_script]*len(freqnames), freqnames)))
 # job_names should specify the file name of each script (as a list, of the same length as job_commands)
 
-job_names = list(map(lambda x: 'model_'+ model + "_"+ radius+'_'+ vox_size + '.sh', range(len(job_commands))))
+job_names = list(map(lambda x: 'model_' + str(x) + '.sh', range(len(job_commands))))
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 
 assert(len(job_commands) == len(job_names))
@@ -130,8 +122,8 @@ for n, c in zip(job_names, job_commands):
         if lock(next_lockfile):
             next_job = create_job(n, c)
 
-            if (socket.gethostname() == 'discovery.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
-                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; qsub'
+            if (socket.gethostname() == 'discovery7.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
+                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; mksub'
             else:
                 submit_command = 'echo "[RUNNING JOB: ' + next_job + ']"; sh'
 

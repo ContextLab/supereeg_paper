@@ -2,14 +2,18 @@
 
 # create a bunch of job scripts
 from config import config
-from subprocess import call
+from subprocess import call, run, PIPE
 import glob
 import os
 import socket
 import getpass
 import datetime as dt
 import supereeg as se
-from supereeg.helpers import filter_subj
+from supereeg.load import load
+import time
+import pandas as pd
+from supereeg.helpers import filter_subj as filtsub
+import numpy as np
 
 # ====== MODIFY ONLY THE CODE BETWEEN THESE LINES ======
 try:
@@ -17,27 +21,41 @@ try:
 except:
     os.makedirs(config['resultsdir'])
 
-
-def electrode_search(fname):
-    values = filter_subj(fname, return_locs=True)
-    if values is None:
-        return 0
-    else:
-        meta, locs = values
-        return locs.shape[0]
+def electrode_search(fname, threshold=10):
+    basefname = os.path.basename(fname)
+    freq = fname.split('_')[-1].split('.bo')[0]
+    og_fname = os.path.join(config['og_bodir'], basefname.split('_' + freq)[0] + '.bo')
+    if not freq in set(['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband', 'raw']):
+        og_fname = fname 
+    kurt_vals = se.load(og_fname, field='kurtosis')
+    thresh_bool = kurt_vals > threshold
+    return sum(~thresh_bool)
 
 
 # each job command should be formatted as a string
 job_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'recon.py')
 
-bos = ('BW001.bo', 'BW013.bo')
-files = list(map(lambda x: os.path.join(config['datadir'],x), bos))
+freqnames = ['delta', 'theta', 'alpha', 'beta', 'lgamma', 'hgamma', 'broadband']
+completed = []
+for freq in freqnames:
+    completed += glob.glob(os.path.join(config['resultsdir'], freq + '_recon', '*_within.npz'))
+
+
+completed = set(['_'.join(os.path.basename(os.path.splitext(f)[0]).split('_')[:-2]) for f in completed])
+
+all_files = set(glob.glob(os.path.join(config['datadir'],'*.bo')))
+
+files = all_files - completed
+
+# bos = ('BW001.bo', 'BW013.bo')file_
+# files = list(map(lambda x: os.path.join(config['datadir'],x), bos))
 #print(files)
-#files = glob.glob(os.path.join(config['datadir'],'*.bo'))
+files = glob.glob(os.path.join(config['datadir'],'*.bo')) + glob.glob(os.path.join(config['og_bodir'], '*.bo'))
 
 file_nums = [(a, i) for item, (a,b) in enumerate(zip(files, map(lambda e :electrode_search(e), files))) for i in range(b)]
 
-#file_nums =file_nums[0:12]
+print('num of remaining jobs: ' + str(len(file_nums)))
+
 # options for model: 'pyFR_union', 'example_model', 'gray'
 model = str('pyFR_union')
 
@@ -137,6 +155,7 @@ try:
 except:
     os.makedirs(config['startdir'])
 
+
 locks = list()
 for n, c in zip(job_names, job_commands):
     # if the submission script crashes before all jobs are submitted, the lockfile system ensures that only
@@ -148,11 +167,15 @@ for n, c in zip(job_names, job_commands):
             next_job = create_job(n, c)
 
             if (socket.gethostname() == 'discovery7.hpcc.dartmouth.edu') or (socket.gethostname() == 'ndoli.hpcc.dartmouth.edu'):
-                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; qsub'
+                # submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; mksub'
+                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; /optnfs/mkerberos/bin/mksub'
+                # submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; /usr/local/bin/qsub'
             else:
-                submit_command = 'echo "[RUNNING JOB: ' + next_job + ']"; sh'
+                # submit_command = 'echo "[RUNNING JOB: ' + next_job + ']"; sh'
+                submit_command = 'echo "[SUBMITTING JOB: ' + next_job + ']"; /optnfs/mkerberos/bin/mksub'
 
-            call(submit_command + " " + next_job, shell=True)
+            cp = run(submit_command + " " + next_job, shell=True, stdout=PIPE, universal_newlines=True)
+            run('echo \"' + cp.stdout + '\"', shell=True)
 
 # all jobs have been submitted; release all locks
 for l in locks:
