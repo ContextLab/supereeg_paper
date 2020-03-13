@@ -1,7 +1,7 @@
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL old.tex    Wed Mar 11 17:08:40 2020
-%DIF ADD main.tex   Thu Mar 12 22:13:38 2020
+%DIF ADD main.tex   Fri Mar 13 09:09:00 2020
 \usepackage[round,sort&compress]{natbib}
 \setcitestyle{aysep={}}
 \usepackage{newpxtext,newpxmath}
@@ -144,18 +144,19 @@ Boston, MA 02110\DIFaddbegin \DIFadd{, USA}\\
   We present a model-based method for inferring full-brain neural
   activity at millimeter-scale spatial resolutions and
   millisecond-scale temporal resolutions using standard human
-  intracranial recordings.  Our approach assumes that different
-  people's brains exhibit similar correlational structure, and that
-  activity and correlation patterns vary smoothly over space.  One can
-  then ask, for an arbitrary individual's brain: given recordings from
-  a limited set of locations in that individual's brain, along with
-  the observed spatial correlations learned from other people's
-  recordings, how much can be inferred about ongoing activity at
-  \textit{other} locations throughout that
-  individual's brain?  We show that our approach generalizes across
-  people and tasks, thereby providing a person- and task-general means
-  of inferring high spatiotemporal resolution full-brain neural
-  dynamics from standard low-density intracranial recordings.
+  intracranial recordings.  Our approach \DIFdelbegin \DIFdel{assumes }\DIFdelend \DIFaddbegin \DIFadd{makes the simplifying
+  assumptions }\DIFaddend that different people's brains exhibit similar
+  correlational structure, and that activity and correlation patterns
+  vary smoothly over space.  One can then ask, for an arbitrary
+  individual's brain: given recordings from a limited set of locations
+  in that individual's brain, along with the observed spatial
+  correlations learned from other people's recordings, how much can be
+  inferred about ongoing activity at \textit{other} locations
+  throughout that individual's brain?  We show that our approach
+  generalizes across people and tasks, thereby providing a person- and
+  task-general means of inferring high spatiotemporal resolution
+  full-brain neural dynamics from standard low-density intracranial
+  recordings.
   \\\\
   \footnotesize{\textbf{Keywords: Electrocorticography (ECoG),
       intracranial electroencephalography (iEEG), local field
@@ -742,7 +743,7 @@ potential;][]{BuzsEtal12, FrieEtal07, CronEtal11}}\hspace{0pt}%DIFAUXCMD
 .  For example, lower frequency
 components of the local field potential tend to have higher power and extend
 further in space than high-frequency components~\mbox{%DIFAUXCMD
-\citep[e.g., ][]{MillEtal07,
+\citep[e.g., ][]{MillEtal07a,
 MannEtal09}}\hspace{0pt}%DIFAUXCMD
 .  We wondered whether the reconstructions we observed might be
 differently weighting or considering the contributions of activity at different
@@ -1069,10 +1070,10 @@ representations that unfold over long timescales.
 \DIFadd{Taken together, the frequency-specific information maps suggest a potential new
 interpretation of many of the above previously reported findings.  Prior work
 has largely treated region-specific narrowband and broadband activity as an
-indictor that activity at those frequency ranges reflects that the given region
+indicator that activity at those frequency ranges reflects that the given region
 is representing or supporting a particular function.  Our work suggests an
 alternative interpretation that when we observe a particular neural pattern in a
-particular brain region, it may instead reflect how that region is is
+particular brain region, it may instead reflect how that region is 
 transmitting information to the rest of the brain via signalling at the given
 frequency range.
 }
@@ -1150,7 +1151,20 @@ that we were able to reconstruct full-brain patterns of broadband power well
 (Fig.~\ref{fig:frequency}).
 }\DIFaddend 
 
-Beyond providing a means of estimating ongoing activity throughout the brain
+\DIFaddbegin \DIFadd{A second potential limitation of our approach is that it relies on
+ECoG data from epilepsy patients.  Recent work comparing functional
+correlations in epilepsy patients (measured using ECoG) and healthy
+individuals (measured using fMRI) suggests that there are gross
+similarities between these populations~\mbox{%DIFAUXCMD
+\citep[e.g.,][]{ReddEtal18,
+  KucyEtal18}}\hspace{0pt}%DIFAUXCMD
+.  Nevertheless, because all of the patients we examined
+have drug-resistant epilepsy, it remains uncertain how generally the
+findings reported here might apply more broadly to the population at
+large (e.g., non-clinical populations).
+}
+
+\DIFaddend Beyond providing a means of estimating ongoing activity throughout the brain
 using \DIFdelbegin \DIFdel{already implanted }\DIFdelend \DIFaddbegin \DIFadd{already-implanted }\DIFaddend electrodes, our work also has implications \DIFdelbegin \DIFdel{for where to
 place the electrodes in the first place}\DIFdelend \DIFaddbegin \DIFadd{how to
 optimize electrode placements in neurosurgical evaluations}\DIFaddend . Electrodes are
@@ -1173,7 +1187,7 @@ different narrowband and broadband full-brain activity patterns.
 SuperEEG approach maps ECoG recordings from different patients into a common
 neural space, despite that different patients' electrodes were implanted in
 different locations. This feature of our approach enables across-patient ECoG
-studies, analogous to across-patient fMRI studies~\mbox{%DIFAUXCMD
+studies, analogous to across-subject fMRI studies~\mbox{%DIFAUXCMD
 \citep[e.g.,][]{HaxbEtal01,
 NormEtal06, HaxbEtal11}}\hspace{0pt}%DIFAUXCMD
 . Whereas the focus of this manuscript is to specifically
