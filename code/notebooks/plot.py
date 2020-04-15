@@ -357,6 +357,106 @@ def plot_2_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
     print('t test: ')
     print(t_stat_group)
 
+
+def plot_2r_histograms(df, X, Y, xticks=True, legend=True, outfile=None):
+
+    grouped_results = df.groupby('Subject')[Y, X].mean()
+    one_sided_t_across = stats.ttest_1samp(grouped_results[Y],  0)
+    one_sided_t_within = stats.ttest_1samp(grouped_results[X],  0)
+
+    print('one sided t test for across: ')
+    print(one_sided_t_across)
+
+
+    print('one sided t test for within: ')
+    print(one_sided_t_within)
+
+    t_stat_group = stats.ttest_rel(grouped_results[Y],grouped_results[X])
+
+    fig = plt.gcf()
+    fig.set_size_inches(18.5, 8.5)
+    fig.subplots_adjust(left=0.2, bottom=.2)
+    bin_values = np.arange(start=-1, stop=1, step=.01)
+
+
+    ax = sns.distplot(z2r(df[X]), hist=True, kde=True,
+             bins=bin_values, color = 'k',
+             hist_kws={'edgecolor':'lightgray', 'alpha':.3},
+             kde_kws={'linewidth': 4, 'alpha':1, 'color':'lightgray'})
+
+
+    ax = sns.distplot(z2r(df[Y]), hist=True, kde=True,
+             bins=bin_values, color = 'k',
+             hist_kws={'edgecolor':'k', 'alpha':.7},
+             kde_kws={'linewidth': 4, 'alpha':1, 'color':'k'})
+
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    left, width = .05, .5
+    bottom, height = .25, .5
+    n_count = len(df[Y].values)
+
+    ax.set_xlim(0, 1)
+
+    #ax.get_yaxis().set_major_formatter(mtick.FormatStrFormatter('%.1e'))
+
+    vals = ax.get_yticks()
+    ax.set_yticklabels([np.round(x/n_count*10000,2) for x in vals])
+    f = mtick.ScalarFormatter(useOffset=False, useMathText=True)
+    g = lambda x,pos : "${}$".format(f._formatSciNotation('%1.10e' % x))
+    fmt = mtick.FuncFormatter(g)
+
+    t_left, t_width = 0, .5
+    t_bottom, t_height = 1, .5
+    ax.text(t_left, t_bottom, 'x' + str(fmt(10**-4)),
+            horizontalalignment='left',
+            verticalalignment='bottom',
+            transform=ax.transAxes, fontsize=40)
+
+    if legend:
+        leg = ax.legend(['Across', 'Within'], fontsize=50, loc='upper right')
+        LH = leg.legendHandles
+        LH[0].set_color('k')
+        LH[0].set_alpha(1)
+        LH[1].set_color('lightgray')
+        LH[1].set_alpha(1)
+
+    ylim = ax.get_ylim()[1]
+    m1, n1 = [z2r(df[X]).mean(), z2r(df[Y]).mean()], [ylim, ylim]
+    plt.plot(m1, n1, marker = '|', mew=4, markersize=20, color='k', linewidth=4)
+    a1 = (z2r(df[X]).mean() + z2r(df[Y]).mean()) /2
+    #ax.plot(a1, ylim + .1, marker = '*', markersize=20, color='k')
+    ax.tick_params(axis='x', labelsize=40)
+    ax.tick_params(axis='y', labelsize=40)
+    ax.set_ylabel('Proportion \n of electrodes', fontsize=50)
+    
+    ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.2f'))
+    ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=5))
+    ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=9))
+
+    if not xticks:
+        plt.tick_params(
+            axis='x',          # changes apply to the x-axis
+            which='both',      # both major and minor ticks are affected
+            bottom=False,      # ticks along the bottom edge are off
+            top=False,         # ticks along the top edge are off
+            labelbottom=False)
+        ax.set_xlabel('')
+    else:
+        ax.set_xlabel('Coefficient of Determination"', fontsize=50)
+        for index, label in enumerate(ax.xaxis.get_ticklabels()):
+            if index % 2 == 0:
+                label.set_visible(False)
+    #plt.tight_layout()
+    bbox_inches='tight'
+
+
+    if outfile:
+        plt.savefig(outfile)
+
+    print('t test: ')
+    print(t_stat_group)
+    
 def interp_corr(locs, corrs, width=10, vox_size=10, outfile=None, save_nii=None):
     nii = se.load('std', vox_size=vox_size)
     full_locs = nii.get_locs().values
