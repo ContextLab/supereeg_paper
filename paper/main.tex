@@ -7,7 +7,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage[left]{lineno}
-\linenumbers
+%\linenumbers
 
 \topmargin 0.0cm
 \oddsidemargin 0.2cm
@@ -791,18 +791,8 @@ responses~\citep{SimoEtal16} and broadband ECoG patterns~\citep{HoneEtal12a} in
 these default-mode hubs have been implicated in processing context-dependent
 representations that unfold over long timescales.
 
-Taken together, the frequency-specific information maps suggest a potential new
-interpretation of many of the above previously reported findings.  Prior work
-has largely treated region-specific narrowband and broadband activity as an
-indicator that activity at those frequency ranges reflects that the given region
-is representing or supporting a particular function.  Our work suggests an
-alternative interpretation that when we observe a particular neural pattern in a
-particular brain region, it may instead reflect how that region is 
-transmitting information to the rest of the brain via signalling at the given
-frequency range.
 
-\section*{Discussion}
-Are our brain's networks static or dynamic?  And to what
+\section*{Discussion} Are our brain's networks static or dynamic?  And to what
 extent are the network properties of our brains stable across people and tasks?
 One body of work suggests that our brain's \textit{functional} networks are
 dynamic~\citep[e.g., ][]{MannEtal18, OwenEtal19}, person-specific~\citep[e.g.,
@@ -820,11 +810,17 @@ be reflected in reliable functional connectivity differences.  Along these
 lines, one recent study found that diffusion tensor imaging (DTI) structural
 data is similar across people, but may be used to predict person-specific
 resting state functional connectivity data~\citep{BeckEtal18}.  Similarly, other
-work indicates that task-specific functional connectivity may be predicted by
+work indicates that task-specific functional activations may be predicted by
 resting state functional connectivity data~\citep{ColeEtal16, TavoEtal16}.
 Another (potentially complementary) possibility is that our functional networks
 are constrained by anatomy, but nevertheless exhibit (potentially rapid)
-task-dependent changes~\citep[e.g., ][]{SporBetz16}.
+task-dependent changes~\citep[e.g., ][]{SporBetz16}.  This prior work differs
+from ours in a number of ways.  For example, fMRI data has substantially higher
+spatial resolution than (raw) ECoG data, and fMRI data have nearly complete
+spatial overlap across participants whereas ECoG data have minimal spatial
+overlap across participants.  Nevertheless, our work draws inspiration from
+those studies in that we also attempt to estimate held-out activity patterns
+across people and tasks.
 
 Here we have taken a model-based approach to studying whether high
 spatiotemporal resolution activity patterns throughout the human brain may be
@@ -849,6 +845,18 @@ nearby sources tends to be similar, all else being equal.  This hypothesis
 was supported through our finding that all of the models we trained that
 incorporated this spatial smoothness assumption predicted held-out data well
 above chance.
+
+Another important finding is that SuperEEG-based reconstructions accurately
+recover activity patterns at a broad range of frequencies (as well as broadband
+patterns).  However, brain networks differed in how informative they were about
+activity within each frequency band.  Prior work has largely treated
+region-specific narrowband and broadband activity as an indicator that activity
+at those frequency ranges reflects that the given region is representing or
+supporting a particular function.  Our work suggests a complementary
+interpretation that when we observe a particular neural pattern in a particular
+brain region, it may instead (or in addition) reflect how that region is
+transmitting information to the rest of the brain via signalling at the given
+frequency range.
 
 One potential limitation of our approach is that it does not provide a natural
 means of estimating the precise timing of single-neuron action potentials. Prior
@@ -952,3 +960,4 @@ from all other authors.
 
 
 \end{document}
+
